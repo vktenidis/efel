@@ -1,5 +1,5 @@
-// Συμπλήρωσε από Supabase → Project Settings → API. Το anon key είναι δημόσιο by design· την ασφάλεια την κάνουν οι κανόνες RLS.
+// Δημόσιες ρυθμίσεις σύνδεσης (ασφαλείς στον browser· την ασφάλεια την κάνουν οι κανόνες RLS)
 window.EFEL_CONFIG = {
-  url: 'https://XXXXXXXX.supabase.co',
-  key: 'ΤΟ_ANON_PUBLIC_KEY'
+  url: 'https://hujtqzcmxrvtwwsgpedu.supabase.co',
+  key: 'sb_publishable_SDzrGAj9Vq0GMDMuc3qVaA_0aZVSV8A'
 };
