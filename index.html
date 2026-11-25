@@ -246,6 +246,7 @@ a{color:#7fd0ff}
 .fchip.on{background:var(--gold);color:#111;border-color:var(--gold)}.fchip.t-star:not(.on){border-color:#c99a12}.fchip.t-top:not(.on){border-color:#2b6fd6}.fchip.t-core:not(.on){border-color:#1f9d55}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .fgrid label{display:grid;gap:3px;font-size:12px;color:#9fb3d1}.fgrid input,.fgrid select{width:100%;min-width:0}
+#view .filters label:has(#faff){display:flex;gap:8px;align-items:center}#faff{width:auto;min-height:0}
 button.sm{min-height:32px;padding:0 10px;font-size:13px}button.sm.on{background:var(--gold);color:#111;border-color:var(--gold)}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
@@ -262,6 +263,6 @@ button.sm{min-height:32px;padding:0 10px;font-size:13px}button.sm.on{background:
 <div class="toast" id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=cc3a"></script>
+<script src="app.js?v=cc3b"></script>
 </body>
 </html>

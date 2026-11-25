@@ -34,8 +34,8 @@ let DET={},STD=null,stdLoading=false;
 function cardImg(p,w,cls){if(!p.img)return '';const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
 const TIERS=[['star','Αστέρας',90000,1e9,'#c99a12'],['top','Κορυφαίος',40000,89999,'#2b6fd6'],['core','Βασικός',15000,39999,'#1f9d55'],['squad','Ρόστερ',5001,14999,'#7d8aa0'],['base','Βασική τιμή',0,5000,'#4b5870']];
 const tierKey=pr=>(TIERS.find(t=>pr>=t[2]&&pr<=t[3])||TIERS[4])[0];
-function faceImg(p,sz){if(!p.img)return '';const k=p.img-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/72;
-  return `<span class="eface" style="width:${sz}px;height:${sz}px;background:url(sp/${s}.webp) ${-(c*120+44)*f}px ${-(r*170+3)*f}px/${1200*f}px ${1700*f}px no-repeat"></span>`}
+function faceImg(p,sz){if(!p.img)return '';const k=p.img-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
+  return `<span class="eface" style="width:${sz}px;height:${sz}px;background:url(sp/${s}.webp) ${-(c*120+47)*f}px ${-(r*170+15)*f}px/${1200*f}px ${1700*f}px no-repeat"></span>`}
 function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180;
   const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
   return `<div class="ecard t-${tk}" style="--s:${sc}"><div class="ec-in">
