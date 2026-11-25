@@ -248,6 +248,48 @@ a{color:#7fd0ff}
 .fgrid label{display:grid;gap:3px;font-size:12px;color:#9fb3d1}.fgrid input,.fgrid select{width:100%;min-width:0}
 #view .filters label:has(#faff){display:flex;gap:8px;align-items:center}#faff{width:auto;min-height:0}
 button.sm{min-height:32px;padding:0 10px;font-size:13px}button.sm.on{background:var(--gold);color:#111;border-color:var(--gold)}
+
+/* avatars, προφίλ */
+.av{border-radius:50%;object-fit:cover;vertical-align:middle;display:inline-block;flex:none;background:#1b2f55}
+.avi{display:inline-grid;place-items:center;color:#fff;font:800 12px "Fira Sans Condensed",sans-serif;background:linear-gradient(135deg,#2b6fd6,#123c86);width:28px;height:28px}
+.avbtn{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 10px 0 4px;font-size:13px;margin-right:6px}
+.btnlike{display:inline-block;padding:8px 12px;border-radius:6px;background:var(--gold);color:#111;font-weight:700;cursor:pointer}
+/* ημερολόγιο: μεταγραφική */
+.cday.win{box-shadow:inset 0 -3px 0 #c99a12;background-image:linear-gradient(180deg,rgba(245,197,66,.08),rgba(245,197,66,.02))}
+.wtag{display:block;font:700 10px "Fira Sans",sans-serif;color:#f5c542;letter-spacing:.04em;text-transform:uppercase}
+.wrow{color:#f5c542}
+/* ραντεβού */
+.slots{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.slots input{width:190px}
+/* προτάσεις και διαπραγμάτευση */
+.offer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding:10px 0}
+.offer>div:first-child{flex:1 1 320px}
+.thread{margin-top:6px;font-size:13px}.thread summary{cursor:pointer;color:#9fb3d1}.thread div{padding:3px 0 3px 10px;border-left:2px solid #2b6fd6;margin:4px 0}
+.h3{font-size:20px;margin:16px 0 4px}
+/* παίκτης χωρίς φωτογραφία */
+.eface.noimg{position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#284a86,#0b1730 70%);overflow:hidden}
+.eface.noimg svg{position:absolute;inset:14% 14% 0;width:72%;height:86%;fill:rgba(255,255,255,.14)}
+.eface.noimg b{position:relative;font-family:"Fira Sans Condensed",sans-serif;font-weight:800;color:#fff;letter-spacing:.04em;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.eface.g-GK{background:radial-gradient(circle at 50% 35%,#7a5a12,#1a1406 70%)}.eface.g-DEF{background:radial-gradient(circle at 50% 35%,#1f5ea8,#08162c 70%)}
+.eface.g-MID{background:radial-gradient(circle at 50% 35%,#16794a,#061a10 70%)}.eface.g-FWD{background:radial-gradient(circle at 50% 35%,#a12a2a,#1e0707 70%)}
+.noimgs{border-radius:3px;font:800 8px "Fira Sans Condensed",sans-serif;color:#fff;background:#22324d;vertical-align:middle;margin-right:6px}
+.noimgs.g-GK{background:#7a5a12}.noimgs.g-DEF{background:#1f5ea8}.noimgs.g-MID{background:#16794a}.noimgs.g-FWD{background:#a12a2a}
+/* επόμενο βήμα */
+.nextstep{border:1px solid var(--gold);margin-bottom:14px}.nextstep .todo>div{font-size:16px}
+/* μενού περισσότερα */
+.moregrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.morebtn{display:flex;gap:10px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:8px;color:inherit;text-decoration:none;font-weight:700;background:rgba(255,255,255,.03);min-height:52px}
+.morebtn svg{width:22px;height:22px;fill:currentColor}
+#navMore{display:none}
+@media (max-width:700px){
+  body{padding-bottom:72px}
+  header nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#0a1426;border-top:1px solid #2a3d60;box-shadow:0 -6px 18px rgba(0,0,0,.4)}
+  #nav{display:grid!important;grid-template-columns:repeat(5,1fr);overflow:visible;padding:0}
+  #nav a{display:none!important}
+  #nav a[data-m]{display:flex!important;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;font-size:11px;border:0;clip-path:none;margin:0;transform:none;min-width:0}
+  #nav a[data-m] span{font-size:11px;white-space:nowrap;transform:none}
+  #nav a[data-m] svg{width:22px;height:22px;transform:none}
+  #navMore{display:flex}
+}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -255,7 +297,7 @@ button.sm{min-height:32px;padding:0 10px;font-size:13px}button.sm.on{background:
 <header class="top">
   <div class="tb"><img class="efl" src="logo.jpg" alt="EFEL"><span id="topCrest"></span><div><h1 id="lname">eFootball Evolution League</h1><div class="lg" id="lsub"></div></div>
     <div class="chips"><span id="authBtn"></span><span class="chip"><i>GP</i><span id="gpchip">—</span></span><span class="chip ph" id="phase">Φόρτωση…</span></div></div>
-  <nav><div class="in" id="nav"><a href="#home"><svg viewBox="0 0 24 24"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg><span>Αρχική</span></a><a href="#squad"><svg viewBox="0 0 24 24"><path d="M8 3 3 6v4h3v11h12V10h3V6l-5-3c-.5 1.5-2 2.5-4 2.5S8.5 4.5 8 3z"/></svg><span>Ενδεκάδα</span></a><a href="#table"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10zm6 0V4h4v16zm6 0v-7h4v7z"/></svg><span>Βαθμολογία</span></a><a href="#matches"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4 3.5 2.5-1.3 4h-4.4l-1.3-4zM5 9.5l2 .7 1.3 4.1-1.4 2.2L4.4 16A8 8 0 0 1 5 9.5zm14 0a8 8 0 0 1 .6 6.5l-2.5.5-1.4-2.2 1.3-4.1zM9.7 17.4h4.6l1.3 2a8 8 0 0 1-7.2 0z"/></svg><span>Αγώνες</span></a><a href="#calendar"><svg viewBox="0 0 24 24"><path d="M5 4h2V2h2v2h6V2h2v2h2a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 6v9h12v-9z"/></svg><span>Ημερολόγιο</span></a><a href="#market"><svg viewBox="0 0 24 24"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 4H2V2h4.5l1 2H21l-3 8H8.6l-1 2H19v2H5l2-4z"/></svg><span>Αγορά</span></a><a href="#teams"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/></svg><span>Ομάδες</span></a><a href="#transfers"><svg viewBox="0 0 24 24"><path d="M7 7h11l-3-3 1.4-1.4L21.8 8l-5.4 5.4L15 12l3-3H7zm10 10H6l3 3-1.4 1.4L2.2 16l5.4-5.4L9 12l-3 3h11z"/></svg><span>Μεταγραφές</span></a><a href="#rules"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zm8 1.5V8h4.5zM8 12h10v1.6H8zm0 3.5h10v1.6H8zm0 3.5h7v1.6H8z"/></svg><span>Κανονισμός</span></a><a href="#admin" id="navAdmin" hidden><svg viewBox="0 0 24 24"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7 7 0 0 0-1.7-1L15 3h-4l-.4 2.9a7 7 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7 7 0 0 0 1.7 1L11 21h4l.4-2.9a7 7 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg><span>Διαχείριση</span></a></div></nav>
+  <nav><div class="in" id="nav"><a href="#home" data-m="1"><svg viewBox="0 0 24 24"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg><span>Αρχική</span></a><a href="#squad"><svg viewBox="0 0 24 24"><path d="M8 3 3 6v4h3v11h12V10h3V6l-5-3c-.5 1.5-2 2.5-4 2.5S8.5 4.5 8 3z"/></svg><span>Ενδεκάδα</span></a><a href="#table"><svg viewBox="0 0 24 24"><path d="M4 20V10h4v10zm6 0V4h4v16zm6 0v-7h4v7z"/></svg><span>Βαθμολογία</span></a><a href="#matches" data-m="1"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4 3.5 2.5-1.3 4h-4.4l-1.3-4zM5 9.5l2 .7 1.3 4.1-1.4 2.2L4.4 16A8 8 0 0 1 5 9.5zm14 0a8 8 0 0 1 .6 6.5l-2.5.5-1.4-2.2 1.3-4.1zM9.7 17.4h4.6l1.3 2a8 8 0 0 1-7.2 0z"/></svg><span>Αγώνες</span></a><a href="#calendar"><svg viewBox="0 0 24 24"><path d="M5 4h2V2h2v2h6V2h2v2h2a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 6v9h12v-9z"/></svg><span>Ημερολόγιο</span></a><a href="#market" data-m="1"><svg viewBox="0 0 24 24"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 4H2V2h4.5l1 2H21l-3 8H8.6l-1 2H19v2H5l2-4z"/></svg><span>Αγορά</span></a><a href="#teams"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/></svg><span>Ομάδες</span></a><a href="#transfers" data-m="1"><svg viewBox="0 0 24 24"><path d="M7 7h11l-3-3 1.4-1.4L21.8 8l-5.4 5.4L15 12l3-3H7zm10 10H6l3 3-1.4 1.4L2.2 16l5.4-5.4L9 12l-3 3h11z"/></svg><span>Μεταγραφές</span></a><a href="#rules"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zm8 1.5V8h4.5zM8 12h10v1.6H8zm0 3.5h10v1.6H8zm0 3.5h7v1.6H8z"/></svg><span>Κανονισμός</span></a><a href="#admin" id="navAdmin" hidden><svg viewBox="0 0 24 24"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7 7 0 0 0-1.7-1L15 3h-4l-.4 2.9a7 7 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7 7 0 0 0 1.7 1L11 21h4l.4-2.9a7 7 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg><span>Διαχείριση</span></a><a href="#more" id="navMore" data-m="1"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg><span>Περισσότερα</span></a></div></nav>
   <div class="ticker" aria-hidden="true"><div id="tick">eFootball Greece League</div></div>
 </header>
 <main id="view"><div class="card empty">Φόρτωση της λίγκας…</div></main>
@@ -263,6 +305,6 @@ button.sm{min-height:32px;padding:0 10px;font-size:13px}button.sm.on{background:
 <div class="toast" id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=sim1"></script>
+<script src="app.js?v=f26a"></script>
 </body>
 </html>

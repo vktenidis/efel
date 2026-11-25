@@ -31,10 +31,10 @@ const ago=ts=>{const d=(Date.now()-ts)/6e4;return d<1?'τώρα':d<60?Math.floor
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)}
 const cfg=()=>S.cfg||{};
 let DET={},STD=null,stdLoading=false;
-function cardImg(p,w,cls){if(!p.img)return '';const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
+function cardImg(p,w,cls){if(!p.img)return `<span class="${cls} noimgs g-${grp(p.pos)}" style="display:inline-grid;place-items:center;width:${w}px;height:${Math.round(w*170/120)}px">${esc(p.pos)}</span>`;const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
 const TIERS=[['star','Αστέρας',90000,1e9,'#c99a12'],['top','Κορυφαίος',40000,89999,'#2b6fd6'],['core','Βασικός',15000,39999,'#1f9d55'],['squad','Ρόστερ',5001,14999,'#7d8aa0'],['base','Βασική τιμή',0,5000,'#4b5870']];
 const tierKey=pr=>(TIERS.find(t=>pr>=t[2]&&pr<=t[3])||TIERS[4])[0];
-function faceImg(p,sz){if(!p.img)return '';const k=p.img-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
+function faceImg(p,sz){if(!p.img){const ini=esc(p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase());return `<span class=\"eface noimg g-${grp(p.pos)}\" style=\"width:${sz}px;height:${sz}px\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><circle cx=\"32\" cy=\"24\" r=\"12\"/><path d=\"M8 62c2-14 12-22 24-22s22 8 24 22z\"/></svg><b style=\"font-size:${Math.round(sz*.26)}px\">${ini}</b></span>`}const k=p.img-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
   return `<span class="eface" style="width:${sz}px;height:${sz}px;background:url(sp/${s}.webp) ${-(c*120+47)*f}px ${-(r*170+15)*f}px/${1200*f}px ${1700*f}px no-repeat"></span>`}
 function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180;
   const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
@@ -63,8 +63,10 @@ function playerHTML(pid){const p=pl(pid),d=DET[p.name+'|'+p.ovr],o=ownerOf(pid),
   if(mt&&season&&!o)act=`<button data-act="buy" data-id="${esc(pid)}">Αγορά · ${gp(p.price)}</button>`;
   else if(mt&&season&&o&&o.id!==mt.id)act=`<button data-act="offer" data-id="${esc(pid)}">Πρόταση στην ${esc(o.name)}</button>`;
   else if(mt&&cfg().phase!=='season'&&cfg().biddingOpen&&!o)act=`<span class="small muted">Κάνε κρυφή προσφορά από τη λίστα της Αγοράς.</span>`;
+  else if(mt&&o&&o.id===mt.id){act=contractEnds(r)?`<button data-act="renew" data-id="${esc(pid)}|1">Ανανέωση 1 σεζόν</button><button class="ghost" data-act="renew" data-id="${esc(pid)}|2">2 σεζόν</button>`:'';
+    act+=cfg().windowOpen?`<button class="ghost" data-act="release" data-id="${esc(pid)}">Αποδέσμευση (+50%)</button>`:`<span class="small muted">Αποδέσμευση: όταν ανοίξει η μεταγραφική (${windowText()}).</span>`}
   return `<div class="box"><div class="bh">Στοιχεία παίκτη</div>${pcardHTML(pid)}
-  <div class="kv"><div>Ομάδα<b>${o?esc(o.name)+(o.is_auto?' (αυτόματη)':''):'Ελεύθερος'}</b></div>${r&&r.activation!=='active'?`<div>Κατάσταση<b>${actLabel(r)}</b></div>`:''}${r?`<div>Κόστος απόκτησης<b>${gp(r.paid)}</b></div>`:''}${d?`<div>Ύψος<b>${esc(d.h)} cm</b></div><div>Πόδι<b>${esc(d.f)}</b></div><div>Ηλικία<b>${d.a}</b></div><div>Weak foot<b>${esc(d.wf)}</b></div><div>Form<b>${esc(d.fm)}</b></div>`:''}</div>
+  <div class="kv"><div>Ομάδα<b>${o?esc(o.name)+(o.is_auto?' (αυτόματη)':''):'Ελεύθερος'}</b></div>${r&&r.activation!=='active'?`<div>Κατάσταση<b>${actLabel(r)}</b></div>`:''}${r?`<div>Κόστος απόκτησης<b>${gp(r.paid)}</b></div><div>Συμβόλαιο<b>ως σεζόν ${r.cu??'—'}${contractEnds(r)?' · λήγει':''}</b></div>`:''}${d?`<div>Ύψος<b>${esc(d.h)} cm</b></div><div>Πόδι<b>${esc(d.f)}</b></div><div>Ηλικία<b>${d.a}</b></div><div>Weak foot<b>${esc(d.wf)}</b></div><div>Form<b>${esc(d.fm)}</b></div>`:''}</div>
   ${d?d.st.map(([k,v])=>`<div class="sbar"><span>${SN[k]||k}</span><div class="bar"><i style="width:${Math.min(100,v)}%;background:${v>=85?'var(--ok)':v>=75?'var(--sky)':'#9aa7b8'}"></i></div><b>${v}</b></div>`).join('')+`<div class="sks">${d.sk.map(s=>`<span>${esc(s)}</span>`).join('')}</div>`:'<p class="muted small">Δεν υπάρχουν αναλυτικά στοιχεία για αυτόν τον παίκτη.</p>'}
   <div class="row" style="margin-top:12px;justify-content:space-between"><a href="https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(p.name)}" target="_blank" rel="noopener">Προφίλ στο Transfermarkt ↗</a>${act}</div></div>`}
 const FORM={'4-4-2':[['GK',50,90],['LB',14,70],['CB',37,75],['CB',63,75],['RB',86,70],['LMF',14,45],['CMF',38,50],['CMF',62,50],['RMF',86,45],['CF',38,18],['CF',62,18]],
@@ -84,10 +86,11 @@ function matchHTML(id){const m=S.allMatches.find(x=>x.id===id);if(!m)return '';c
   const cmpN=(a,b,low)=>a===b?0:(low?a<b:a>b)?1:2;
   const ha=xiAvg(team(m.home)),aa=xiAvg(team(m.away));
   const mid=fin?`<div class="score" style="font-size:34px">${m.hs} - ${m.as}</div>`:`<div class="x">VS</div>`;
-  const mt=myTeam(),mine=mt&&(m.home===mt.id||m.away===mt.id);
+  const mt=myTeam(),mine=mt&&(m.home===mt.id||m.away===mt.id),opM=mine?team(m.home===mt.id?m.away:m.home)?.manager:null,opP=opM?S.prof?.[opM]||{}:null;
   return `<div class="box"><div class="bh">${esc(leagueName(m.league_id))} · ${m.md}η<small>${fin?(m.sim?'Προσομοίωση':'Τελικό αποτέλεσμα'):m.status==='reported'?'Περιμένει επιβεβαίωση':m.status==='disputed'?'Υπό διαφωνία':m.tagreed?'Ώρα: '+fmtDT(m.tagreed):'Δεν έχει παιχτεί'}</small></div>
   <div class="vs"><div class="t">${crest(team(m.home),58)}${tlink(m.home)}</div>${mid}<div class="t">${crest(team(m.away),58)}${tlink(m.away)}</div></div>
   ${fin?`<p style="text-align:center;margin:4px 0 8px;font-weight:700">${m.hs>m.as?tname(m.home)+' νίκησε':m.hs<m.as?tname(m.away)+' νίκησε':'Ισοπαλία'}</p>`:''}
+  ${opM?`<div class="note small" style="margin:6px 0">Αντίπαλος: ${mgrLine(opM)}${opP.efootball_name?` · eFootball: <b>${esc(opP.efootball_name)}</b>`:''}${opP.contact?` · ${esc(opP.contact)}`:''}</div>`:''}
   <table class="cmp"><tbody>
   ${row('Θέση',(pos(m.home)+1)+'η',(pos(m.away)+1)+'η',cmpN(pos(m.home),pos(m.away),1))}
   ${row('Βαθμοί',H.pts??0,A2.pts??0,cmpN(H.pts||0,A2.pts||0))}
@@ -109,7 +112,7 @@ function teamHTML(id){const t=team(id);if(!t)return '';const st=standings(t.leag
     return n.to===id?`<div><span>Από ${tname(n.from)}: ${plink(n.pid)}</span><span class="muted">${gp(n.gp)}</span></div>`:`<div><span>Σε ${tname(n.to)}: ${plink(n.pid)}</span><span class="muted">+${gp(n.gp)}</span></div>`}).join('');
   const top=(t.roster||[]).map(r=>pl(r.pid)).sort((a,b)=>b.ovr-a.ovr).slice(0,5);
   return `<div class="box"><div class="bh">Καρτέλα ομάδας<small>${t.is_auto?'Αυτόματος σύλλογος':t.manager?'Manager: '+esc(S.names[t.manager]||'—'):'Ψάχνει manager'}</small></div>
-  <div class="row" style="gap:14px;margin-bottom:10px">${crest(t,64)}<div><h3 style="font-size:26px">${esc(t.name)}</h3><div class="muted small">${esc(leagueName(t.league_id))}${i>=0?' · '+(i+1)+'η θέση · '+(s.pts||0)+' βαθμοί':''}</div><div style="margin-top:4px">${(s.form||[]).slice(-5).map(f=>`<span class="dot ${f}"></span>`).join('')}</div></div></div>
+  <div class="row" style="gap:14px;margin-bottom:10px">${crest(t,64)}<div><h3 style="font-size:26px">${esc(t.name)}</h3>${t.manager?`<div class="small" style="margin:2px 0">${mgrLine(t.manager)}${S.prof?.[t.manager]?.contact?` · ${esc(S.prof[t.manager].contact)}`:''}</div>`:''}<div class="muted small">${esc(leagueName(t.league_id))}${i>=0?' · '+(i+1)+'η θέση · '+(s.pts||0)+' βαθμοί':''}</div><div style="margin-top:4px">${(s.form||[]).slice(-5).map(f=>`<span class="dot ${f}"></span>`).join('')}</div></div></div>
   <div class="kv"><div>Ρεκόρ<b>${s.w||0}Ν ${s.d||0}Ι ${s.l||0}Η</b></div><div>Γκολ<b>${s.gf||0} - ${s.ga||0}</b></div><div>Budget<b>${gp(t.budget)}</b></div><div>Αξία ρόστερ<b>${gp(val)}</b></div><div>Έπαθλα σεζόν<b>${gp(t.earned||0)}</b></div><div>Μ.Ο. OVR ενδεκάδας<b>${xiAvg(t)||'—'}</b></div></div>
   ${top.length?`<div class="small muted" style="margin:8px 0 4px">Κορυφαίοι παίκτες</div><div class="ros">${top.map(p=>`<div><span><span class="pos ${grp(p.pos)}">${esc(p.pos)}</span> ${plink(p.id)}</span><span class="muted">${p.ovr}</span></div>`).join('')}</div>`:''}
   <div class="small muted" style="margin:12px 0 4px">Αποτελέσματα</div>${ms.length?`<div class="ros">${ms.map(m=>{const hm=m.home===id,f=hm?m.hs:m.as,a=hm?m.as:m.hs,r=f>a?'W':f<a?'L':'D';return `<div><span>${m.md}η · ${hm?'vs':'@'} ${tname(hm?m.away:m.home)}</span><span class="res ${r}">${f}-${a}</span></div>`}).join('')}</div>`:'<p class="small muted">Κανένας αγώνας ακόμα.</p>'}
@@ -128,16 +131,17 @@ function vCalendar(){const mt=myTeam(),mds=[...new Set(S.matches.map(m=>m.md))].
   const m0=S.calM,first=new Date(m0),lead=(first.getUTCDay()+6)%7,start=new Date(first.getTime()-lead*DAYMS);
   let cells='';for(let i=0;i<42;i++){const d=new Date(start.getTime()+i*DAYMS),k=isoD(d),md=byDate[k],out=d.getUTCMonth()!==m0.getUTCMonth();
     if(i>=35&&out&&i%7===0)break;
-    let inner=`<b class="d">${d.getUTCDate()}</b>`;
+    const wn=inWindow(k);let inner=`<b class="d">${d.getUTCDate()}</b>${wn?'<span class="wtag">Μεταγραφές</span>':''}`;
     if(md){const ms=S.matches.filter(m=>m.md===md),done=ms.filter(m=>m.status==='final').length,my=mt&&ms.find(m=>m.home===mt.id||m.away===mt.id);
       inner+=`<span class="mdl2">${md}η<span class="lw"> αγωνιστική</span></span>`;
       if(my){const hm=my.home===mt.id,op=hm?my.away:my.home;let r='';if(my.status==='final'){const f=hm?my.hs:my.as,a=hm?my.as:my.hs;r=`<span class="res ${f>a?'W':f<a?'L':'D'}">${f}-${a}</span>`}
         inner+=`<span class="op">${crest(team(op),18)}<span>${hm?'vs':'@'} ${esc(team(op)?.abbr||'')}</span>${r}</span>`}
       inner+=`<span class="pl">${done}/${ms.length} αγώνες</span>`}
-    cells+=md?`<button class="cday md ${out?'out':''} ${k===today?'today':''}" data-act="calday" data-id="${md}">${inner}</button>`:`<div class="cday ${out?'out':''} ${k===today?'today':''}">${inner}</div>`}
+    cells+=md?`<button class="cday md ${wn?'win':''} ${out?'out':''} ${k===today?'today':''}" data-act="calday" data-id="${md}">${inner}</button>`:`<div class="cday ${wn?'win':''} ${out?'out':''} ${k===today?'today':''}">${inner}</div>`}
   const mn=m0.toLocaleDateString('el-GR',{month:'long',year:'numeric',timeZone:'UTC'});
   const nextMd=mds.filter(md=>S.matches.some(m=>m.md===md&&m.status!=='final')).slice(0,5);
-  const ev=nextMd.map(md=>{const my=mt&&S.matches.find(m=>m.md===md&&(m.home===mt.id||m.away===mt.id));return `<div><span><b>${md}η</b> · ${fmtD(mdDate(md))}</span><span>${my?`${my.home===mt.id?'vs':'@'} ${tname(my.home===mt.id?my.away:my.home)}`:'<span class="muted">—</span>'}</span></div>`}).join('');
+  const wl=(S.windows||[]).filter(x=>x.to>=today).map(x=>`<div class="wrow"><span><b>Μεταγραφική · ${esc(x.label)}</b></span><span>${fmtD(new Date(x.from+'T12:00:00Z'))} – ${fmtD(new Date(x.to+'T12:00:00Z'))}</span></div>`).join('');
+  const ev=wl+nextMd.map(md=>{const my=mt&&S.matches.find(m=>m.md===md&&(m.home===mt.id||m.away===mt.id));return `<div><span><b>${md}η</b> · ${fmtD(mdDate(md))}</span><span>${my?`${my.home===mt.id?'vs':'@'} ${tname(my.home===mt.id?my.away:my.home)}`:'<span class="muted">—</span>'}</span></div>`}).join('');
   const sim=leagueBar()+(S.owner?`<section class="card"><h2>Χρόνος της λίγκας</h2><div class="simbar"><span class="day">${fmtD(new Date())}</span><button class="ghost" data-act="tick">Έλεγχος τώρα</button></div><p class="small muted" style="margin:8px 0 0">Ο server τρέχει μόνος του κάθε 15 λεπτά με την πραγματική ημερομηνία: παίζει τους αγώνες των αυτόματων λιγκών όταν φτάσει η μέρα τους, κάνει κινήσεις αγοράς, λήγει προτάσεις και προθεσμίες.</p></section>
   <section class="card"><h2>Προσομοίωση (δοκιμές)</h2><div class="simbar"><label class="small"><input type="checkbox" id="simHuman" ${S.simHuman!==false?'checked':''}> Και η ανθρώπινη λίγκα</label>
    <button data-act="sim" data-id="1">Επόμενη αγωνιστική ▶</button><button class="ghost" data-act="sim" data-id="3">+3</button><button class="ghost" data-act="sim" data-id="half" data-confirm="1">Ως τη μέση</button><button class="ghost" data-act="sim" data-id="30" data-confirm="1">Ως το τέλος</button></div>
@@ -162,7 +166,9 @@ function mapNews(n){const p=n.payload||{},ts=Date.parse(n.ts),b={type:n.type,ts,
   if(n.type==='buy')return {...b,tid:sid(p.club),pid:spid(p.player),price:p.price};
   if(n.type==='release')return {...b,tid:sid(p.club),pid:spid(p.player),refund:p.refund};
   if(n.type==='manager')return {...b,type:'note',text:p.event==='joined'?`Η ${team(sid(p.club))?.name||'ομάδα'} απέκτησε νέο manager.`:`Η ${team(sid(p.club))?.name||'ομάδα'} ψάχνει manager.`};
-  if(n.type==='window')return {...b,type:'note',text:'Άνοιξε η μεταγραφική περίοδος.'};
+  if(n.type==='window')return {...b,type:'note',text:p.open===false?'Έκλεισε η μεταγραφική περίοδος.':'Άνοιξε η μεταγραφική περίοδος!'};
+  if(n.type==='renew')return {...b,type:'renew',tid:sid(p.club),pid:spid(p.player),cost:p.cost,until:p.until};
+  if(n.type==='contract_end')return {...b,type:'contract_end',tid:sid(p.club),pid:spid(p.player)};
   if(n.type==='round_open')return {...b,type:'note',text:`Άνοιξε ο ${p.round}ος γύρος κρυφών προσφορών${p.closes_at?' · κλείνει '+fmtDT(p.closes_at):''}.`};
   if(n.type==='season_end')return {...b,type:'note',text:`Τέλος σεζόν ${p.season}: πρωταθλήτρια η ${team(sid(p.champion))?.name||'—'} (${leagueName(sid(p.league))}).`};
   return {...b,type:'note',text:p.text||''}}
@@ -174,7 +180,7 @@ let loading=null;
 async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;loading=(async()=>{
   const q=t=>sb.from(t).select('*');
   const [cf,lg,cl,cm,pf,ro,ma,of,ne,br,bi,pr,ar]=await Promise.all([q('config'),q('leagues').order('sort'),q('clubs').order('id'),
-    sb.from('club_managers').select('*').is('ended_at',null),sb.from('profiles').select('id,display_name,is_admin'),q('roster'),
+    sb.from('club_managers').select('*').is('ended_at',null),sb.from('profiles').select('id,display_name,is_admin,avatar_url,efootball_name,platform,contact'),q('roster'),
     q('matches').order('md'),sb.from('offers').select('*').order('created_at',{ascending:false}).limit(300),
     sb.from('news').select('*').order('ts',{ascending:false}).limit(80),sb.from('bid_rounds').select('*').order('id',{ascending:false}).limit(1),
     q('bids'),sb.from('players').select('id,price').gt('price',5000),sb.from('season_archive').select('*')]);
@@ -185,22 +191,24 @@ async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;loading=
   S.cfg={name:'eFootball Evolution League',budget:+C.budget,winBonus:+C.win_bonus,drawBonus:+C.draw_bonus,prizes:C.prizes,
     bidsPerRound:+C.bids_per_round,phase:C.phase,windowOpen:!!C.window_open,biddingOpen:!!openR,round:openR?openR.no:(rd?rd.no+1:1),
     roundClosesAt:openR?.closes_at,deadline:openR?.closes_at?fmtDT(openR.closes_at):'',seasonStart:C.season_start,mdEvery:+C.md_every_days,
-    seasonNo,activationHours:+C.activation_hours,coverMax:+C.cover_max_ovr,catalog:'standard'};
-  for(const p of pf.data||[])S.names[p.id]=p.display_name;
+    seasonNo,activationHours:+C.activation_hours,coverMax:+C.cover_max_ovr,catalog:'standard',windowAuto:!!C.window_auto,contractSeasons:+C.contract_seasons||2,renewPct:+C.renew_pct||30,counterRounds:+C.counter_rounds||4,windowMid:+C.window_mid_after_md||9,windowDays:+C.window_days||7};
+  try{S.windows=await rpc('efel_window_dates')}catch(e){S.windows=[]}
+  S.prof={};for(const p of pf.data||[]){S.names[p.id]=p.display_name;S.prof[p.id]=p}
   S.owner=!!(pf.data||[]).find(p=>p.id===S.me)?.is_admin;
   S.leagues=(lg.data||[]).map(l=>({id:sid(l.id),name:l.name,kind:l.kind}));
   const mg={};for(const m of cm.data||[])mg[m.club_id]=m.user_id;
-  const ros={};for(const r of ro.data||[])(ros[r.club_id]=ros[r.club_id]||[]).push({pid:spid(r.player_id),paid:r.paid,activation:r.activation,deadline:r.activation_deadline,via:r.via,at:Date.parse(r.acquired_at)});
+  const ros={};for(const r of ro.data||[])(ros[r.club_id]=ros[r.club_id]||[]).push({pid:spid(r.player_id),paid:r.paid,activation:r.activation,deadline:r.activation_deadline,via:r.via,at:Date.parse(r.acquired_at),cu:r.contract_until});
   S.all=(cl.data||[]).map(c=>({id:sid(c.id),name:c.name,abbr:c.abbr,color:c.color,budget:+c.budget,earned:+c.earned,is_auto:c.is_auto,status:c.status,
     league_id:sid(c.league_id),order:c.id,manager:mg[c.id]||null,roster:ros[c.id]||[],
     lineup:c.lineup?{f:c.lineup.f,xi:(c.lineup.xi||[]).map(x=>x?spid(x):null)}:null}));
   S.allMatches=(ma.data||[]).filter(m=>m.season_no===seasonNo).map(m=>({id:sid(m.id),league_id:sid(m.league_id),md:m.md,home:sid(m.home),away:sid(m.away),
-    hs:m.hg,as:m.ag,status:m.status,by:sid(m.reported_by),tprop:m.time_proposed,tpropBy:sid(m.time_proposed_by),tagreed:m.time_agreed,sim:m.simulated}));
+    hs:m.hg,as:m.ag,status:m.status,by:sid(m.reported_by),tprop:m.time_proposed,tpropBy:sid(m.time_proposed_by),tagreed:m.time_agreed,sim:m.simulated,slots:m.time_slots||(m.time_proposed?[m.time_proposed]:[])}));
   S.offers=(of.data||[]).map(o=>({id:sid(o.id),from:sid(o.from_club),to:sid(o.to_club),pid:spid(o.player_id),gp:o.gp,swap:spid(o.swap_player),
-    status:o.status==='accepted'?'done':o.status,note:o.note,expires:o.expires_at,ts:Date.parse(o.decided_at||o.created_at)}));
+    status:o.status==='accepted'?'done':o.status,note:o.note,expires:o.expires_at,ts:Date.parse(o.decided_at||o.created_at),turn:sid(o.turn??o.to_club),round:o.round||1,hist:o.history||[]}));
   S.bids=(bi.data||[]).filter(b=>openR&&b.round_id===openR.id).map(b=>({id:sid(b.id),round:openR.no,tid:sid(b.club_id),pid:spid(b.player_id),amt:b.amount}));
   S.prices={};for(const p of pr.data||[])S.prices['s'+p.id]=p.price;
   S.archive=ar.data||[];
+  {const mt0=S.all.find(t=>t.manager===S.me),ids=new Set(S.offers.filter(o=>o.status==='open'&&mt0&&o.turn===mt0.id).map(o=>o.id));if(S._turn&&[...ids].some(x=>!S._turn.has(x)))setTimeout(()=>toast('Νέα πρόταση ή αντιπρόταση σε περιμένει στις Μεταγραφές'),300);S._turn=ids}
   applyLeague();
   S.news=(ne.data||[]).map(mapNews);
   const mt=myTeam();S.fin=null;
@@ -213,21 +221,36 @@ const isAutoLg=()=>S.leagues.find(l=>l.id===S.lg)?.kind==='auto';
 function leagueBar(){if(S.leagues.length<2)return '';return `<div class="lgbar">${S.leagues.map(l=>`<button class="${l.id===S.lg?'':'ghost'}" data-act="league" data-id="${l.id}">${esc(l.name)}${l.kind==='auto'?' <small>αυτόματη</small>':''}</button>`).join('')}</div>`}
 function actLabel(r){if(!r)return '';if(r.activation==='pending')return 'Αναμονή ενεργοποίησης'+(r.deadline?' ως '+fmtDT(r.deadline):'');if(r.activation==='unable')return 'Δεν διαθέσιμη κάρτα · κάλυψη έως OVR '+(cfg().coverMax||65);if(r.activation==='locked')return 'Κλειδωμένη ως το επόμενο παράθυρο';return 'Ενεργός'}
 function actChip(r){if(!r||r.activation==='active'||!r.activation)return '';const c={pending:'#c99a12',unable:'#c0392b',locked:'#6b7a90'}[r.activation];return `<span class="tag" style="background:${c};color:#fff" title="${esc(actLabel(r))}">${{pending:'Αναμονή',unable:'Κάλυψη',locked:'Κλειδωμένος'}[r.activation]}</span>`}
+function slotEditor(m){return `<div class="slots"><span class="small">Πρότεινε έως 3 ώρες που μπορείς:</span>${[1,2,3].map(k=>`<input type="datetime-local" id="ts${k}_${m.id}" aria-label="Ώρα ${k}">`).join('')}<button data-act="sendSlots" data-id="${m.id}">Αποστολή</button><button class="ghost" data-act="slotEdit" data-id="">Άκυρο</button></div>`}
 function timeUI(m,mt){if(m.status==='final')return '';if(m.tagreed)return `<span class="small"><b>Ώρα:</b> ${fmtDT(m.tagreed)}</span>`;
-  const mineProp=m.tpropBy===mt.id;let h='';
-  if(m.tprop&&!mineProp)h+=`<span class="small">Πρόταση ώρας: <b>${fmtDT(m.tprop)}</b></span><button data-act="acceptTime" data-id="${m.id}">Δέχομαι</button>`;
-  else if(m.tprop)h+=`<span class="small muted">Πρότεινες ${fmtDT(m.tprop)}</span>`;
-  h+=`<input type="datetime-local" id="tp_${m.id}" style="width:190px" aria-label="Προτεινόμενη ώρα"><button class="ghost" data-act="proposeTime" data-id="${m.id}">${m.tprop?'Άλλη ώρα':'Πρότεινε ώρα'}</button>`;return h}
+  if(S.slotEdit===m.id)return slotEditor(m);
+  const mine=m.tpropBy===mt.id;let h='';
+  if(m.tprop&&!mine)h+=`<span class="small">Ο αντίπαλος μπορεί:</span>${m.slots.map(x=>`<button data-act="pickSlot" data-id="${m.id}|${esc(x)}">${fmtDT(x)} ✓</button>`).join('')}<button class="ghost" data-act="slotEdit" data-id="${m.id}">Δεν μπορώ, προτείνω άλλες</button>`;
+  else if(m.tprop)h+=`<span class="small muted">Πρότεινες ${m.slots.map(x=>fmtDT(x)).join(' / ')} · περιμένεις απάντηση</span><button class="ghost" data-act="slotEdit" data-id="${m.id}">Αλλαγή</button>`;
+  else h+=`<button class="ghost" data-act="slotEdit" data-id="${m.id}">Πρότεινε ώρες</button>`;
+  return h}
 function myPending(){const mt=myTeam();const ms=S.allMatches.filter(m=>m.status!=='final'&&(m.home===mt.id||m.away===mt.id));
   return ms.length?`<div class="ros">${ms.map(m=>{const hm=m.home===mt.id,op=hm?m.away:m.home;return `<div><span>${m.md}η · ${hm?'vs':'@'} ${tname(op)}${m.status==='reported'?' · <b>'+m.hs+'-'+m.as+'</b>':''}${m.tagreed?' · '+fmtDT(m.tagreed):''}</span><button class="ghost" style="min-height:32px;padding:0 10px" data-act="gomd" data-id="${m.id}">Άνοιγμα</button></div>`}).join('')}</div>`:'<p class="small muted">Κανένας εκκρεμής αγώνας.</p>'}
+function avatar(uid,sz){sz=sz||28;const p=S.prof?.[uid],n=p?.display_name||S.names[uid]||'?';const ini=esc(n.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase());
+  return p?.avatar_url?`<img class="av" src="${esc(p.avatar_url)}" alt="" width="${sz}" height="${sz}" referrerpolicy="no-referrer" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'av avi',textContent:'${ini}'}))">`:`<span class="av avi" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.4)}px">${ini}</span>`}
+const PLAT={console:'Κονσόλα',mobile:'Κινητό'};
+function mgrLine(uid){if(!uid)return '';const p=S.prof?.[uid]||{};return `${avatar(uid,22)} ${esc(S.names[uid]||'Manager')}${p.platform?` <span class="tag">${PLAT[p.platform]}</span>`:''}`}
+function inWindow(k){for(const w of S.windows||[])if(k>=w.from&&k<=w.to)return w;return null}
+function windowText(){const t=isoD(new Date()),ws=(S.windows||[]).filter(w=>w.to>=t);if(cfg().windowOpen){const w=inWindow(t);return w?`Ανοιχτή ως ${fmtD(new Date(w.to+'T12:00:00Z'))}`:'Ανοιχτή'}
+  return ws.length?`Ανοίγει ${fmtD(new Date(ws[0].from+'T12:00:00Z'))}`:'Κλειστή'}
+const contractEnds=r=>r&&r.cu!=null&&r.cu<=(cfg().seasonNo||1);
+const contractChip=r=>contractEnds(r)?'<span class="tag n" title="Το συμβόλαιο λήγει στο τέλος της σεζόν">Λήγει</span>':'';
 /* Γραφείο manager: εκκρεμότητες και οικονομική εικόνα */
-function officeHTML(mt){const f=S.fin||{},todo=[];
+function myTodos(mt){const todo=[];
   for(const r of mt.roster||[]){if(r.activation==='pending')todo.push(`<div><span>${actChip(r)} Ενεργοποίησε τον <b>${esc(pl(r.pid).name)}</b>${r.deadline?' ως '+fmtDT(r.deadline):''}</span><span class="row" style="gap:6px"><button style="min-height:34px;padding:0 10px" data-act="actConfirm" data-id="${r.pid}">Έχω την κάρτα</button><button class="ghost" style="min-height:34px;padding:0 10px" data-act="actUnable" data-id="${r.pid}">Δεν μπορώ</button></span></div>`)}
-  const inc=S.offers.filter(o=>o.status==='open'&&o.to===mt.id);if(inc.length)todo.push(`<div><span>${inc.length} ${inc.length>1?'προτάσεις':'πρόταση'} για παίκτες σου</span><a href="#transfers"><button class="ghost" style="min-height:34px;padding:0 10px">Δες</button></a></span></div>`);
+  const inc=S.offers.filter(o=>o.status==='open'&&o.turn===mt.id);if(inc.length)todo.push(`<div><span>${inc.length} ${inc.length>1?'προτάσεις περιμένουν':'πρόταση περιμένει'} την απάντησή σου</span><a href="#transfers"><button class="ghost" style="min-height:34px;padding:0 10px">Δες</button></a></span></div>`);
   const conf=S.allMatches.filter(m=>m.status==='reported'&&(m.home===mt.id||m.away===mt.id)&&m.by!==mt.id);for(const m of conf)todo.push(`<div><span>Επιβεβαίωσε το <b>${tname(m.home)} ${m.hs}-${m.as} ${tname(m.away)}</b></span><button style="min-height:34px;padding:0 10px" data-act="confirm" data-id="${m.id}">Σωστό</button></div>`);
-  const tp=S.allMatches.filter(m=>m.status!=='final'&&m.tprop&&!m.tagreed&&m.tpropBy!==mt.id&&(m.home===mt.id||m.away===mt.id));for(const m of tp)todo.push(`<div><span>Πρόταση ώρας από ${tname(m.tpropBy)}: <b>${fmtDT(m.tprop)}</b></span><button style="min-height:34px;padding:0 10px" data-act="acceptTime" data-id="${m.id}">Δέχομαι</button></div>`);
+  const tp=S.allMatches.filter(m=>m.status!=='final'&&m.tprop&&!m.tagreed&&m.tpropBy!==mt.id&&(m.home===mt.id||m.away===mt.id));for(const m of tp)todo.push(`<div><span>Ο ${tname(m.tpropBy)} προτείνει ώρα για την ${m.md}η: <b>${m.slots.map(x=>fmtDT(x)).join(' ή ')}</b></span><button style="min-height:34px;padding:0 10px" data-act="gomd" data-id="${m.id}">Απάντηση</button></div>`);
+  const ends=(mt.roster||[]).filter(contractEnds);if(ends.length)todo.push(`<div><span>${ends.length} ${ends.length>1?'συμβόλαια λήγουν':'συμβόλαιο λήγει'} στο τέλος της σεζόν: ανανέωσε όποιους θες να κρατήσεις</span><a href="#teams"><button class="ghost" style="min-height:34px;padding:0 10px">Ρόστερ</button></a></div>`);
   const dis=S.allMatches.filter(m=>m.status==='disputed'&&(m.home===mt.id||m.away===mt.id));for(const m of dis)todo.push(`<div><span><span class="tag n">Διαφωνία</span> ${tname(m.home)} - ${tname(m.away)}: δηλώστε ξανά</span><button class="ghost" style="min-height:34px;padding:0 10px" data-act="gomd" data-id="${m.id}">Άνοιγμα</button></div>`);
   if(cfg().biddingOpen)todo.push(`<div><span>Ανοιχτός γύρος προσφορών${cfg().deadline?' ως '+esc(cfg().deadline):''} · ${myBids().length}/${cfg().bidsPerRound||8} προσφορές</span><a href="#market"><button class="ghost" style="min-height:34px;padding:0 10px">Αγορά</button></a></div>`);
+  return todo}
+function officeHTML(mt){const f=S.fin||{},todo=myTodos(mt);
   const fin=`<div class="kv" style="margin-top:6px;grid-template-columns:1fr 1fr"><div>Ελεύθερα<b>${gp(f.free??mt.budget)}</b></div><div>Σε προσφορές<b>${gp(f.in_bids||0)}</b></div><div>Σε προτάσεις<b>${gp(f.in_offers||0)}</b></div><div>Απόθεμα ρόστερ<b>${gp(f.reserve||0)}</b></div></div><p class="small muted" style="margin:6px 0 0">Το απόθεμα κρατά ${gp(MINP)} για κάθε κενή θέση ως τους ${MAXR}, ώστε να μπορείς πάντα να κλείσεις το ρόστερ.</p>`;
   return `<section class="box"><div class="bh">Γραφείο manager<small>${todo.length?todo.length+(todo.length>1?' εκκρεμότητες':' εκκρεμότητα'):'Όλα εντάξει'}</small></div>${todo.length?`<div class="ros todo">${todo.join('')}</div>`:'<p class="small muted">Καμία εκκρεμότητα αυτή τη στιγμή.</p>'}${fin}</section>`}
 /* Αρχείο σεζόν */
@@ -277,6 +300,7 @@ function vRules(){const c=cfg(),B=c.budget||ECON.budget,T=S.all.length||24,pz=c.
   ${sec('6. Έπαθλα',`<ul><li>Νίκη <b>+${gp(c.winBonus??ECON.winBonus)}</b>, ισοπαλία <b>+${gp(c.drawBonus??ECON.drawBonus)}</b>, αμέσως μόλις επιβεβαιωθεί το σκορ.</li><li>Τελική θέση: ${pz.map((v,i)=>`${i+1}η ${gp(v)}`).join(' · ')}.</li></ul>`)}
   ${sec('7. Μεταγραφές',`<ul><li>Όσο η μεταγραφική περίοδος είναι ανοιχτή, αγοράζεις ελεύθερους στη βασική τους τιμή.</li><li>Για παίκτη άλλης ομάδας στέλνεις <b>πρόταση</b> με GP, ανταλλαγή ή και τα δύο. Ο κάτοχος τη δέχεται ή την απορρίπτει.</li><li><b>Αποδέσμευση:</b> παίρνεις πίσω το 50% από όσα πλήρωσες.</li></ul>`)}
   ${sec('8. Ενεργοποίηση κάρτας',`<ul><li>Κάθε απόκτηση ξεκινά σε <b>αναμονή ενεργοποίησης</b>. Έχεις <b>${c.activationHours||72} ώρες</b> από την ολοκλήρωση να δηλώσεις ότι έχεις την κάρτα στο eFootball.</li><li>Η μεταγραφή είναι οριστική: τα GP και τα ανταλλάγματα <b>δεν επιστρέφονται</b> αν δεν αποκτήσεις την κάρτα.</li><li>Αν δηλώσεις αδυναμία ή περάσει η προθεσμία, η θέση καλύπτεται προσωρινά από παίκτη <b>έως OVR ${c.coverMax||65}</b> που έχεις, και η ενεργοποίηση κλειδώνει μέχρι το επόμενο μεταγραφικό παράθυρο.</li><li>Ο παίκτης μένει δικός σου: μπορείς να τον ενεργοποιήσεις, να τον πουλήσεις ή να τον αποδεσμεύσεις στο επόμενο παράθυρο.</li></ul>`)}
+  ${sec('Συμβόλαια και μεταγραφική περίοδος',`<ul><li>Κάθε νέα απόκτηση έρχεται με συμβόλαιο <b>${c.contractSeasons||2} σεζόν</b>. Τη λήξη τη βλέπεις στα στοιχεία κάθε παίκτη.</li><li>Στην τελευταία σεζόν του συμβολαίου μπορείς να τον <b>ανανεώσεις</b> για 1 ή 2 σεζόν, με κόστος ${c.renewPct||30}% της τιμής του ανά σεζόν.</li><li>Αν δεν ανανεωθεί, στο τέλος της σεζόν μένει <b>ελεύθερος</b> και τον διεκδικεί όποιος θέλει. Έτσι κανένας σταρ δεν μένει για πάντα σε μία ομάδα.</li><li>Η μεταγραφική περίοδος ανοίγει <b>μόνη της</b>: μία εβδομάδα πριν την πρεμιέρα και μία εβδομάδα μετά την ${c.windowMid||9}η αγωνιστική. Φαίνεται στο Ημερολόγιο.</li><li>Σε κάθε πρόταση μπορείς να κάνεις <b>αντιπρόταση</b>, και με ανθρώπους και με αυτόματους συλλόγους, έως ${c.counterRounds||4} γύρους. Αποδεσμεύσεις και ολοκληρώσεις μεταγραφών γίνονται μόνο με ανοιχτή μεταγραφική.</li></ul>`)}
   ${sec('9. Κόσμος EFEL',`<ul><li>Τρεις λίγκες: η <b>EFEL Premier</b> των managers και δύο αυτόματες (<b>Europa</b>, <b>Classic</b>) που παίζουν μόνες τους στις ημερομηνίες τους.</li><li>Κάθε παίκτης ανήκει σε <b>έναν σύλλογο σε όλο τον κόσμο</b>. Οι αυτόματοι σύλλογοι αγοράζουν, πουλάνε και κάνουν προτάσεις με πραγματικό λόγο (τι θέση θέλουν να αναβαθμίσουν).</li><li>Αποτελέσματα αυτόματων λιγκών δεν μπαίνουν ποτέ στη βαθμολογία της ανθρώπινης.</li><li><b>Αποχωρεί ο manager, δεν διαλύεται η ομάδα:</b> ρόστερ, βαθμοί και GP μένουν στον σύλλογο για τον επόμενο.</li></ul>`)}
   ${sec('10. Συμπεριφορά',`<ul><li>Παίζουμε τους αγώνες μας στην ώρα τους και ενημερώνουμε αν κάτι μας εμποδίζει.</li><li>Σεβασμός σε αντιπάλους και διοργάνωση. Η διοργάνωση μπορεί να διορθώσει αποτελέσματα ή να αφαιρέσει μάνατζερ που δεν συμμετέχει.</li></ul>`)}
   </div>`}
@@ -304,7 +328,7 @@ function render(force){
   S.dirty=false;
   const r=route();
   for(const a of document.querySelectorAll('#nav a'))a.classList.toggle('on',a.getAttribute('href')==='#'+r);
-  $('#navAdmin').hidden=!S.owner;$('#authBtn').innerHTML=S.me?'<button class="ghost" data-act="logout" style="min-height:30px;padding:0 10px;font-size:13px">Έξοδος</button>':'';
+  $('#navAdmin').hidden=!S.owner;$('#authBtn').innerHTML=S.me?`<button class="ghost avbtn" data-act="profile" title="Το προφίλ μου">${avatar(S.me,26)}<span>Προφίλ</span></button><button class="ghost" data-act="logout" style="min-height:30px;padding:0 10px;font-size:13px">Έξοδος</button>`:'';
   const mt=myTeam(),ln='eFootball Evolution League';
   $('#lname').textContent=mt?mt.name:ln;$('#lsub').textContent=mt?ln+' · '+(S.names[S.me]||''):(S.me?'Δεν έχεις σύλλογο ακόμα':'');
   $('#topCrest').innerHTML=mt?crest(mt,44):'';
@@ -318,7 +342,7 @@ function render(force){
   if(!S.me){$('#view').innerHTML=`<section class="card" style="max-width:560px;margin:30px auto;text-align:center"><h2>Καλώς ήρθες στην EFEL</h2><img src="logo.jpg" alt="EFEL" style="max-width:320px;width:100%;margin:10px auto;display:block"><p>Συνδέσου με τον λογαριασμό Google σου για να δεις τη λίγκα και να αναλάβεις σύλλογο.</p><button data-act="login">Σύνδεση με Google</button></section>`;return}
   if(!S.loaded){$('#view').innerHTML='<div class="card empty">Φόρτωση λίγκας…</div>';return}
   if(!S.all.length){$('#view').innerHTML=S.owner?`<div class="card"><h2>Ας στήσουμε τον κόσμο της EFEL</h2><p class="muted">Δημιουργεί 3 λίγκες (1 ανθρώπινη, 2 αυτόματες), 24 συλλόγους, ρόστερ για τους αυτόματους και πρόγραμμα. Θέλει πρώτα να έχει φορτωθεί ο κατάλογος παικτών.</p><button data-act="setupWorld">Δημιουργία κόσμου</button></div>`:'<div class="card empty">Η λίγκα δεν έχει στηθεί ακόμα.</div>';return}
-  const V={rules:vRules,calendar:vCalendar,squad:vSquad,home:vHome,table:vTable,matches:vMatches,market:vMarket,teams:vTeams,transfers:vTransfers,admin:vAdmin}[r]||vHome;
+  const V={more:vMore,rules:vRules,calendar:vCalendar,squad:vSquad,home:vHome,table:vTable,matches:vMatches,market:vMarket,teams:vTeams,transfers:vTransfers,admin:vAdmin}[r]||vHome;
   $('#view').innerHTML=V();
 }
 
@@ -333,6 +357,8 @@ function newsLine(n){
   if(n.type==='prizes')return {tag:'<span class="tag t">Έπαθλα</span>',h:`Απονομή επάθλων: πρωταθλήτρια η ${tname(n.items[0]?.[0])}`,b:n.items.map(i=>`${i[2]}. ${tname(i[0])} +${gp(i[1])}`).join('<br>')};
   if(n.type==='transfer')return {tag:'<span class="tag t">Μεταγραφή</span>',h:`${esc(pl(n.pid).name)} από ${tname(n.from)} σε ${tname(n.to)}`,b:[n.gp?gp(n.gp):'',n.swap?`ανταλλαγή με ${esc(pl(n.swap).name)}`:''].filter(Boolean).join(' + ')};
   if(n.type==='buy')return {tag:'<span class="tag t">Αγορά</span>',h:`${tname(n.tid)} αγόρασε τον ${esc(pl(n.pid).name)}`,b:gp(n.price)+' από τους ελεύθερους'};
+  if(n.type==='renew')return {tag:'<span class="tag t">Ανανέωση</span>',h:`${tname(n.tid)}: ανανέωση για τον ${esc(pl(n.pid).name)}`,b:`ως τη σεζόν ${n.until} · ${gp(n.cost)}`};
+  if(n.type==='contract_end')return {tag:'<span class="tag n">Λήξη συμβολαίου</span>',h:`Ο ${esc(pl(n.pid).name)} έμεινε ελεύθερος`,b:`Έληξε το συμβόλαιό του με την ${tname(n.tid)}. Μπορεί να τον διεκδικήσει όποιος θέλει.`};
   if(n.type==='release')return {tag:'<span class="tag">Αποδέσμευση</span>',h:`${tname(n.tid)} αποδέσμευσε τον ${esc(pl(n.pid).name)}`,b:'Επιστροφή '+gp(n.refund)};
   return {tag:'<span class="tag n">Ανακοίνωση</span>',h:esc(n.text),b:''};
 }
@@ -340,6 +366,7 @@ function lineup(mt){const L=getLU(mt),slots=FORM[L.f];
   return `<a class="pl" href="#squad" aria-label="Άνοιγμα ενδεκάδας"><div class="pitch">${slots.map(([pos,x,y],i)=>{const p=L.xi[i]?pl(L.xi[i]):null;return `<div class="pc ${p?'':'e'}" style="left:${x}%;top:${y}%"><b>${p?p.ovr:'+'}</b><span>${p?esc(p.name.split(' ').slice(-1)[0]):pos}</span></div>`}).join('')}</div></a>`}
 function vHome(){
   const hl=S.leagues.find(l=>l.kind==='human')?.id;if(S.lg!==hl){S.lg=hl;applyLeague()}
+  const NS=(()=>{const mt0=myTeam();if(!mt0)return '';const t=myTodos(mt0);if(!t.length)return '';return `<section class="box nextstep"><div class="bh">Το επόμενο βήμα σου<small>${t.length>1?'+'+(t.length-1)+' ακόμα στο Γραφείο':''}</small></div><div class="ros todo">${t[0]}</div></section>`})();
   const hum=id=>id&&team(id)&&!team(id).is_auto,NEWS=S.news.filter(n=>n.type==='note'||n.type==='round'||n.type==='prizes'||hum(n.tid)||hum(n.from)||hum(n.to)||hum(n.home)),
   top=NEWS[0],mt=myTeam(),st=standings();
   const l=top?newsLine(top):null;
@@ -364,12 +391,13 @@ function vHome(){
      return `<button class="cd ${nextM&&m.id===nextM.id?'on':''}" data-act="mcard" data-id="${m.id}"><div class="dn">${m.md}η</div><div class="cb">${crest(team(opp),28)}<span>${home?'Έδρα':'Εκτός'}</span>${r}</div></button>`}).join('')}</div>`
     :`<p class="muted">${S.matches.length?'Ανάλαβε ομάδα για να δεις το δικό σου πρόγραμμα.':'Το πρόγραμμα βγαίνει όταν κλείσει το χτίσιμο των ομάδων.'}</p>`;
   const nx=nextM?`<div class="vs"><div class="t">${crest(team(nextM.home),56)}${tlink(nextM.home)}</div><div class="x">VS</div><div class="t">${crest(team(nextM.away),56)}${tlink(nextM.away)}</div></div><div class="row" style="justify-content:center;margin-top:6px"><span class="small muted">${nextM.md}η αγωνιστική</span><button class="ghost" data-act="mcard" data-id="${nextM.id}">Καρτέλα αγώνα</button></div>`:'<p class="muted">Κανένας αγώνας σε εκκρεμότητα.</p>';
-  return `<div class="dash"><section class="box news"><div class="bh">Νέα της λίγκας</div>${hero}${feed?`<ul class="feed">${feed}</ul>`:''}</section>
+  return NS+`<div class="dash"><section class="box news"><div class="bh">Νέα της λίγκας</div>${hero}${feed?`<ul class="feed">${feed}</ul>`:''}</section>
    <div class="mid">${mid}</div><div class="right">${right}</div>
    <section class="box cal"><div class="bh">Πρόγραμμα${mt?'<small>'+esc(mt.name)+'</small>':''}</div>${cal}</section>
    <section class="box next"><div class="bh">Επόμενος αγώνας</div>${nx}</section></div>
    <div class="org"><img src="shield2.jpg" alt="" style="border-radius:6px"><img src="billy.jpg" alt="">eFootball Evolution League · Διοργάνωση: Billy the Professor</div>`;
 }
+function vMore(){const L=[...document.querySelectorAll('#nav a')].filter(a=>!a.hidden&&a.id!=='navMore');return `<section class="card"><h2>Μενού</h2><div class="moregrid">${L.map(a=>`<a class="morebtn" href="${a.getAttribute('href')}">${a.innerHTML}</a>`).join('')}<button class="morebtn" data-act="profile">${avatar(S.me,24)}<span>Το προφίλ μου</span></button></div></section>`}
 function vTable(){return leagueBar()+`<section class="card"><h2>Βαθμολογία</h2><div class="small muted" style="margin-bottom:10px">Νίκη 3, ισοπαλία 1. Ισοβαθμία: διαφορά τερμάτων, μετά γκολ υπέρ. Μετράνε μόνο επιβεβαιωμένα αποτελέσματα.${isAutoLg()?' Οι αγώνες αυτής της λίγκας προσομοιώνονται και δεν αναμειγνύονται με την ανθρώπινη.':''}</div>${tableHTML(true)}</section>`+archiveHTML()}
 
 function vMatches(){
@@ -456,28 +484,34 @@ function vTeams(){
   const mt=myTeam();
   return leagueBar()+`<div class="teams">${[...S.teams].sort((a,b)=>a.order-b.order).map(t=>{const ros=t.roster||[];
     const by={GK:[],DEF:[],MID:[],FWD:[]};for(const r of ros)by[grp(pl(r.pid).pos)].push(r);
-    const mgr=t.is_auto?'<span class="tag">Αυτόματος σύλλογος</span>':t.manager?(esc(S.names[t.manager]||'Μάνατζερ')):'<span class="tag t">Ψάχνει manager</span>';
+    const mgr=t.is_auto?'<span class="tag">Αυτόματος σύλλογος</span>':t.manager?mgrLine(t.manager):'<span class="tag t">Ψάχνει manager</span>';
     return `<section class="card tcard" style="--c:${esc(t.color)}"><h2><span>${crest(t,22)} ${esc(t.name)}</span><button class="ghost" style="min-height:32px;padding:0 10px;font-size:13px" data-act="tinfo" data-id="${t.id}">Καρτέλα</button></h2><p class="small muted" style="margin:4px 0 10px">Μάνατζερ: ${mgr}</p>
     <div class="stat"><div><span class="small muted">Budget</span><b>${gp(t.budget)}</b></div><div><span class="small muted">Ρόστερ</span><b>${ros.length}/${MAXR}</b></div></div>
     ${!t.is_auto&&!t.manager&&S.me&&!mt?`<button data-act="claim" data-id="${t.id}">Ανάλαβε αυτή την ομάδα</button>`:''}
-    ${ros.length?`<details ${mt&&mt.id===t.id?'open':''}><summary>Ρόστερ</summary><div class="ros">${Object.keys(by).map(g=>by[g].length?`<div class="small muted" style="border:0">${GNAME[g]}</div>`+by[g].sort((a,b)=>pl(b.pid).ovr-pl(a.pid).ovr).map(r=>`<div><span><span class="pos ${g}">${esc(pl(r.pid).pos)}</span> ${plink(r.pid)} <span class="muted">${pl(r.pid).ovr}</span> ${mt&&mt.id===t.id?actChip(r):''}</span><span class="row" style="gap:6px"><span class="muted num">${gp(r.paid)}</span>${mt&&mt.id===t.id&&cfg().phase==='season'&&cfg().windowOpen?`<button class="ghost" style="min-height:36px;padding:0 8px" data-act="release" data-id="${r.pid}" title="Επιστροφή 50%">Αποδέσμευση</button>`:''}</span></div>`).join(''):'').join('')}</div></details>`:''}
+    ${ros.length?`<details ${mt&&mt.id===t.id?'open':''}><summary>Ρόστερ</summary>${mt&&mt.id===t.id?`<p class="small muted" style="margin:6px 0">Πάτα έναν παίκτη για συμβόλαιο, ανανέωση ή αποδέσμευση. ${cfg().windowOpen?'Η μεταγραφική είναι ανοιχτή.':'Αποδεσμεύσεις γίνονται μόνο με ανοιχτή μεταγραφική ('+windowText()+').'}</p>`:''}<div class="ros">${Object.keys(by).map(g=>by[g].length?`<div class="small muted" style="border:0">${GNAME[g]}</div>`+by[g].sort((a,b)=>pl(b.pid).ovr-pl(a.pid).ovr).map(r=>`<div><span><span class="pos ${g}">${esc(pl(r.pid).pos)}</span> ${plink(r.pid)} <span class="muted">${pl(r.pid).ovr}</span> ${mt&&mt.id===t.id?actChip(r)+contractChip(r):''}</span><span class="row" style="gap:6px"><span class="muted num">${gp(r.paid)}</span>${mt&&mt.id===t.id&&cfg().phase==='season'&&cfg().windowOpen?`<button class="ghost" style="min-height:36px;padding:0 8px" data-act="release" data-id="${r.pid}" title="Επιστροφή 50%">Αποδέσμευση</button>`:''}</span></div>`).join(''):'').join('')}</div></details>`:''}
     </section>`}).join('')}</div>`;
 }
 
 function offerValid(o){const tgt=ownerOf(o.pid);if(!tgt||tgt.id!==o.to)return false;if(o.swap){const s=ownerOf(o.swap);if(!s||s.id!==o.from)return false}return true}
+function offerTerms(o){return [o.gp?gp(o.gp):'',o.swap?esc(pl(o.swap).name)+' (ανταλλαγή)':''].filter(Boolean).join(' + ')||'0 GP'}
+function offerThread(o){if((o.hist||[]).length<2)return '';return `<details class="thread"><summary>Διαπραγμάτευση · γύρος ${o.round}/${cfg().counterRounds||4}</summary>${o.hist.map(h=>`<div><b>${tname(sid(h.by))}</b>: ${[h.gp?gp(h.gp):'',h.swap?esc(pl(spid(h.swap)).name):''].filter(Boolean).join(' + ')}${h.note?` · <span class="muted">${esc(h.note)}</span>`:''} <span class="muted small">${ago(Date.parse(h.ts))}</span></div>`).join('')}</details>`}
 function vTransfers(){
   const mt=myTeam();
-  const line=o=>`${tname(o.from)}${team(o.from)?.is_auto?' <span class="tag">αυτόματη</span>':''} θέλει τον <b>${esc(pl(o.pid).name)}</b> (${tname(o.to)}) για ${[o.gp?gp(o.gp):'',o.swap?esc(pl(o.swap).name):''].filter(Boolean).join(' + ')||'0 GP'}${o.note?`<br><span class="small muted">${esc(o.note)}</span>`:''}${o.status==='open'&&o.expires?`<br><span class="small muted">Λήγει ${fmtDT(o.expires)}</span>`:''}`;
+  const auto=id=>team(id)?.is_auto?' <span class="tag">αυτόματη</span>':'';
+  const line=o=>{const buyer=mt&&o.from===mt.id;return `${buyer?`Η πρότασή σου στην ${tname(o.to)}${auto(o.to)} για τον <b>${esc(pl(o.pid).name)}</b>`:`${tname(o.from)}${auto(o.from)} θέλει τον <b>${esc(pl(o.pid).name)}</b>${mt&&o.to===mt.id?' σου':` (${tname(o.to)})`}`}: <b>${offerTerms(o)}</b>${o.round>1?` <span class="tag t">γύρος ${o.round}</span>`:''}${o.note?`<br><span class="small muted">${esc(o.note)}</span>`:''}${o.status==='open'&&o.expires?`<br><span class="small muted">Λήγει ${fmtDT(o.expires)}</span>`:''}${offerThread(o)}`};
   const open=S.offers.filter(o=>o.status==='open');
-  const inc=mt?open.filter(o=>o.to===mt.id):[],out=mt?open.filter(o=>o.from===mt.id):[];
+  const mineO=mt?open.filter(o=>o.to===mt.id||o.from===mt.id):[];
+  const myTurn=mineO.filter(o=>o.turn===mt.id),waiting=mineO.filter(o=>o.turn!==mt.id);
   const done=S.offers.filter(o=>o.status==='done').sort((a,b)=>b.ts-a.ts).slice(0,20);
-  const blk=(arr,fn)=>arr.length?arr.map(o=>`<div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding:10px 0"><span>${line(o)}</span><span class="row">${fn(o)}</span></div>`).join(''):'<p class="muted small">Τίποτα εδώ.</p>';
+  const blk=(arr,fn)=>arr.length?arr.map(o=>`<div class="offer"><div>${line(o)}</div><div class="row">${fn(o)}</div></div>`).join(''):'<p class="muted small">Τίποτα εδώ.</p>';
+  const maxR=cfg().counterRounds||4;
   return `<section class="card"><h2>Μεταγραφές</h2>${!mt?'<p class="muted">Ανάλαβε μια ομάδα για να στέλνεις και να δέχεσαι προτάσεις.</p>':''}
-  <h3 style="font-size:20px;margin:10px 0 4px">Προτάσεις προς εσένα</h3>${blk(inc,o=>offerValid(o)?`<button data-act="accept" data-id="${o.id}">Αποδοχή</button><button class="ghost" data-act="reject" data-id="${o.id}">Απόρριψη</button>`:`<button class="ghost" data-act="reject" data-id="${o.id}">Αφαίρεση</button>`)}
-  <h3 style="font-size:20px;margin:18px 0 4px">Οι προτάσεις σου</h3>${blk(out,o=>`<button class="ghost" data-act="cancel" data-id="${o.id}">Απόσυρση</button>`)}
-  <h3 style="font-size:20px;margin:18px 0 4px">Απαντήσεις στις προτάσεις σου</h3>${(mt?S.offers.filter(o=>o.from===mt.id&&['rejected','expired','invalid','cancelled'].includes(o.status)).slice(0,10):[]).map(o=>`<div style="border-top:1px solid var(--line);padding:8px 0" class="small">${esc(pl(o.pid).name)} · ${{rejected:'Απορρίφθηκε',expired:'Έληξε',invalid:'Ακυρώθηκε (άλλαξε η κατάσταση)',cancelled:'Αποσύρθηκε'}[o.status]}${o.note?' · '+esc(o.note):''}</div>`).join('')||'<p class="muted small">Καμία ακόμα.</p>'}
-  <h3 style="font-size:20px;margin:18px 0 4px">Τελευταίες μεταγραφές στον κόσμο EFEL</h3>${done.length?done.map(o=>`<div style="border-top:1px solid var(--line);padding:10px 0" class="small">${ago(o.ts)} · ${esc(pl(o.pid).name)}: ${tname(o.to)} → ${tname(o.from)} για ${[o.gp?gp(o.gp):'',o.swap?esc(pl(o.swap).name):''].filter(Boolean).join(' + ')}</div>`).join(''):'<p class="muted small">Καμία ακόμα.</p>'}
-  <p class="small muted">Για νέα πρόταση: Αγορά → φίλτρο «Όλοι» → «Πρόταση» δίπλα στον παίκτη.</p></section>`;
+  ${!cfg().windowOpen?`<div class="note small">Η μεταγραφική περίοδος είναι κλειστή (${windowText()}). Μπορείς να διαπραγματεύεσαι με άλλους managers, αλλά η μεταγραφή ολοκληρώνεται μόνο όταν ανοίξει. Οι αυτόματοι σύλλογοι απαντούν όταν ανοίξει.</div>`:''}
+  <h3 class="h3">Σε περιμένουν</h3>${blk(myTurn,o=>`<button data-act="accept" data-id="${o.id}">Αποδοχή</button>${o.round<maxR?`<button class="ghost" data-act="counter" data-id="${o.id}">Αντιπρόταση</button>`:''}<button class="ghost" data-act="reject" data-id="${o.id}">${o.from===mt.id?'Απόσυρση':'Απόρριψη'}</button>`)}
+  <h3 class="h3">Περιμένεις απάντηση</h3>${blk(waiting,o=>`<button class="ghost" data-act="reject" data-id="${o.id}">${o.from===mt.id?'Απόσυρση':'Ακύρωση'}</button>`)}
+  <h3 class="h3">Απαντήσεις</h3>${(mt?S.offers.filter(o=>(o.from===mt.id||o.to===mt.id)&&['rejected','expired','invalid','cancelled'].includes(o.status)).slice(0,10):[]).map(o=>`<div style="border-top:1px solid var(--line);padding:8px 0" class="small">${esc(pl(o.pid).name)} · ${tname(o.from)} → ${tname(o.to)} · ${{rejected:'Απορρίφθηκε',expired:'Έληξε',invalid:'Ακυρώθηκε (άλλαξε η κατάσταση)',cancelled:'Αποσύρθηκε'}[o.status]}${o.note?' · '+esc(o.note):''}</div>`).join('')||'<p class="muted small">Καμία ακόμα.</p>'}
+  <h3 class="h3">Τελευταίες μεταγραφές στον κόσμο EFEL</h3>${done.length?done.map(o=>`<div style="border-top:1px solid var(--line);padding:10px 0" class="small">${ago(o.ts)} · ${esc(pl(o.pid).name)}: ${tname(o.to)} → ${tname(o.from)} για ${offerTerms(o)}</div>`).join(''):'<p class="muted small">Καμία ακόμα.</p>'}
+  <p class="small muted">Για νέα πρόταση: Αγορά → Διαθεσιμότητα «Όλοι» → «Πρόταση» δίπλα στον παίκτη. Κάθε πρόταση έχει έως ${maxR} γύρους αντιπροτάσεων.</p></section>`;
 }
 
 
@@ -512,10 +546,37 @@ const A={
     ask({title:'Πρόταση μεταγραφής',pid,before:mt.budget,after:mt.budget-g,label:'Budget αν τη δεχτούν',
       note:`Στέλνεις στην ${esc(o.name)}: <b>${[g?gp(g):'',swap?esc(pl(swap).name):''].filter(Boolean).join(' + ')}</b>. Τα GP δεσμεύονται όσο η πρόταση είναι ανοιχτή και λήγει σε 72 ώρες.${TERMS}`,ok:'Αποστολή πρότασης',
       run:()=>w(async()=>{await rpc('efel_make_offer',{p_player:npid(pid),p_gp:g,p_swap:npid(swap)});S.offerFor=null},'Η πρόταση στάλθηκε')})},
-  accept(id){const of=S.offers.find(o=>o.id===id);if(!of)return;const T=team(of.to);
+  counter(id){const o=S.offers.find(x=>x.id===id);if(!o)return;const mt=myTeam(),buyer=o.from===mt.id,B=team(o.from);
+    openM(`<div class="box"><div class="bh">Αντιπρόταση</div>${pcardHTML(o.pid)}<p class="small">Τώρα: <b>${offerTerms(o)}</b>${buyer?'':` από την ${tname(o.from)}`}. Γύρος ${o.round}/${cfg().counterRounds||4}.</p>
+     <label class="small">GP<br><input id="cgp" type="number" step="1000" min="0" value="${o.gp}"></label>
+     <label class="small">Παίκτης ανταλλαγής από ${buyer?'σένα':'την '+esc(B.name)} (προαιρετικά)<br><select id="cswap"><option value="">Κανένας</option>${(B.roster||[]).map(r=>pl(r.pid)).sort((a,b)=>b.ovr-a.ovr).map(p=>`<option value="${p.id}" ${o.swap===p.id?'selected':''}>${esc(p.pos)} · ${esc(p.name)} · ${p.ovr}</option>`).join('')}</select></label>
+     <label class="small">Μήνυμα (προαιρετικά)<br><input id="cnote" maxlength="200" placeholder="${buyer?'π.χ. Τελευταία μου πρόταση':'π.χ. Τον θέλω για βασικό, ζητάω λίγο παραπάνω'}"></label>
+     <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="closeM">Άκυρο</button><button data-act="sendCounter" data-id="${id}">Αποστολή αντιπρότασης</button></div></div>`)},
+  async sendCounter(id){const g=Math.max(0,Math.round(+$('#cgp').value||0)),sw=$('#cswap').value||null,nt=$('#cnote').value;closeM();
+    await w(()=>rpc('efel_counter_offer',{p_offer:+id,p_gp:g,p_swap:npid(sw),p_note:nt}),'Η αντιπρόταση στάλθηκε')},
+  slotEdit(id){S.slotEdit=id||null;render(true)},
+  async sendSlots(id){const t=[1,2,3].map(k=>$(`#ts${k}_${id}`)?.value).filter(Boolean).map(v=>new Date(v).toISOString());if(!t.length)return toast('Διάλεξε τουλάχιστον μία ώρα');S.slotEdit=null;
+    await w(()=>rpc('efel_propose_slots',{p_match:+id,p_times:t}),'Οι ώρες στάλθηκαν στον αντίπαλο')},
+  async pickSlot(v){const [id,t]=v.split('|');await w(()=>rpc('efel_pick_slot',{p_match:+id,p_time:t}),'Η ώρα συμφωνήθηκε!')},
+  renew(v){const [pid,n]=v.split('|'),p=pl(pid),cost=Math.ceil(p.price*(cfg().renewPct||30)/100*(+n)/1000)*1000,mt=myTeam(),f=S.fin||{};
+    ask({title:'Ανανέωση συμβολαίου',pid,before:f.free??mt.budget,after:(f.free??mt.budget)-cost,label:'Ελεύθερα GP',note:`Ανανεώνεις τον <b>${esc(p.name)}</b> για ${n} ${+n>1?'σεζόν':'σεζόν'} με κόστος <b>${gp(cost)}</b>.`,ok:'Ανανέωση',
+      run:()=>w(()=>rpc('efel_renew',{p_player:npid(pid),p_seasons:+n}),'Το συμβόλαιο ανανεώθηκε')})},
+  profile(){const p=S.prof?.[S.me]||{};openM(`<div class="box"><div class="bh">Το προφίλ μου</div>
+    <div class="row" style="gap:14px;align-items:center;margin-bottom:10px">${avatar(S.me,72)}<div><label class="ghost-file"><input type="file" id="avf" accept="image/png,image/jpeg,image/webp" hidden><span class="btnlike">Ανέβασε φωτογραφία</span></label><div class="small muted" style="margin-top:6px">Αν δεν ανεβάσεις, μένει η φωτογραφία του Google σου.</div></div></div>
+    <label class="small">Όνομα που βλέπουν οι άλλοι<br><input id="pf_n" maxlength="40" value="${esc(p.display_name||'')}"></label>
+    <label class="small">Όνομα στο eFootball<br><input id="pf_e" maxlength="40" value="${esc(p.efootball_name||'')}"></label>
+    <label class="small">Πλατφόρμα<br><select id="pf_p"><option value="">—</option><option value="console" ${p.platform==='console'?'selected':''}>Κονσόλα</option><option value="mobile" ${p.platform==='mobile'?'selected':''}>Κινητό</option></select></label>
+    <label class="small">Πώς σε βρίσκουν (Discord, Viber, Messenger)<br><input id="pf_c" maxlength="80" value="${esc(p.contact||'')}" placeholder="π.χ. Discord: billy#1234"></label>
+    <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="closeM">Άκυρο</button><button data-act="saveProfile">Αποθήκευση</button></div></div>`)},
+  async saveProfile(){const v=id=>$(id)?.value||'';const a=[v('#pf_n'),v('#pf_e'),v('#pf_p'),v('#pf_c')];closeM();
+    await w(()=>rpc('efel_update_profile',{p_name:a[0],p_efname:a[1],p_platform:a[2],p_contact:a[3],p_avatar:null}),'Το προφίλ αποθηκεύτηκε')},
+  accept(id){const of=S.offers.find(o=>o.id===id);if(!of)return;const mt=myTeam();if(of.from===mt.id){const f=S.fin||{};
+    return ask({title:'Αποδοχή όρων',pid:of.pid,label:'Budget',before:mt.budget,after:mt.budget-of.gp,note:`Αγοράζεις τον <b>${esc(pl(of.pid).name)}</b> από την ${tname(of.to)} για <b>${offerTerms(of)}</b>.${TERMS}`,ok:'Αποδοχή',
+      run:()=>w(()=>rpc('efel_respond_offer',{p_offer:+id,p_accept:true,p_terms:true}),'Η μεταγραφή ολοκληρώθηκε')})}
+    const T=team(of.to);
     ask({title:'Αποδοχή πρότασης',pid:of.pid,before:T.budget,after:T.budget+of.gp,note:`Δίνεις τον <b>${esc(pl(of.pid).name)}</b> στην ${tname(of.from)} και παίρνεις <b>${[of.gp?gp(of.gp):'',of.swap?esc(pl(of.swap).name):''].filter(Boolean).join(' + ')}</b>.${of.swap?TERMS:''}`,ok:'Αποδοχή',
       run:()=>w(()=>rpc('efel_respond_offer',{p_offer:+id,p_accept:true,p_terms:true}),'Η μεταγραφή ολοκληρώθηκε')})},
-  async reject(id){await w(()=>rpc('efel_respond_offer',{p_offer:+id,p_accept:false,p_terms:false}),'Απορρίφθηκε')},
+  async reject(id){const o=S.offers.find(x=>x.id===id);await w(()=>rpc('efel_respond_offer',{p_offer:+id,p_accept:false,p_terms:false}),o&&o.from===myTeam()?.id?'Η πρόταση αποσύρθηκε':'Απορρίφθηκε')},
   async cancel(id){await w(()=>rpc('efel_cancel_offer',{p_offer:+id}),'Αποσύρθηκε')},
   async go(){const f=S.pend;S.pend=null;closeM();if(f)await f()},
   closeM(){closeM()},
@@ -575,7 +636,9 @@ document.addEventListener('click',async e=>{if(e.target.id==='ov'){closeM();retu
   const f=A[el.dataset.act];if(!f)return;el.disabled=true;try{await f(el.dataset.id,el)}finally{el.disabled=false}
 });
 document.addEventListener('input',e=>{if(e.target.id==='fq'){S.mf.q=e.target.value;clearTimeout(S._q);S._q=setTimeout(()=>{render();const i=$('#fq');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
-document.addEventListener('change',e=>{if(e.target.id==='simHuman')S.simHuman=e.target.checked;if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}{const M={fg:'g',fpos:'pos',fpmin:'pmin',fpmax:'pmax',fomin:'omin',fomax:'omax',fsort:'sort',fav:'av'};if(M[e.target.id]){S.mf[M[e.target.id]]=e.target.value;S.mf.lim=60;render(true)}if(e.target.id==='faff'){S.mf.afford=e.target.checked;render(true)}}});
+document.addEventListener('change',e=>{if(e.target.id==='simHuman')S.simHuman=e.target.checked;if(e.target.id==='avf'){const f=e.target.files[0];if(!f)return;if(f.size>2e6)return toast('Η φωτογραφία πρέπει να είναι έως 2MB');const P=S.prof?.[S.me]||{},path=`${S.me}/avatar-${Date.now()}.${f.type.split('/')[1]||'jpg'}`;toast('Ανέβασμα…');
+    sb.storage.from('avatars').upload(path,f,{upsert:true,contentType:f.type}).then(({error})=>{if(error)return toast('Δεν ανέβηκε: '+error.message);const url=sb.storage.from('avatars').getPublicUrl(path).data.publicUrl;closeM();
+      w(()=>rpc('efel_update_profile',{p_name:'',p_efname:P.efootball_name||'',p_platform:P.platform||'',p_contact:P.contact||'',p_avatar:url}),'Η φωτογραφία σου ανέβηκε')})}if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}{const M={fg:'g',fpos:'pos',fpmin:'pmin',fpmax:'pmax',fomin:'omin',fomax:'omax',fsort:'sort',fav:'av'};if(M[e.target.id]){S.mf[M[e.target.id]]=e.target.value;S.mf.lim=60;render(true)}if(e.target.id==='faff'){S.mf.afford=e.target.checked;render(true)}}});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(S.dirty)render()},0));
 addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 addEventListener('hashchange',()=>{S.lu=null;S.sel=null;closeM();S.offerFor=S._keep||null;S._keep=null;render(true);scrollTo(0,0)});
