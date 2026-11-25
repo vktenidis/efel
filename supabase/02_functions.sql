@@ -295,6 +295,28 @@ begin
 end $$;
 
 -- εκτέλεση μεταγραφής (κοινή για ανθρώπους και αυτόματους)
+-- Αυτόματος σύλλογος που αγοράζει με γεμάτο ρόστερ ή θέση: αποδεσμεύει πρώτα τον πιο αδύναμο της ίδιας ζώνης
+-- (ή τον πιο αδύναμο γενικά αν φτάνει), με την κανονική επιστροφή 50%, και το γράφει στα νέα.
+create or replace function efel_auto_make_room(c int, pid bigint, minus bigint default null) returns void
+language plpgsql security definer set search_path=public as $$
+declare g text; rel record; maxr int := cfg_int('max_roster');
+begin
+  if not coalesce((select is_auto from clubs where id = c), false) then return; end if;
+  select grp(pos) into g from players where id = pid;
+  if (select count(*) from roster r join players p on p.id=r.player_id where r.club_id=c and grp(p.pos)=g and r.player_id is distinct from minus) >= (cfg('quota')->>g)::int
+     or (select count(*) from roster where club_id=c and player_id is distinct from minus) >= maxr then
+    select r.player_id, r.paid into rel from roster r join players p on p.id=r.player_id
+     where r.club_id=c and r.player_id is distinct from minus
+     order by (grp(p.pos)=g) desc, p.ovr asc, r.paid asc limit 1;
+    if rel.player_id is null then return; end if;
+    delete from roster where player_id = rel.player_id;
+    update clubs set budget = budget + floor(rel.paid/2000)*1000 where id = c;
+    update offers set status='invalid', decided_at=now() where status='open' and (player_id=rel.player_id or swap_player=rel.player_id);
+    perform efel_news('release', jsonb_build_object('club', c, 'player', rel.player_id, 'refund', floor(rel.paid/2000)*1000));
+  end if;
+end $$;
+revoke execute on function efel_auto_make_room(int,bigint,bigint) from public, anon, authenticated;
+
 create or replace function efel_execute_offer(o offers) returns void
 language plpgsql security definer set search_path=public as $$
 declare rmv roster; rsw roster; e text; fb bigint;
@@ -307,8 +329,9 @@ begin
   end if;
   select budget into fb from clubs where id = o.from_club for update;
   if fb < o.gp then raise exception 'Ο αγοραστής δεν έχει πια αρκετά GP.'; end if;
+  perform efel_auto_make_room(o.from_club, o.player_id, o.swap_player);
   e := efel_check_add(o.from_club, o.player_id, o.gp, o.swap_player);
-  if e <> '' then raise exception 'Αγοραστής: %', e; end if;
+  if e <> '' then raise exception 'Ο αγοραστής (%) δεν μπορεί να ολοκληρώσει: %', (select name from clubs where id=o.from_club), e; end if;
   delete from roster where player_id = o.player_id;
   if o.swap_player is not null then delete from roster where player_id = o.swap_player; end if;
   perform efel_acquire(o.from_club, o.player_id, greatest(o.gp, 0), case when o.swap_player is null then 'transfer' else 'swap' end);
