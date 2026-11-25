@@ -236,7 +236,7 @@ a{color:#7fd0ff}
 .ec-tier{position:relative;z-index:1;margin-top:calc(5px*var(--s));font:800 calc(9px*var(--s)) "Fira Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#081120;background:var(--a);padding:calc(2px*var(--s)) calc(10px*var(--s));clip-path:polygon(8% 0,100% 0,92% 100%,0 100%)}
 .ec-foot{position:relative;z-index:1;margin-top:auto;width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 calc(12px*var(--s)) calc(10px*var(--s)) calc(22px*var(--s));box-sizing:border-box;font:700 calc(11px*var(--s)) "Fira Sans",sans-serif;color:#cfe0ff}
 .ec-foot span{display:flex;align-items:center;gap:calc(4px*var(--s))}.ec-foot b{color:var(--a);font-size:calc(14px*var(--s))}
-.pcard .ecard{grid-row:span 3}
+.pcard:has(.ecard){grid-template-columns:auto minmax(0,1fr);align-items:center}.pcard .ecard{grid-row:span 4}.pcard:has(.ecard) .o{display:none}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;justify-items:center}
 .cbtn{background:none;border:0;padding:0;min-height:0;cursor:pointer;box-shadow:none}.cbtn:hover .ecard{transform:translateY(-3px)}.ecard{transition:transform .15s}
 /* φίλτρα αγοράς */
@@ -263,6 +263,6 @@ button.sm{min-height:32px;padding:0 10px;font-size:13px}button.sm.on{background:
 <div class="toast" id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=cc3b"></script>
+<script src="app.js?v=cc3c"></script>
 </body>
 </html>
