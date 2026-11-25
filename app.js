@@ -43,7 +43,7 @@ function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TI
    <div class="ec-face">${faceImg(p,Math.round(104*sc))}</div>
    <div class="ec-name">${first?`<small>${esc(first)}</small>`:''}${esc(last)}</div>
    <div class="ec-tier">${T[1]}</div>
-   <div class="ec-foot"><span>${o?crest(o,Math.round(16*sc))+' '+esc(o.abbr||''):'Ελεύθερος'}</span><b>${Math.round(p.price/1000)}K</b></div>
+   <div class="ec-foot"><span>${o?crest(o,Math.round(18*sc)):'Ελεύθερος'}</span><b>${Math.round(p.price/1000)}K</b></div>
   </div></div>`}
 function setCat(list){S.cat=list;S.cmap=Object.fromEntries(list.map(p=>[p.id,p]))}
 fetch('standard.json').then(r=>r.json()).then(d=>{STD=d;pickCat();render()}).catch(()=>toast('Ο κατάλογος δεν φόρτωσε'));
