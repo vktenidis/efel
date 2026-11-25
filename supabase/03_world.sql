@@ -257,3 +257,26 @@ grant execute on function
   efel_set_config(text,jsonb), efel_setup_world(), efel_admin_tick(), efel_end_season(), efel_new_season_fixtures(),
   efel_reprice_admin(), efel_admin_note(text), efel_admin_club(int,text,text,text), efel_end_manager(int,text)
 to authenticated;
+
+-- ---------- Ασφάλεια (25/11/2026): μόνο οι ενέργειες της σελίδας είναι εκτελέσιμες ----------
+revoke execute on all functions in schema public from public, anon, authenticated;
+alter default privileges in schema public revoke execute on functions from public, anon, authenticated;
+grant execute on function
+  efel_my_club(), efel_is_admin(), efel_finance(int),
+  efel_claim_club(int), efel_save_lineup(text, jsonb), efel_release(bigint),
+  efel_confirm_activation(bigint, boolean), efel_declare_unable(bigint),
+  efel_place_bid(bigint, int), efel_cancel_bid(bigint), efel_buy_free(bigint),
+  efel_make_offer(bigint, int, bigint), efel_respond_offer(int, boolean, boolean), efel_cancel_offer(int),
+  efel_report_score(int, int, int), efel_confirm_score(int), efel_dispute_score(int),
+  efel_propose_time(int, timestamptz), efel_accept_time(int), efel_end_manager(int, text),
+  efel_admin_set_score(int, int, int), efel_admin_reopen(int), efel_set_config(text, jsonb),
+  efel_open_round(timestamptz), efel_close_round(), efel_admin_tick(), efel_end_season(),
+  efel_new_season_fixtures(), efel_reprice_admin(), efel_setup_world(),
+  efel_admin_club(int, text, text, text), efel_admin_note(text)
+to authenticated;
+alter function efel_fmt(bigint) set search_path = public;
+alter function cfg(text) set search_path = public;
+alter function cfg_int(text) set search_path = public;
+alter function grp(text) set search_path = public;
+alter function efel_poisson(numeric) set search_path = public;
+alter function efel_md_date(int) set search_path = public;
