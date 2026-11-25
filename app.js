@@ -10,7 +10,7 @@ function priceByRank(r,T){T=T||8;const tiers=[[2*T,130000,90000],[7*T,70000,4000
 const tierOf=p=>p>=90000?['Αστέρας','#c99a12']:p>=40000?['Κορυφαίος','#123c86']:p>=15000?['Βασικός','#1f9d55']:['Ρόστερ','#8a96a8'];
 const tierTag=pr=>{const [l,c]=tierOf(pr);return `<span class="tag" style="background:${c};color:#fff">${l}</span>`};
 const COLORS=['#e1262d','#2f6fd6','#f2c230','#1d8a4e','#8e44ad','#f07c1e','#17a2b8','#222f3e','#c0392b','#16a085'];
-const S={all:[],allMatches:[],leagues:[],lg:null,prices:{},archive:[],fin:null,cfg:null,teams:[],cat:[],cmap:{},matches:[],offers:[],news:[],bids:[],me:null,owner:false,names:{},md:1,mf:{q:'',g:'',av:'free'},offerFor:null,loaded:false};
+const S={all:[],allMatches:[],leagues:[],lg:null,prices:{},archive:[],fin:null,cfg:null,teams:[],cat:[],cmap:{},matches:[],offers:[],news:[],bids:[],me:null,owner:false,names:{},md:1,mf:{q:'',g:'',av:'free',pos:'',tier:'',pmin:'',pmax:'',omin:'',omax:'',sort:'ovr',afford:false,view:'list',lim:60},offerFor:null,loaded:false};
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -32,6 +32,19 @@ let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on
 const cfg=()=>S.cfg||{};
 let DET={},STD=null,stdLoading=false;
 function cardImg(p,w,cls){if(!p.img)return '';const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
+const TIERS=[['star','Αστέρας',90000,1e9,'#c99a12'],['top','Κορυφαίος',40000,89999,'#2b6fd6'],['core','Βασικός',15000,39999,'#1f9d55'],['squad','Ρόστερ',5001,14999,'#7d8aa0'],['base','Βασική τιμή',0,5000,'#4b5870']];
+const tierKey=pr=>(TIERS.find(t=>pr>=t[2]&&pr<=t[3])||TIERS[4])[0];
+function faceImg(p,sz){if(!p.img)return '';const k=p.img-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/72;
+  return `<span class="eface" style="width:${sz}px;height:${sz}px;background:url(sp/${s}.webp) ${-(c*120+44)*f}px ${-(r*170+3)*f}px/${1200*f}px ${1700*f}px no-repeat"></span>`}
+function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180;
+  const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
+  return `<div class="ecard t-${tk}" style="--s:${sc}"><div class="ec-in">
+   <div class="ec-top"><div class="ec-ovr">${p.ovr}<small>${esc(p.pos)}</small></div><div class="ec-logo">EF<b>E</b>L</div></div>
+   <div class="ec-face">${faceImg(p,Math.round(104*sc))}</div>
+   <div class="ec-name">${first?`<small>${esc(first)}</small>`:''}${esc(last)}</div>
+   <div class="ec-tier">${T[1]}</div>
+   <div class="ec-foot"><span>${o?crest(o,Math.round(16*sc))+' '+esc(o.abbr||''):'Ελεύθερος'}</span><b>${Math.round(p.price/1000)}K</b></div>
+  </div></div>`}
 function setCat(list){S.cat=list;S.cmap=Object.fromEntries(list.map(p=>[p.id,p]))}
 fetch('standard.json').then(r=>r.json()).then(d=>{STD=d;pickCat();render()}).catch(()=>toast('Ο κατάλογος δεν φόρτωσε'));
 fetch('details.json').then(r=>r.json()).then(d=>{DET=d||{}}).catch(()=>{});
@@ -44,7 +57,7 @@ function ask(o){S.pend=o.run;const p=pl(o.pid);
 const SN={speed:'Speed',acceleration:'Acceleration',finishing:'Finishing',lowPass:'Low Pass',dribbling:'Dribbling',physicalContact:'Physical Contact',defensiveAwareness:'Defensive Awareness',stamina:'Stamina',gkAwareness:'GK Awareness',gkCatching:'GK Catching',gkParrying:'GK Parrying',gkReflexes:'GK Reflexes',gkReach:'GK Reach',jump:'Jump'};
 const plink=pid=>`<button class="lnk" data-act="pinfo" data-id="${esc(pid)}">${esc(pl(pid).name)}</button>`;
 function pcardHTML(pid){const p=pl(pid),d=DET[p.name+'|'+p.ovr],o=ownerOf(pid);
-  return `<div class="pcard">${cardImg(p,86,'cimg')}<div class="o">${p.ovr}<small>${esc(p.pos)}</small></div><h3>${esc(p.name)}</h3><div class="s">${d?esc(d.ps)+' · ':''}${o?esc(o.name):'Ελεύθερος'}</div><div class="s">Βασική τιμή ${gp(p.price)} ${tierTag(p.price)}</div></div>`}
+  return `<div class="pcard">${efelCard(pid,96)}<div class="o">${p.ovr}<small>${esc(p.pos)}</small></div><h3>${esc(p.name)}</h3><div class="s">${d?esc(d.ps)+' · ':''}${o?esc(o.name):'Ελεύθερος'}</div><div class="s">Βασική τιμή ${gp(p.price)} ${tierTag(p.price)}</div></div>`}
 function playerHTML(pid){const p=pl(pid),d=DET[p.name+'|'+p.ovr],o=ownerOf(pid),mt=myTeam(),r=o&&(o.roster||[]).find(x=>x.pid===pid);
   const season=cfg().phase==='season'&&cfg().windowOpen;let act='';
   if(mt&&season&&!o)act=`<button data-act="buy" data-id="${esc(pid)}">Αγορά · ${gp(p.price)}</button>`;
@@ -379,12 +392,24 @@ function vMatches(){
 }
 
 function myBids(){const mt=myTeam();return mt?S.bids.filter(b=>b.round===cfg().round&&b.tid===mt.id):[]}
+const POSL=["GK", "CB", "LB", "RB", "DMF", "CMF", "AMF", "LMF", "RMF", "LWF", "RWF", "SS", "CF"];
 function vMarket(){
   const mt=myTeam(),draft=cfg().phase!=='season',open=draft?!!cfg().biddingOpen:!!cfg().windowOpen;
   const f=S.mf,q=f.q.trim().toLowerCase();
-  let rows=S.cat.filter(p=>(!q||p.name.toLowerCase().includes(q))&&(!f.g||grp(p.pos)===f.g));
-  if(f.av==='free')rows=rows.filter(p=>!ownerOf(p.id));
-  const shown=rows.slice(0,150);
+  const own={};for(const t of S.all)for(const r of t.roster||[])own[r.pid]=t;
+  const free=S.fin?.free??mt?.budget??Infinity,n=v=>v===''||v==null?null:+v;
+  const pmin=n(f.pmin),pmax=n(f.pmax),omin=n(f.omin),omax=n(f.omax);
+  let rows=S.cat.filter(p=>{const o=own[p.id];
+    if(q&&!p.name.toLowerCase().includes(q))return false;
+    if(f.g&&grp(p.pos)!==f.g)return false;if(f.pos&&p.pos!==f.pos)return false;
+    if(f.tier&&tierKey(p.price)!==f.tier)return false;
+    if(pmin!=null&&p.price<pmin*1000)return false;if(pmax!=null&&p.price>pmax*1000)return false;
+    if(omin!=null&&p.ovr<omin)return false;if(omax!=null&&p.ovr>omax)return false;
+    if(f.av==='free'&&o)return false;if(f.av==='human'&&!(o&&!o.is_auto))return false;if(f.av==='auto'&&!(o&&o.is_auto))return false;if(f.av==='mine'&&!(o&&mt&&o.id===mt.id))return false;
+    if(f.afford&&!o&&p.price>free)return false;return true});
+  const so={ovr:(a,b)=>b.ovr-a.ovr||b.price-a.price,pdesc:(a,b)=>b.price-a.price||b.ovr-a.ovr,pasc:(a,b)=>a.price-b.price||b.ovr-a.ovr,value:(a,b)=>(b.ovr/b.price)-(a.ovr/a.price)||b.ovr-a.ovr,name:(a,b)=>a.name.localeCompare(b.name)}[f.sort]||null;
+  if(so)rows=rows.slice().sort(so);
+  const shown=rows.slice(0,f.lim||60);
   const mb=myBids(),committed=mb.reduce((s,b)=>s+b.amt,0);
   const head=draft?`<div class="note small">${open?`<b>Γύρος ${cfg().round} ανοιχτός</b>${cfg().deadline?' · κλείνει '+esc(cfg().deadline):''}. Κάνε έως ${cfg().bidsPerRound||8} κρυφές προσφορές. Στο κλείσιμο, κάθε παίκτης πάει σε όποιον έδωσε τα περισσότερα. Σε ισοπαλία κερδίζει όποιος έχει ξοδέψει λιγότερα.`:'Δεν υπάρχει ανοιχτός γύρος προσφορών αυτή τη στιγμή.'}</div>`
    :`<div class="note small">${open?'<b>Η μεταγραφική περίοδος είναι ανοιχτή.</b> Οι ελεύθεροι αγοράζονται στη βασική τιμή. Για παίκτη άλλης ομάδας στέλνεις πρόταση στον κάτοχο.':'Η μεταγραφική περίοδος είναι κλειστή.'}</div>`;
@@ -397,8 +422,23 @@ function vMarket(){
     }
     return `<tr><td><span class="pos ${grp(p.pos)}">${esc(p.pos)}</span></td><td>${cardImg(p,26,'thumb')}${plink(p.id)}</td><td class="num">${p.ovr}</td><td class="num">${gp(p.price)} ${tierTag(p.price)}</td><td>${o?`${tdot(o.id)}${tname(o.id)}`:'<span class="muted">Ελεύθερος</span>'}</td><td><div class="row">${a}</div></td></tr>`}).join('');
   return `<section class="card"><h2>Αγορά παικτών</h2>${head}${bidsBox}${S.offerFor?offerBox():''}
-  <div class="row" style="margin:14px 0"><input type="search" id="fq" placeholder="Αναζήτηση παίκτη" value="${esc(f.q)}" aria-label="Αναζήτηση"><select id="fg" aria-label="Θέση"><option value="">Όλες οι θέσεις</option>${Object.keys(GNAME).map(g=>`<option value="${g}" ${f.g===g?'selected':''}>${GNAME[g]}</option>`).join('')}</select><select id="fav" aria-label="Διαθεσιμότητα"><option value="free" ${f.av==='free'?'selected':''}>Μόνο ελεύθεροι</option><option value="all" ${f.av==='all'?'selected':''}>Όλοι</option></select></div>
-  ${S.cat.length?`<p class="small muted">${rows.length} παίκτες${rows.length>150?' · δείχνω τους πρώτους 150, στένεψε την αναζήτηση':''}. Η τιμή είναι η ελάχιστη.</p><table class="mk"><thead><tr><th>Θέση</th><th>Παίκτης</th><th class="num">OVR</th><th class="num">Τιμή</th><th>Ομάδα</th><th></th></tr></thead><tbody>${rowsH}</tbody></table>`:'<p class="empty">Ο κατάλογος είναι άδειος.</p>'}</section>`;
+  <div class="filters">
+   <input type="search" id="fq" placeholder="Αναζήτηση παίκτη" value="${esc(f.q)}" aria-label="Αναζήτηση">
+   <div class="fchips">${[['','Όλες οι κατηγορίες'],...TIERS.map(t=>[t[0],t[1]])].map(([k,l])=>`<button class="fchip ${f.tier===k?'on':''} ${k?'t-'+k:''}" data-act="ftier" data-id="${k}">${l}</button>`).join('')}</div>
+   <div class="fgrid">
+    <label>Ζώνη<select id="fg"><option value="">Όλες</option>${Object.keys(GNAME).map(g=>`<option value="${g}" ${f.g===g?'selected':''}>${GNAME[g]}</option>`).join('')}</select></label>
+    <label>Θέση<select id="fpos"><option value="">Όλες</option>${POSL.map(x=>`<option ${f.pos===x?'selected':''}>${x}</option>`).join('')}</select></label>
+    <label>Τιμή από (K)<input id="fpmin" type="number" min="0" step="5" value="${esc(f.pmin)}" placeholder="π.χ. 20"></label>
+    <label>έως (K)<input id="fpmax" type="number" min="0" step="5" value="${esc(f.pmax)}" placeholder="π.χ. 80"></label>
+    <label>OVR από<input id="fomin" type="number" min="40" max="99" value="${esc(f.omin)}" placeholder="π.χ. 75"></label>
+    <label>έως<input id="fomax" type="number" min="40" max="99" value="${esc(f.omax)}"></label>
+    <label>Διαθεσιμότητα<select id="fav">${[['free','Μόνο ελεύθεροι'],['all','Όλοι'],['human','Σε managers'],['auto','Σε αυτόματους συλλόγους'],['mine','Οι δικοί μου']].map(([v,l])=>`<option value="${v}" ${f.av===v?'selected':''}>${l}</option>`).join('')}</select></label>
+    <label>Ταξινόμηση<select id="fsort">${[['ovr','OVR ↓'],['pdesc','Τιμή ↓'],['pasc','Τιμή ↑'],['value','Αξία για τα λεφτά'],['name','Όνομα']].map(([v,l])=>`<option value="${v}" ${f.sort===v?'selected':''}>${l}</option>`).join('')}</select></label>
+   </div>
+   <div class="row" style="justify-content:space-between">${mt?`<label class="small"><input type="checkbox" id="faff" ${f.afford?'checked':''}> Μόνο όσοι χωράνε στα ελεύθερα GP μου (${gp(free)})</label>`:'<span></span>'}
+    <span class="row" style="gap:6px"><button class="ghost sm ${f.view==='list'?'on':''}" data-act="fview" data-id="list">Λίστα</button><button class="ghost sm ${f.view==='cards'?'on':''}" data-act="fview" data-id="cards">Κάρτες</button><button class="ghost sm" data-act="freset">Καθαρισμός</button></span></div>
+  </div>
+  ${S.cat.length?`<p class="small muted">${rows.length.toLocaleString('el-GR')} παίκτες${rows.length>shown.length?` · βλέπεις ${shown.length}`:''}. Η τιμή είναι η ελάχιστη.</p>${f.view==='cards'?`<div class="cgrid">${shown.map(p=>`<button class="cbtn" data-act="pinfo" data-id="${esc(p.id)}" aria-label="${esc(p.name)}">${efelCard(p.id,150)}</button>`).join('')}</div>`:`<table class="mk"><thead><tr><th>Θέση</th><th>Παίκτης</th><th class="num">OVR</th><th class="num">Τιμή</th><th>Ομάδα</th><th></th></tr></thead><tbody>${rowsH}</tbody></table>`}${rows.length>shown.length?`<div class="row" style="justify-content:center;margin-top:10px"><button class="ghost" data-act="fmore">Δείξε άλλους ${Math.min(60,rows.length-shown.length)}</button></div>`:''}`:'<p class="empty">Ο κατάλογος είναι άδειος.</p>'}</section>`;
 }
 function offerBox(){
   const p=pl(S.offerFor),o=ownerOf(p.id),mt=myTeam();if(!o||!mt)return '';
@@ -459,6 +499,10 @@ const A={
     ask({title:'Αποδέσμευση παίκτη',pid,before:mt.budget,after:mt.budget+refund,note:`Παίρνεις πίσω το μισό από τα ${gp(r.paid)} που πλήρωσες και ο παίκτης γίνεται ελεύθερος.`,ok:'Αποδέσμευση',warn:1,
       run:()=>w(()=>rpc('efel_release',{p_player:npid(pid)}),'Αποδεσμεύτηκε')})},
   offer(pid){closeM();if(location.hash!=='#market'){S._keep=pid;location.hash='#market'}S.offerFor=pid;S.mf.av='all';render(true);$('#offerBox')?.scrollIntoView({behavior:'smooth',block:'center'})},
+  ftier(k){S.mf.tier=k||'';S.mf.lim=60;render(true)},
+  fview(v){S.mf.view=v;render(true)},
+  fmore(){S.mf.lim=(S.mf.lim||60)+60;render(true)},
+  freset(){S.mf={...S.mf,q:'',g:'',pos:'',tier:'',pmin:'',pmax:'',omin:'',omax:'',av:'free',sort:'ovr',afford:false,lim:60};render(true)},
   closeOffer(){S.offerFor=null;render(true)},
   sendOffer(){const mt=myTeam(),pid=S.offerFor,o=ownerOf(pid),g=Math.max(0,Math.round(+$('#ogp').value||0)),swap=$('#oswap').value||null;
     if(!o)return;if(!g&&!swap)return toast('Βάλε GP ή παίκτη σε ανταλλαγή');
@@ -525,7 +569,7 @@ document.addEventListener('click',async e=>{if(e.target.id==='ov'){closeM();retu
   const f=A[el.dataset.act];if(!f)return;el.disabled=true;try{await f(el.dataset.id,el)}finally{el.disabled=false}
 });
 document.addEventListener('input',e=>{if(e.target.id==='fq'){S.mf.q=e.target.value;clearTimeout(S._q);S._q=setTimeout(()=>{render();const i=$('#fq');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
-document.addEventListener('change',e=>{if(e.target.id==='keepMine')S.keepMine=e.target.checked;if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}if(e.target.id==='fg'){S.mf.g=e.target.value;render()}if(e.target.id==='fav'){S.mf.av=e.target.value;render()}});
+document.addEventListener('change',e=>{if(e.target.id==='keepMine')S.keepMine=e.target.checked;if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}{const M={fg:'g',fpos:'pos',fpmin:'pmin',fpmax:'pmax',fomin:'omin',fomax:'omax',fsort:'sort',fav:'av'};if(M[e.target.id]){S.mf[M[e.target.id]]=e.target.value;S.mf.lim=60;render(true)}if(e.target.id==='faff'){S.mf.afford=e.target.checked;render(true)}}});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(S.dirty)render()},0));
 addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 addEventListener('hashchange',()=>{S.lu=null;S.sel=null;closeM();S.offerFor=S._keep||null;S._keep=null;render(true);scrollTo(0,0)});

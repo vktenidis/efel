@@ -220,6 +220,33 @@ a{color:#7fd0ff}
 .rules ul{margin:0;padding-left:20px;display:grid;gap:8px;line-height:1.5}.rules b{color:var(--gold2)}
 @media(prefers-reduced-motion:reduce){.toast{transition:none}.ticker div{animation:none;padding-left:12px}}
 .lgbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.lgbar button small{font-weight:400;opacity:.75;font-size:12px;margin-left:4px}.todo>div{align-items:center;gap:8px;flex-wrap:wrap}
+
+/* EFEL card */
+.ecard{--a:#f5c542;--b:#8a6410;--g:rgba(245,197,66,.35);width:calc(180px*var(--s));height:calc(252px*var(--s));padding:calc(3px*var(--s));background:linear-gradient(145deg,var(--a),var(--b) 45%,var(--a) 70%,var(--b));clip-path:polygon(0 0,86% 0,100% 9%,100% 100%,14% 100%,0 91%);flex:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.ecard.t-top{--a:#7fb3ff;--b:#1c3f86;--g:rgba(80,150,255,.35)}.ecard.t-core{--a:#5fe39a;--b:#10673a;--g:rgba(60,220,130,.3)}.ecard.t-squad{--a:#c9d3e2;--b:#56627a;--g:rgba(200,210,230,.25)}.ecard.t-base{--a:#8f9bb0;--b:#2c3546;--g:rgba(150,160,180,.18)}
+.ec-in{position:relative;height:100%;clip-path:polygon(0 0,86% 0,100% 9%,100% 100%,14% 100%,0 91%);background:radial-gradient(120% 70% at 70% 30%,var(--g),transparent 60%),repeating-linear-gradient(115deg,rgba(255,255,255,.045) 0 calc(6px*var(--s)),transparent calc(6px*var(--s)) calc(14px*var(--s))),linear-gradient(170deg,#132a55,#070f20 75%);color:#fff;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.ec-in::after{content:"";position:absolute;left:-20%;right:-20%;bottom:30%;height:calc(40px*var(--s));background:linear-gradient(90deg,transparent,var(--g),transparent);transform:skewY(-12deg);opacity:.8;pointer-events:none}
+.ec-top{width:100%;display:flex;justify-content:space-between;padding:calc(8px*var(--s)) calc(10px*var(--s)) 0;box-sizing:border-box;position:relative;z-index:1}
+.ec-ovr{font:800 calc(38px*var(--s))/.9 "Fira Sans Condensed",sans-serif;color:var(--a);text-shadow:0 2px 0 rgba(0,0,0,.5)}.ec-ovr small{display:block;font-size:calc(14px*var(--s));color:#fff;letter-spacing:.04em;margin-top:calc(2px*var(--s))}
+.ec-logo{font:900 italic calc(15px*var(--s)) "Fira Sans Condensed",sans-serif;color:#fff;letter-spacing:.02em;margin-top:calc(4px*var(--s));margin-right:calc(8px*var(--s))}.ec-logo b{color:var(--a)}
+.ec-face{margin-top:calc(-18px*var(--s));position:relative;z-index:1;padding:calc(3px*var(--s));border-radius:50%;background:conic-gradient(var(--a),var(--b),var(--a),var(--b),var(--a))}
+.eface{display:block;border-radius:50%;background-color:#0b1730}
+.ec-name{position:relative;z-index:1;text-align:center;font:800 calc(17px*var(--s))/1.05 "Fira Sans Condensed",sans-serif;text-transform:uppercase;margin-top:calc(6px*var(--s));padding:0 calc(8px*var(--s));max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ec-name small{display:block;font-size:calc(10px*var(--s));font-weight:600;opacity:.75;text-transform:none}
+.ec-tier{position:relative;z-index:1;margin-top:calc(5px*var(--s));font:800 calc(9px*var(--s)) "Fira Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#081120;background:var(--a);padding:calc(2px*var(--s)) calc(10px*var(--s));clip-path:polygon(8% 0,100% 0,92% 100%,0 100%)}
+.ec-foot{position:relative;z-index:1;margin-top:auto;width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 calc(12px*var(--s)) calc(10px*var(--s)) calc(22px*var(--s));box-sizing:border-box;font:700 calc(11px*var(--s)) "Fira Sans",sans-serif;color:#cfe0ff}
+.ec-foot span{display:flex;align-items:center;gap:calc(4px*var(--s))}.ec-foot b{color:var(--a);font-size:calc(14px*var(--s))}
+.pcard .ecard{grid-row:span 3}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;justify-items:center}
+.cbtn{background:none;border:0;padding:0;min-height:0;cursor:pointer;box-shadow:none}.cbtn:hover .ecard{transform:translateY(-3px)}.ecard{transition:transform .15s}
+/* φίλτρα αγοράς */
+.filters{display:grid;gap:10px;margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.03)}
+.fchips{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{min-height:32px;padding:0 12px;border-radius:16px;font-size:13px;background:transparent;border:1px solid #3a4d70;color:#cfe0ff;box-shadow:none}
+.fchip.on{background:var(--gold);color:#111;border-color:var(--gold)}.fchip.t-star:not(.on){border-color:#c99a12}.fchip.t-top:not(.on){border-color:#2b6fd6}.fchip.t-core:not(.on){border-color:#1f9d55}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.fgrid label{display:grid;gap:3px;font-size:12px;color:#9fb3d1}.fgrid input,.fgrid select{width:100%;min-width:0}
+button.sm{min-height:32px;padding:0 10px;font-size:13px}button.sm.on{background:var(--gold);color:#111;border-color:var(--gold)}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
