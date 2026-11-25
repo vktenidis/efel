@@ -280,3 +280,42 @@ alter function cfg_int(text) set search_path = public;
 alter function grp(text) set search_path = public;
 alter function efel_poisson(numeric) set search_path = public;
 alter function efel_md_date(int) set search_path = public;
+-- ---------- Δοκιμαστική προσομοίωση (μόνο διοργάνωση) ----------
+-- Παίζει τις επόμενες p_mds αγωνιστικές σε όλες τις λίγκες (και στην ανθρώπινη αν p_human),
+-- σημειωμένες ως «Προσομοίωση», και τρέχει την αγορά των αυτόματων μία φορά ανά αγωνιστική.
+create or replace function efel_admin_sim(p_mds int, p_human boolean) returns jsonb
+language plpgsql security definer set search_path=public as $$
+declare i int; lg record; nxt int; m record; hs numeric; as_ numeric; n int := 0; mk int := 0;
+begin
+  if not efel_is_admin() then raise exception 'Μόνο για τη διοργάνωση.'; end if;
+  for i in 1..greatest(1, least(p_mds, 30)) loop
+    for lg in select * from leagues where kind = 'auto' or p_human loop
+      select min(md) into nxt from matches where league_id = lg.id and season_no = cfg_int('season_no') and status <> 'final';
+      continue when nxt is null;
+      for m in select * from matches where league_id = lg.id and season_no = cfg_int('season_no') and md = nxt and status <> 'final' loop
+        hs := efel_strength(m.home); as_ := efel_strength(m.away);
+        perform efel_finalize(m.id, efel_poisson(greatest(0.3, 1.45 + (hs-as_)/8)), efel_poisson(greatest(0.3, 1.15 - (hs-as_)/8)), true);
+        n := n + 1;
+      end loop;
+    end loop;
+    mk := mk + efel_auto_market();
+  end loop;
+  perform efel_log('admin_sim', jsonb_build_object('mds', p_mds, 'human', p_human, 'matches', n));
+  return jsonb_build_object('simulated', n, 'market', mk);
+end $$;
+
+-- Μηδενισμός αποτελεσμάτων της τρέχουσας σεζόν (αντιστρέφει και τα GP των αγώνων)
+create or replace function efel_admin_reset_results() returns int
+language plpgsql security definer set search_path=public as $$
+declare m record; n int := 0;
+begin
+  if not efel_is_admin() then raise exception 'Μόνο για τη διοργάνωση.'; end if;
+  for m in select id from matches where season_no = cfg_int('season_no') and status <> 'open' loop
+    perform efel_admin_reopen(m.id); n := n + 1;
+  end loop;
+  update matches set simulated = false, time_proposed = null, time_proposed_by = null, time_agreed = null where season_no = cfg_int('season_no');
+  delete from news where type = 'result';
+  perform efel_log('admin_reset_results', jsonb_build_object('matches', n));
+  return n;
+end $$;
+grant execute on function efel_admin_sim(int, boolean), efel_admin_reset_results() to authenticated;
