@@ -1,176 +1,1071 @@
 {
   "players": {
-    "s40714": {
-      "name": "Thomas Müller",
-      "commonsFile": "Thomas Müller, Germany national football team (01).jpg",
-      "author": "Steindy",
-      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
-      "source": "https://commons.wikimedia.org/wiki/File:Thomas_M%C3%BCller%2C_Germany_national_football_team_(01).jpg"
+    "s110718": {
+      "name": "Kylian Mbappé",
+      "path": "assets/players/s110718.webp",
+      "commonsFile": "Kylian_Mbappe_France_v_Senegal_16_June_2026-391_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Kylian_Mbappe_France_v_Senegal_16_June_2026-391_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kylian Mbappé",
+      "restrictions": "personality"
     },
-    "s144578": {
-      "name": "Tino Livramento",
-      "commonsFile": "Tino Livramento 07112026 (3).jpg",
+    "s135067": {
+      "name": "Vitinha",
+      "path": "assets/players/s135067.webp",
+      "commonsFile": "Vitinha_USMNT_v_Portugal_Mar_31_2026-50_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Vitinha_USMNT_v_Portugal_Mar_31_2026-50_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Vitinha (footballer, born February 2000)",
+      "restrictions": "personality"
+    },
+    "s111207": {
+      "name": "Gabriel Magalhães",
+      "path": "assets/players/s111207.webp",
+      "commonsFile": "Gabriel_Magalhaes_Brazil_V_Morocco_13_June_2026-132_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Gabriel_Magalhaes_Brazil_V_Morocco_13_June_2026-132_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Gabriel Magalhães",
+      "restrictions": "personality"
+    },
+    "s128720": {
+      "name": "K. Kvaratskhelia",
+      "path": "assets/players/s128720.webp",
+      "commonsFile": "Kvaratskhelia_asse_psg_2425.png",
+      "author": "Paté kroute",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Kvaratskhelia_asse_psg_2425.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Khvicha Kvaratskhelia",
+      "restrictions": ""
+    },
+    "s162114": {
+      "name": "Lamine Yamal",
+      "path": "assets/players/s162114.webp",
+      "commonsFile": "Lamine_Yamal_France_v_Spain_7.24.26-142.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Lamine_Yamal_France_v_Spain_7.24.26-142.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Lamine Yamal",
+      "restrictions": "personality"
+    },
+    "s83943203": {
+      "name": "Mohamed Salah",
+      "path": "assets/players/s83943203.webp",
+      "commonsFile": "Mohamed_Salah_Argentina_v_Egypt_7_July_2026-163_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Mohamed_Salah_Argentina_v_Egypt_7_July_2026-163_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Mohamed Salah",
+      "restrictions": "personality"
+    },
+    "s110626": {
+      "name": "Ousmane Dembélé",
+      "path": "assets/players/s110626.webp",
+      "commonsFile": "Ousmane_Dembele_France_v_Senegal_16_June_2026-341_(cropped)_2.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ousmane_Dembele_France_v_Senegal_16_June_2026-341_(cropped)_2.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Ousmane Dembélé",
+      "restrictions": "personality"
+    },
+    "s133157": {
+      "name": "Pedri",
+      "path": "assets/players/s133157.webp",
+      "commonsFile": "Pedri_France_v_Spain_7.24.26-026.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Pedri_France_v_Spain_7.24.26-026.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Pedri",
+      "restrictions": "personality"
+    },
+    "s110644": {
+      "name": "Raphinha",
+      "path": "assets/players/s110644.webp",
+      "commonsFile": "Raphinha_Brazil_V_Morocco_13_June_2026-133_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Raphinha_Brazil_V_Morocco_13_June_2026-133_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Raphinha",
+      "restrictions": "personality"
+    },
+    "s50374711": {
+      "name": "Son Heung-Min",
+      "path": "assets/players/s50374711.webp",
+      "commonsFile": "BFA_2023_-2_Heung-Min_Son_(cropped).jpg",
+      "author": "Ujishadow",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:BFA_2023_-2_Heung-Min_Son_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Son Heung-min",
+      "restrictions": ""
+    },
+    "s44383": {
+      "name": "Thibaut Courtois",
+      "path": "assets/players/s44383.webp",
+      "commonsFile": "Thibaut_Courtois_Belgium_v_USA_6_July_2026-076_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Thibaut_Courtois_Belgium_v_USA_6_July_2026-076_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Thibaut Courtois",
+      "restrictions": "personality"
+    },
+    "s126689": {
+      "name": "William Saliba",
+      "path": "assets/players/s126689.webp",
+      "commonsFile": "William_Saliba_France_v_Paraguay_4_July_2026-183.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:William_Saliba_France_v_Paraguay_4_July_2026-183.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "William Saliba",
+      "restrictions": "personality"
+    },
+    "s115079": {
+      "name": "Alexander Isak",
+      "path": "assets/players/s115079.webp",
+      "commonsFile": "Alexander_Isak_-_Sweden_-_Greece21_(cropped).jpg",
+      "author": "Mikael Hervestad",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Alexander_Isak_-_Sweden_-_Greece21_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Alexander Isak",
+      "restrictions": ""
+    },
+    "s104677": {
+      "name": "Antonio Rüdiger",
+      "path": "assets/players/s104677.webp",
+      "commonsFile": "Antonio_Rudiger_Ecuador_v_Germany_25_June_2026-002.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Antonio_Rudiger_Ecuador_v_Germany_25_June_2026-002.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Antonio Rüdiger",
+      "restrictions": "personality"
+    },
+    "s60512": {
+      "name": "Bruno Fernandes",
+      "path": "assets/players/s60512.webp",
+      "commonsFile": "Bruno_Fernandes_USMNT_v_Portugal_Mar_31_2026-27_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Bruno_Fernandes_USMNT_v_Portugal_Mar_31_2026-27_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Bruno Fernandes",
+      "restrictions": "personality"
+    },
+    "s113911": {
+      "name": "Federico Valverde",
+      "path": "assets/players/s113911.webp",
+      "commonsFile": "Federico_Valverde_2021_(cropped).jpg",
+      "author": "Real Madrid",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Federico_Valverde_2021_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Federico Valverde",
+      "restrictions": ""
+    },
+    "s44104": {
+      "name": "Jan Oblak",
+      "path": "assets/players/s44104.webp",
+      "commonsFile": "Jan_Oblak_2019.jpg",
+      "author": "Анна Нэсси",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Jan_Oblak_2019.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jan Oblak",
+      "restrictions": ""
+    },
+    "s159320": {
+      "name": "João Neves",
+      "path": "assets/players/s159320.webp",
+      "commonsFile": "Joao_Neves_Croatia_v_Portugal_2_July_2026-102_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Joao_Neves_Croatia_v_Portugal_2_July_2026-102_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "João Neves",
+      "restrictions": "personality"
+    },
+    "s109005": {
+      "name": "Joshua Kimmich",
+      "path": "assets/players/s109005.webp",
+      "commonsFile": "Joshua_Kimmich_Ecuador_v_Germany_25_June_2026-149.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Joshua_Kimmich_Ecuador_v_Germany_25_June_2026-149.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Joshua Kimmich",
+      "restrictions": "personality"
+    },
+    "s132933": {
+      "name": "Jude Bellingham",
+      "path": "assets/players/s132933.webp",
+      "commonsFile": "Jude_Bellingham_England_v_Ghana_23_June_2026-061_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Jude_Bellingham_England_v_Ghana_23_June_2026-061_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jude Bellingham",
+      "restrictions": "personality"
+    },
+    "s7511": {
+      "name": "Lionel Messi",
+      "path": "assets/players/s7511.webp",
+      "commonsFile": "Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Lionel Messi",
+      "restrictions": "personality"
+    },
+    "s45993": {
+      "name": "Marquinhos",
+      "path": "assets/players/s45993.webp",
+      "commonsFile": "Marquinhos_Brazil_V_Morocco_13_June_2026-153_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Marquinhos_Brazil_V_Morocco_13_June_2026-153_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Marquinhos",
+      "restrictions": "personality"
+    },
+    "s143196": {
+      "name": "Moisés Caicedo",
+      "path": "assets/players/s143196.webp",
+      "commonsFile": "Moises_Caicedo_Ecuador_v_Germany_25_June_2026-051_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Moises_Caicedo_Ecuador_v_Germany_25_June_2026-051_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Moisés Caicedo",
+      "restrictions": "personality"
+    },
+    "s152458": {
+      "name": "Willian Pacho",
+      "path": "assets/players/s152458.webp",
+      "commonsFile": "Willian_Pacho_Ecuador_v_Germany_25_June_2026-228.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Willian_Pacho_Ecuador_v_Germany_25_June_2026-228.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Willian Pacho",
+      "restrictions": "personality"
+    },
+    "s113960": {
+      "name": "Achraf Hakimi",
+      "path": "assets/players/s113960.webp",
+      "commonsFile": "Achraf_Hakimi_Morocco_v_Norway_7_June_2026-32.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Achraf_Hakimi_Morocco_v_Norway_7_June_2026-32.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Achraf Hakimi",
+      "restrictions": "personality"
+    },
+    "s84000040": {
+      "name": "Achraf Hakimi",
+      "path": "assets/players/s113960.webp",
+      "commonsFile": "Achraf_Hakimi_Morocco_v_Norway_7_June_2026-32.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Achraf_Hakimi_Morocco_v_Norway_7_June_2026-32.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Achraf Hakimi",
+      "restrictions": "personality"
+    },
+    "s63474": {
+      "name": "Alisson Becker",
+      "path": "assets/players/s63474.webp",
+      "commonsFile": "Alisson_Becker_Brazil_V_Morocco_13_June_2026-117_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Alisson_Becker_Brazil_V_Morocco_13_June_2026-117_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Alisson Becker",
+      "restrictions": "personality"
+    },
+    "s124266": {
+      "name": "Antoine Semenyo",
+      "path": "assets/players/s124266.webp",
+      "commonsFile": "Antoine_Semenyo_England_v_Ghana_23_June_2026-209_(cropped2).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Antoine_Semenyo_England_v_Ghana_23_June_2026-209_(cropped2).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Antoine Semenyo",
+      "restrictions": "personality"
+    },
+    "s119782": {
+      "name": "Aurélien Tchouaméni",
+      "path": "assets/players/s119782.webp",
+      "commonsFile": "Aurelien_Tchouameni_France_v_Senegal_16_June_2026-447_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Aurelien_Tchouameni_France_v_Senegal_16_June_2026-447_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Aurélien Tchouaméni",
+      "restrictions": "personality"
+    },
+    "s117049": {
+      "name": "Bruno Guimarães",
+      "path": "assets/players/s117049.webp",
+      "commonsFile": "Bruno_Guimaraes_Brazil_V_Morocco_13_June_2026-78_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Bruno_Guimaraes_Brazil_V_Morocco_13_June_2026-78_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Bruno Guimarães",
+      "restrictions": "personality"
+    },
+    "s127544": {
+      "name": "Bukayo Saka",
+      "path": "assets/players/s127544.webp",
+      "commonsFile": "Bukayo_Saka_England_v_Ghana_23_June_2026-057_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Bukayo_Saka_England_v_Ghana_23_June_2026-057_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Bukayo Saka",
+      "restrictions": "personality"
+    },
+    "s152928": {
+      "name": "Désiré Doué",
+      "path": "assets/players/s152928.webp",
+      "commonsFile": "Desire_Doue_France_v_Senegal_16_June_2026-264.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Desire_Doue_France_v_Senegal_16_June_2026-264.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Désiré Doué",
+      "restrictions": "personality"
+    },
+    "s130319": {
+      "name": "Dominik Szoboszlai",
+      "path": "assets/players/s130319.webp",
+      "commonsFile": "Dominik_Szoboszlai_04012026_(1).jpg",
       "author": "Timmy96",
       "license": "https://creativecommons.org/publicdomain/zero/1.0/",
-      "source": "https://commons.wikimedia.org/wiki/File:Tino_Livramento_07112026_(3).jpg"
+      "source": "https://commons.wikimedia.org/wiki/File:Dominik_Szoboszlai_04012026_(1).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Dominik Szoboszlai",
+      "restrictions": ""
+    },
+    "s101076": {
+      "name": "Emiliano Martínez",
+      "path": "assets/players/s101076.webp",
+      "commonsFile": "Emiliano_Martinez_Argentina_v_Spain_19_July_2026-269.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Emiliano_Martinez_Argentina_v_Spain_19_July_2026-269.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Emiliano Martínez",
+      "restrictions": "personality"
+    },
+    "s128281": {
+      "name": "Enzo Fernández",
+      "path": "assets/players/s128281.webp",
+      "commonsFile": "Enzo_Fernandez_Argentina_v_Spain_19_July_2026-050_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Enzo_Fernandez_Argentina_v_Spain_19_July_2026-050_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Enzo Fernández",
+      "restrictions": "personality"
+    },
+    "s138000": {
+      "name": "Jamal Musiala",
+      "path": "assets/players/s138000.webp",
+      "commonsFile": "Jamal_Musiala_Ecuador_v_Germany_25_June_2026-174_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Jamal_Musiala_Ecuador_v_Germany_25_June_2026-174_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jamal Musiala",
+      "restrictions": "personality"
+    },
+    "s112376": {
+      "name": "Jonathan Tah",
+      "path": "assets/players/s112376.webp",
+      "commonsFile": "Jonathan_Tah_Ecuador_v_Germany_25_June_2026-116.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Jonathan_Tah_Ecuador_v_Germany_25_June_2026-116.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jonathan Tah",
+      "restrictions": "personality"
+    },
+    "s108657": {
+      "name": "Lautaro Martínez",
+      "path": "assets/players/s108657.webp",
+      "commonsFile": "Lautaro_Martinez_Argentina_v_Spain_19_July_2026-049_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Lautaro_Martinez_Argentina_v_Spain_19_July_2026-049_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Lautaro Martínez",
+      "restrictions": "personality"
+    },
+    "s116575": {
+      "name": "Marc Cucurella",
+      "path": "assets/players/s116575.webp",
+      "commonsFile": "Marc_Cucurella_Argentina_v_Spain_19_July_2026-064_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Marc_Cucurella_Argentina_v_Spain_19_July_2026-064_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Marc Cucurella",
+      "restrictions": "personality"
+    },
+    "s142237": {
+      "name": "Nico Schlotterbeck",
+      "path": "assets/players/s142237.webp",
+      "commonsFile": "2023-08-12_TSV_Schott_Mainz_gegen_Borussia_Dortmund_(DFB-Pokal_2023-24)_by_Sandro_Halank–069.jpg",
+      "author": "Sandro Halank, Wikimedia Commons",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:2023-08-12_TSV_Schott_Mainz_gegen_Borussia_Dortmund_(DFB-Pokal_2023-24)_by_Sandro_Halank%E2%80%93069.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Nico Schlotterbeck",
+      "restrictions": "personality"
+    },
+    "s165696": {
+      "name": "Pau Cubarsí",
+      "path": "assets/players/s165696.webp",
+      "commonsFile": "Pau_Cubarsi_Argentina_v_Spain_19_July_2026-181_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Pau_Cubarsi_Argentina_v_Spain_19_July_2026-181_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Pau Cubarsí",
+      "restrictions": "personality"
+    },
+    "s111800": {
+      "name": "Rúben Dias",
+      "path": "assets/players/s111800.webp",
+      "commonsFile": "Ruben_Dias_Croatia_v_Portugal_2_July_2026-228_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ruben_Dias_Croatia_v_Portugal_2_July_2026-228_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Rúben Dias",
+      "restrictions": "personality"
+    },
+    "s104226": {
+      "name": "Bernardo Silva",
+      "path": "assets/players/s104226.webp",
+      "commonsFile": "Bernardo_Silva_Croatia_v_Portugal_2_July_2026-238.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Bernardo_Silva_Croatia_v_Portugal_2_July_2026-238.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Bernardo Silva",
+      "restrictions": "personality"
+    },
+    "s84008413": {
+      "name": "Bryan Mbeumo",
+      "path": "assets/players/s122333.webp",
+      "commonsFile": "Bryan_Mbeumo_00-02-31.18.png",
+      "author": "AFC Bournemouth",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Bryan_Mbeumo_00-02-31.18.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Bryan Mbeumo",
+      "restrictions": ""
+    },
+    "s4522": {
+      "name": "Cristiano Ronaldo",
+      "path": "assets/players/s4522.webp",
+      "commonsFile": "Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Cristiano Ronaldo",
+      "restrictions": "personality"
+    },
+    "s16781738": {
+      "name": "Cristiano Ronaldo",
+      "path": "assets/players/s4522.webp",
+      "commonsFile": "Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Cristiano Ronaldo",
+      "restrictions": "personality"
+    },
+    "s128425": {
+      "name": "Edmond Tapsoba",
+      "path": "assets/players/s128425.webp",
+      "commonsFile": "Edmond_Tapsoba,_2022-07-31,_Saisoneröffnung_Bayer_04,_Leverkusen_(1)_(cropped).jpg",
+      "author": "Pyaet",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Edmond_Tapsoba,_2022-07-31,_Saisoner%C3%B6ffnung_Bayer_04,_Leverkusen_(1)_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Edmond Tapsoba",
+      "restrictions": ""
+    },
+    "s108239": {
+      "name": "Fabián Ruiz",
+      "path": "assets/players/s108239.webp",
+      "commonsFile": "Fabian_Ruiz_Argentina_v_Spain_19_July_2026-315_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Fabian_Ruiz_Argentina_v_Spain_19_July_2026-315_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Fabián Ruiz",
+      "restrictions": "personality"
+    },
+    "s107686": {
+      "name": "Federico Dimarco",
+      "path": "assets/players/s107686.webp",
+      "commonsFile": "Norway_Italy_-_June_2025_A_26_(cropped).jpg",
+      "author": "MichaelEmilio",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Norway_Italy_-_June_2025_A_26_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Federico Dimarco",
+      "restrictions": ""
+    },
+    "s108662": {
+      "name": "Frenkie de Jong",
+      "path": "assets/players/s108662.webp",
+      "commonsFile": "Матч_«Динамо»_-_«Барселона»_0-1._2_ноября_2021_года._II_—_1289671_(cropped).jpg",
+      "author": "Yuliia Perekopaiko",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:%D0%9C%D0%B0%D1%82%D1%87_%C2%AB%D0%94%D0%B8%D0%BD%D0%B0%D0%BC%D0%BE%C2%BB_-_%C2%AB%D0%91%D0%B0%D1%80%D1%81%D0%B5%D0%BB%D0%BE%D0%BD%D0%B0%C2%BB_0-1._2_%D0%BD%D0%BE%D1%8F%D0%B1%D1%80%D1%8F_2021_%D0%B3%D0%BE%D0%B4%D0%B0._II_%E2%80%94_1289671_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Frenkie de Jong",
+      "restrictions": ""
+    },
+    "s132192": {
+      "name": "Joško Gvardiol",
+      "path": "assets/players/s132192.webp",
+      "commonsFile": "Josko_Gvardiol_Croatia_v_Portugal_2_July_2026-262.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Josko_Gvardiol_Croatia_v_Portugal_2_July_2026-262.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Joško Gvardiol",
+      "restrictions": "personality"
+    },
+    "s50454108": {
+      "name": "Kim Min-Jae",
+      "path": "assets/players/s50454108.webp",
+      "commonsFile": "FC_Red_Bull_Salzburg_gegen_Bayern_München_(2025-01-06_Testspiel)_26.jpg",
+      "author": "Werner100359",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:FC_Red_Bull_Salzburg_gegen_Bayern_M%C3%BCnchen_(2025-01-06_Testspiel)_26.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kim Min-jae (footballer)",
+      "restrictions": ""
+    },
+    "s108069": {
+      "name": "Marcus Thuram",
+      "path": "assets/players/s108069.webp",
+      "commonsFile": "Marcus_Thuram_France_v_Senegal_16_June_2026-261_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Marcus_Thuram_France_v_Senegal_16_June_2026-261_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Marcus Thuram",
+      "restrictions": "personality"
+    },
+    "s103404": {
+      "name": "Martin Ødegaard",
+      "path": "assets/players/s103404.webp",
+      "commonsFile": "Martin_Odegaard_France_v_Norway_26_June_26-014.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Martin_Odegaard_France_v_Norway_26_June_26-014.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Martin Ødegaard",
+      "restrictions": "personality"
+    },
+    "s60447": {
+      "name": "Mike Maignan",
+      "path": "assets/players/s60447.webp",
+      "commonsFile": "Mike_Maignan_France_v_Norway_26_June_26-132_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Mike_Maignan_France_v_Norway_26_June_26-132_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Mike Maignan",
+      "restrictions": "personality"
+    },
+    "s57123": {
+      "name": "Mohamed Salah",
+      "path": "assets/players/s83943203.webp",
+      "commonsFile": "Mohamed_Salah_Argentina_v_Egypt_7_July_2026-163_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Mohamed_Salah_Argentina_v_Egypt_7_July_2026-163_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Mohamed Salah",
+      "restrictions": "personality"
+    },
+    "s127069": {
+      "name": "Ryan Gravenberch",
+      "path": "assets/players/s127069.webp",
+      "commonsFile": "2022-07-30_Fußball,_Männer,_DFL-Supercup,_RB_Leipzig_-_FC_Bayern_München_1DX_3342_by_Stepro_(cropped).jpg",
+      "author": "crop by Sepguilherme",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:2022-07-30_Fu%C3%9Fball,_M%C3%A4nner,_DFL-Supercup,_RB_Leipzig_-_FC_Bayern_M%C3%BCnchen_1DX_3342_by_Stepro_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Ryan Gravenberch",
+      "restrictions": "personality"
+    },
+    "s111252": {
+      "name": "Théo Hernández",
+      "path": "assets/players/s111252.webp",
+      "commonsFile": "Theo_Hernandez_France_v_Senegal_16_June_2026-222_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Theo_Hernandez_France_v_Senegal_16_June_2026-222_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Théo Hernández",
+      "restrictions": "personality"
+    },
+    "s16888468": {
+      "name": "Théo Hernández",
+      "path": "assets/players/s111252.webp",
+      "commonsFile": "Theo_Hernandez_France_v_Senegal_16_June_2026-222_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Theo_Hernandez_France_v_Senegal_16_June_2026-222_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Théo Hernández",
+      "restrictions": "personality"
+    },
+    "s42316": {
+      "name": "Antoine Griezmann",
+      "path": "assets/players/s42316.webp",
+      "commonsFile": "FRA-ARG_(10)_(cropped).jpg",
+      "author": "Антон Зайцев",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:FRA-ARG_(10)_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Antoine Griezmann",
+      "restrictions": ""
+    },
+    "s122333": {
+      "name": "Bryan Mbeumo",
+      "path": "assets/players/s122333.webp",
+      "commonsFile": "Bryan_Mbeumo_00-02-31.18.png",
+      "author": "AFC Bournemouth",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Bryan_Mbeumo_00-02-31.18.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Bryan Mbeumo",
+      "restrictions": ""
+    },
+    "s84014505": {
+      "name": "Edmond Tapsoba",
+      "path": "assets/players/s128425.webp",
+      "commonsFile": "Edmond_Tapsoba,_2022-07-31,_Saisoneröffnung_Bayer_04,_Leverkusen_(1)_(cropped).jpg",
+      "author": "Pyaet",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Edmond_Tapsoba,_2022-07-31,_Saisoner%C3%B6ffnung_Bayer_04,_Leverkusen_(1)_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Edmond Tapsoba",
+      "restrictions": ""
+    },
+    "s101097": {
+      "name": "Hakan Çalhanoğlu",
+      "path": "assets/players/s101097.webp",
+      "commonsFile": "AUT_vs._TUR_2016-03-29_(342).jpg",
+      "author": "Steindy (talk) 10:15, 11 April 2016 (UTC)",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:AUT_vs._TUR_2016-03-29_(342).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Hakan Çalhanoğlu",
+      "restrictions": ""
+    },
+    "s16896235": {
+      "name": "Julián Quiñones",
+      "path": "assets/players/s16896235.webp",
+      "commonsFile": "Julián_Quiñones.png",
+      "author": "Selección Nacional de México",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Juli%C3%A1n_Qui%C3%B1ones.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Julián Quiñones",
+      "restrictions": ""
+    },
+    "s122460": {
+      "name": "Kim Min-Jae",
+      "path": "assets/players/s50454108.webp",
+      "commonsFile": "FC_Red_Bull_Salzburg_gegen_Bayern_München_(2025-01-06_Testspiel)_26.jpg",
+      "author": "Werner100359",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:FC_Red_Bull_Salzburg_gegen_Bayern_M%C3%BCnchen_(2025-01-06_Testspiel)_26.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kim Min-jae (footballer)",
+      "restrictions": ""
+    },
+    "s103686": {
+      "name": "Nicolò Barella",
+      "path": "assets/players/s103686.webp",
+      "commonsFile": "Nicolò_Barella_in_2021_(cropped_2).jpg",
+      "author": "Biser Todorov",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Nicol%C3%B2_Barella_in_2021_(cropped_2).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Nicolò Barella",
+      "restrictions": ""
+    },
+    "s42669": {
+      "name": "Casemiro",
+      "path": "assets/players/s42669.webp",
+      "commonsFile": "Casemiro_Brazil_V_Morocco_13_June_2026-76_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Casemiro_Brazil_V_Morocco_13_June_2026-76_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Casemiro",
+      "restrictions": "personality"
+    },
+    "s109364": {
+      "name": "Ivan Toney",
+      "path": "assets/players/s109364.webp",
+      "commonsFile": "Ivan_Toney_England_v_Ghana_23_June_2026-051.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ivan_Toney_England_v_Ghana_23_June_2026-051.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Ivan Toney",
+      "restrictions": "personality"
+    },
+    "s16886580": {
+      "name": "Ivan Toney",
+      "path": "assets/players/s109364.webp",
+      "commonsFile": "Ivan_Toney_England_v_Ghana_23_June_2026-051.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ivan_Toney_England_v_Ghana_23_June_2026-051.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Ivan Toney",
+      "restrictions": "personality"
+    },
+    "s133678": {
+      "name": "Riccardo Calafiori",
+      "path": "assets/players/s133678.webp",
+      "commonsFile": "1_Riccardo_Calafiori_2026_(cropped).jpg",
+      "author": "Chensiyuan",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:1_Riccardo_Calafiori_2026_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Riccardo Calafiori",
+      "restrictions": "personality"
+    },
+    "s43063": {
+      "name": "Son Heung-Min",
+      "path": "assets/players/s50374711.webp",
+      "commonsFile": "BFA_2023_-2_Heung-Min_Son_(cropped).jpg",
+      "author": "Ujishadow",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:BFA_2023_-2_Heung-Min_Son_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Son Heung-min",
+      "restrictions": ""
+    },
+    "s157339": {
+      "name": "Warren Zaïre-Emery",
+      "path": "assets/players/s157339.webp",
+      "commonsFile": "Warren_Zaire-Emery_France_v_Senegal_16_June_2026-279.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Warren_Zaire-Emery_France_v_Senegal_16_June_2026-279.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Warren Zaïre-Emery",
+      "restrictions": "personality"
+    },
+    "s114235": {
+      "name": "Federico Chiesa",
+      "path": "assets/players/s114235.webp",
+      "commonsFile": "Federico_Chiesa_vs_Zenit_2021-10-20_(cropped2).jpg",
+      "author": "Kirill Venediktov",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Federico_Chiesa_vs_Zenit_2021-10-20_(cropped2).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Federico Chiesa",
+      "restrictions": ""
+    },
+    "s116482": {
+      "name": "Guglielmo Vicario",
+      "path": "assets/players/s116482.webp",
+      "commonsFile": "Guglielmo_Vicario.png",
+      "author": "AFC Bournemouth",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Guglielmo_Vicario.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Guglielmo Vicario",
+      "restrictions": ""
+    },
+    "s109329": {
+      "name": "Harry Maguire",
+      "path": "assets/players/s109329.webp",
+      "commonsFile": "Harry_Maguire_2023_(cropped).jpg",
+      "author": "UK Prime Minister",
+      "license": "https://creativecommons.org/licenses/by/2.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Harry_Maguire_2023_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Harry Maguire",
+      "restrictions": ""
+    },
+    "s114036": {
+      "name": "James Maddison",
+      "path": "assets/players/s114036.webp",
+      "commonsFile": "James_Maddison_pre-match_training_(cropped).jpg",
+      "author": "KrispyKrumpets",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:James_Maddison_pre-match_training_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "James Maddison",
+      "restrictions": ""
+    },
+    "s59458": {
+      "name": "Jorginho",
+      "path": "assets/players/s59458.webp",
+      "commonsFile": "Jorginho,_2021_(cropped).jpg",
+      "author": "Vyacheslav Yevdokimov",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Jorginho,_2021_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jorginho (footballer, born December 1991)",
+      "restrictions": ""
     },
     "s113066": {
       "name": "Tammy Abraham",
+      "path": "assets/players/s113066.webp",
       "commonsFile": "Tammy Abraham 2023.jpg",
       "author": "Werner100359",
       "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-      "source": "https://commons.wikimedia.org/wiki/File:Tammy_Abraham_2023.jpg"
+      "source": "https://commons.wikimedia.org/wiki/File:Tammy_Abraham_2023.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Tammy Abraham 2023.jpg",
+      "restrictions": ""
+    },
+    "s40714": {
+      "name": "Thomas Müller",
+      "path": "assets/players/s40714.webp",
+      "commonsFile": "Thomas Müller, Germany national football team (01).jpg",
+      "author": "Steindy (talk) 14:25, 27 June 2011 (UTC)",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Thomas_M%C3%BCller,_Germany_national_football_team_(01).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Thomas Müller, Germany national football team (01).jpg"
+    },
+    "s144578": {
+      "name": "Tino Livramento",
+      "path": "assets/players/s144578.webp",
+      "commonsFile": "Tino Livramento 07112026 (3).jpg",
+      "author": "Timmy96",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Tino_Livramento_07112026_(3).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Tino Livramento 07112026 (3).jpg",
+      "restrictions": ""
     },
     "s123303": {
       "name": "Tyler Adams",
+      "path": "assets/players/s123303.webp",
       "commonsFile": "Tyler Adams 09052026 (4).jpg",
       "author": "Timmy96",
       "license": "https://creativecommons.org/publicdomain/zero/1.0/",
-      "source": "https://commons.wikimedia.org/wiki/File:Tyler_Adams_09052026_(4).jpg"
+      "source": "https://commons.wikimedia.org/wiki/File:Tyler_Adams_09052026_(4).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Tyler Adams 09052026 (4).jpg",
+      "restrictions": ""
+    },
+    "s115228": {
+      "name": "Aaron Ramsdale",
+      "path": "assets/players/s115228.webp",
+      "commonsFile": "Aaron_Ramsdale_2026.png",
+      "author": "Oche180",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Aaron_Ramsdale_2026.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Aaron Ramsdale",
+      "restrictions": ""
+    },
+    "s108200": {
+      "name": "Gabriel Jesus",
+      "path": "assets/players/s108200.webp",
+      "commonsFile": "20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Gabriel_Jesus_850_1688.jpg",
+      "author": "Granada",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Gabriel_Jesus_850_1688.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Gabriel Jesus",
+      "restrictions": "personality"
+    },
+    "s46666": {
+      "name": "Iago Aspas",
+      "path": "assets/players/s46666.webp",
+      "commonsFile": "Partido_Galicia_-_Panamá_en_Balaídos_182_(cropped).jpg",
+      "author": "Estevoaei",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Partido_Galicia_-_Panam%C3%A1_en_Bala%C3%ADdos_182_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Iago Aspas",
+      "restrictions": ""
     }
   },
   "clubs": {
     "1": {
       "name": "Real Madrid",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Spain%20-%20LaLiga/Real%20Madrid.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Spain%20-%20LaLiga/Real%20Madrid.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "2": {
       "name": "Barcelona",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Spain%20-%20LaLiga/FC%20Barcelona.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Spain%20-%20LaLiga/FC%20Barcelona.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "3": {
       "name": "Manchester City",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Manchester%20City.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/England%20-%20Premier%20League/Manchester%20City.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "4": {
       "name": "Bayern München",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Germany%20-%20Bundesliga/Bayern%20Munich.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Germany%20-%20Bundesliga/Bayern%20Munich.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "5": {
       "name": "Liverpool",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Liverpool%20FC.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/England%20-%20Premier%20League/Liverpool%20FC.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "6": {
       "name": "Arsenal",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Arsenal%20FC.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/England%20-%20Premier%20League/Arsenal%20FC.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "7": {
       "name": "Paris Saint-Germain",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/France%20-%20Ligue%201/Paris%20Saint-Germain.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/France%20-%20Ligue%201/Paris%20Saint-Germain.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "8": {
       "name": "Inter",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/Inter%20Milan.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Italy%20-%20Serie%20A/Inter%20Milan.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "9": {
       "name": "Juventus",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/Juventus%20FC.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Italy%20-%20Serie%20A/Juventus%20FC.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "10": {
       "name": "Chelsea",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Chelsea%20FC.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/England%20-%20Premier%20League/Chelsea%20FC.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "11": {
       "name": "AC Milan",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/AC%20Milan.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Italy%20-%20Serie%20A/AC%20Milan.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "12": {
       "name": "Atlético Madrid",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Spain%20-%20LaLiga/Atl%C3%A9tico%20de%20Madrid.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Spain%20-%20LaLiga/Atl%C3%A9tico%20de%20Madrid.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "13": {
       "name": "Borussia Dortmund",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Germany%20-%20Bundesliga/Borussia%20Dortmund.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Germany%20-%20Bundesliga/Borussia%20Dortmund.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "14": {
       "name": "Napoli",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/SSC%20Napoli.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Italy%20-%20Serie%20A/SSC%20Napoli.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "15": {
       "name": "Manchester United",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Manchester%20United.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/England%20-%20Premier%20League/Manchester%20United.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "16": {
       "name": "Tottenham",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Tottenham%20Hotspur.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/England%20-%20Premier%20League/Tottenham%20Hotspur.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "17": {
       "name": "Benfica",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Portugal%20-%20Liga%20Portugal/SL%20Benfica.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Portugal%20-%20Liga%20Portugal/SL%20Benfica.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "18": {
       "name": "FC Porto",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Portugal%20-%20Liga%20Portugal/FC%20Porto.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Portugal%20-%20Liga%20Portugal/FC%20Porto.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "19": {
       "name": "Ajax",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Netherlands%20-%20Eredivisie/Ajax%20Amsterdam.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Netherlands%20-%20Eredivisie/Ajax%20Amsterdam.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "20": {
       "name": "Olympiacos",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/Olympiacos%20Piraeus.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Greece%20-%20Super%20League%201/Olympiacos%20Piraeus.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "21": {
       "name": "Panathinaikos",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/Panathinaikos.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Greece%20-%20Super%20League%201/Panathinaikos.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "22": {
       "name": "PAOK",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/PAOK%20Thessaloniki.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Greece%20-%20Super%20League%201/PAOK%20Thessaloniki.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "23": {
       "name": "AEK Athens",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/AEK%20Athens.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Greece%20-%20Super%20League%201/AEK%20Athens.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     },
     "24": {
       "name": "Celtic",
-      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Scotland%20-%20Scottish%20Premiership/Celtic%20FC.png",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/2a3978f0b4730645c205d855a4bda54c161183e9/logos/Scotland%20-%20Scottish%20Premiership/Celtic%20FC.png",
       "source": "https://github.com/luukhopman/football-logos",
       "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
     }
