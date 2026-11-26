@@ -1,0 +1,33 @@
+{
+  "players": {
+    "s40714": {
+      "name": "Thomas Müller",
+      "commonsFile": "Thomas Müller, Germany national football team (01).jpg",
+      "author": "Steindy",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Thomas_M%C3%BCller%2C_Germany_national_football_team_(01).jpg"
+    },
+    "s144578": {
+      "name": "Tino Livramento",
+      "commonsFile": "Tino Livramento 07112026 (3).jpg",
+      "author": "Timmy96",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Tino_Livramento_07112026_(3).jpg"
+    },
+    "s113066": {
+      "name": "Tammy Abraham",
+      "commonsFile": "Tammy Abraham 2023.jpg",
+      "author": "Werner100359",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Tammy_Abraham_2023.jpg"
+    },
+    "s123303": {
+      "name": "Tyler Adams",
+      "commonsFile": "Tyler Adams 09052026 (4).jpg",
+      "author": "Timmy96",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Tyler_Adams_09052026_(4).jpg"
+    }
+  },
+  "clubs": {}
+}
