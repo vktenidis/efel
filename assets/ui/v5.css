@@ -154,3 +154,22 @@ textarea{width:100%;box-sizing:border-box}
 .frquick{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;scrollbar-width:thin}
 .frq{flex:none;display:grid;justify-items:center;gap:3px;min-width:96px;padding:8px 10px;border-radius:12px;background:rgba(6,12,26,.6);border:1.5px solid rgba(246,184,28,.6);color:#fff;box-shadow:none}
 .frq span{font:700 13px "Fira Sans";white-space:nowrap}.frq small{font:500 11px "Fira Sans";color:#9fb3d1;white-space:nowrap}
+
+/* ===== v7 (26/11 βράδυ) ===== */
+.gpp #gpchip{display:flex;flex-direction:column;align-items:flex-start;line-height:1.05}
+.gpp .gpl{font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.75}
+.dupt{font-size:.72em;font-weight:600;opacity:.7;white-space:nowrap}
+.bidsim{margin:8px 0;padding:8px 10px;border-radius:10px;font-size:13px;line-height:1.35}
+.bidsim.ok{background:rgba(47,208,90,.12);border:1px solid rgba(47,208,90,.35)}
+.bidsim.warn{background:rgba(255,154,31,.14);border:1px solid rgba(255,154,31,.5)}
+.recap{border:1px solid rgba(246,184,28,.45);background:linear-gradient(160deg,rgba(246,184,28,.14),rgba(10,20,40,.0) 55%)}
+.recap .rc-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 10px}
+.recap .rc-ch{display:flex;gap:10px;align-items:center}
+.recap .rc-ch div,.recap .rc-me{display:flex;flex-direction:column;gap:2px}
+.recap small{opacity:.75;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.recap .rc-ch b,.recap .rc-me>b{font-size:20px}
+.recap .rc-me{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.05)}
+.recap .rc-t{width:100%;border-collapse:collapse;font-size:13px}
+.recap .rc-t td{padding:5px 4px;border-top:1px solid rgba(255,255,255,.07)}
+.recap .rc-t tr.me td{background:rgba(246,184,28,.12)}
+@media (max-width:420px){.recap .rc-top{grid-template-columns:1fr}}
