@@ -31,7 +31,6 @@ function mediaCredits(entry){if(!entry?.author||!entry?.source||!entry?.license)
 function playerPortrait(p){const entry=MEDIA.players?.[p.id];return entry?.name===p.name?mediaPath(entry):null}
 function clubPortrait(t){const entry=MEDIA.clubs?.[t.id];if(entry?.name!==t.name)return null;const url=entry.crestUrl;if(typeof url==='string'&&/^https:\/\/raw\.githubusercontent\.com\/luukhopman\/football-logos\/(?:master|[0-9a-f]{40})\/logos\/[A-Za-z0-9_%.-]+\/[A-Za-z0-9_%.-]+\.png$/.test(url))return url;return mediaPath(entry)}
 function mediaImage(path,alt,cls,w,h,fallback){return `<span class="media-wrap" style="width:${w}px;height:${h}px"><span class="media-fallback">${fallback}</span><img class="${cls}" src="${esc(path)}" alt="${esc(alt)}" width="${w}" height="${h}" referrerpolicy="no-referrer" loading="lazy" decoding="async" data-ready="false" onload="this.previousElementSibling.hidden=true;this.dataset.ready='true'" onerror="this.remove()"></span>`}
-fetch('assets/media.json?v=efel-prod01').then(r=>r.ok?r.json():null).then(d=>{if(d&&typeof d==='object'){MEDIA=d;if(S.loaded)render()}}).catch(()=>{});
 
 function crest(t,s=40,skipMedia=false){if(!t)return '';const path=skipMedia?null:clubPortrait(t);if(path)return mediaImage(path,t.name,'club-media'+(['9','16','22'].includes(String(t.id))?' dark-crest':''),s,Math.round(s*1.15),crest(t,s,true));const c=/^#[0-9a-f]{6}$/i.test(t.color||'')?t.color:'#888',k=(t.order||0)%5,id='cp'+esc(t.id);
   const ini=esc(t.abbr||(t.name||'?').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,3).toUpperCase());
@@ -43,7 +42,7 @@ const pl=pid=>S.cmap[pid]||{id:pid,name:'Άγνωστος',pos:'CMF',ovr:0,price
 const ago=ts=>{const d=(Date.now()-ts)/6e4;return d<1?'τώρα':d<60?Math.floor(d)+'′':d<1440?Math.floor(d/60)+' ώρ.':new Date(ts).toLocaleDateString('el-GR',{day:'numeric',month:'short'})};
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)}
 const cfg=()=>S.cfg||{};
-let DET={},STD=null,stdLoading=false;
+let DET={},cataloguePromise=null,supportingMediaStarted=false;
 function cardImg(p,w,cls){if(!p.img)return faceImg(p,w);const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
 const TIERS=[['star','Αστέρας',90000,1e9,'#c99a12'],['top','Κορυφαίος',40000,89999,'#2b6fd6'],['core','Βασικός',15000,39999,'#1f9d55'],['squad','Ρόστερ',5001,14999,'#7d8aa0'],['base','Βασική τιμή',0,5000,'#4b5870']];
 const tierKey=pr=>(TIERS.find(t=>pr>=t[2]&&pr<=t[3])||TIERS[4])[0];
@@ -58,9 +57,25 @@ function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TI
    <div class="ec-tier">${T[1]}</div>
    <div class="ec-foot"><span>${o?crest(o,Math.round(18*sc)):'Ελεύθερος'}</span><b>${Math.round(p.price/1000)}K</b></div>
   </div></div>`}
-function setCat(list){S.cat=list;S.cmap=Object.fromEntries(list.map(p=>[p.id,p]))}
-fetch('standard.json').then(r=>r.json()).then(d=>{STD=d;pickCat();render()}).catch(()=>toast('Ο κατάλογος δεν φόρτωσε'));
-fetch('details.json').then(r=>r.json()).then(d=>{DET=d||{}}).catch(()=>{});
+async function fetchJson(path){
+  const response=await fetch(path);
+  if(!response.ok)throw new Error('Η λήψη απέτυχε ('+response.status+')');
+  return response.json();
+}
+function loadCatalogue(){
+  if(!cataloguePromise){
+    cataloguePromise=fetchJson('standard.json').then(data=>{
+      S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
+      S.cmap=Object.fromEntries(S.cat.map(p=>[p.id,p]));
+    }).catch(error=>{cataloguePromise=null;throw error});
+  }
+  if(!supportingMediaStarted){
+    supportingMediaStarted=true;
+    fetchJson('assets/media.json?v=efel-prod02').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
+  }
+  return cataloguePromise;
+}
 let modalTrigger;
 function openM(html){
   const overlay=$('#ov');
@@ -233,15 +248,16 @@ async function loadPrices(user,configRows){
   if(S.me===user)priceCache={user,key,time:Date.now(),data};
   return {data,error:null};
 }
-async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;const user=S.me;loading=(async()=>{
+async function loadAll(){if(!sb||!S.me)return;if(loading)return loading.catch(()=>{});const user=S.me;loading=(async()=>{
   const q=t=>sb.from(t).select('*');
   const config=q('config');
   const configReady=Promise.resolve(config);
+  const catalogue=loadCatalogue();
   const [cf,lg,cl,cm,pf,ro,ma,of,ne,br,bi,pr,ar]=await Promise.all([configReady,q('leagues').order('sort'),q('clubs').order('id'),
     sb.from('club_managers').select('*'),sb.from('profiles').select('id,display_name,is_admin,avatar_url,efootball_name,platform,contact'),q('roster'),
     configReady.then(({data,error})=>error?{error}:q('matches').eq('season_no',Number(data.find(r=>r.key==='season_no')?.value)||1).order('md')),sb.from('offers').select('*').order('created_at',{ascending:false}).limit(300),
     sb.from('news').select('*').order('ts',{ascending:false}).limit(80),sb.from('bid_rounds').select('*').order('id',{ascending:false}).limit(5),
-    q('bids'),configReady.then(({data,error})=>error?{error}:loadPrices(user,data)),sb.from('season_archive').select('*')]);
+    q('bids'),configReady.then(({data,error})=>error?{error}:loadPrices(user,data)),sb.from('season_archive').select('*'),catalogue]);
   if(S.me!==user)return;
   const err=[cf,lg,cl,ma,ro,pr].find(x=>x.error);if(err){S.loadFailed=true;render();toast('Σφάλμα φόρτωσης: '+err.error.message);return}
   S.loadFailed=false;
@@ -279,8 +295,8 @@ async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;const us
   const mt=myTeam();S.fin=null;
   if(mt){try{S.fin=await rpc('efel_finance',{c:+mt.id})}catch(e){}}
   if(S.me!==user)return;
-  pickCat();S.loaded=true;render();setTimeout(()=>{if(S.me!==user)return;if(!LS.get('onb_'+S.me,0)&&!myTeam()){LS.set('onb_'+S.me,1);onboarding(0)}else momentsCheck()},700)})();try{await loading}finally{loading=null;if(S.me&&S.me!==user)loadAll()}}
-function pickCat(){if(!STD)return;setCat(STD.map(x=>({id:x[0],name:x[1],search:searchName(x[1]),pos:x[2],ovr:x[3],img:x[4],price:S.prices?.[x[0]]||MINP})))}
+  pickCat();S.loaded=true;render();setTimeout(()=>{if(S.me!==user)return;if(!LS.get('onb_'+S.me,0)&&!myTeam()){LS.set('onb_'+S.me,1);onboarding(0)}else momentsCheck()},700)})();try{await loading}catch(error){if(S.me===user){S.loadFailed=true;render();toast(error.message||'Η λίγκα δεν φόρτωσε.')}}finally{loading=null;if(S.me&&S.me!==user)loadAll()}}
+function pickCat(){for(const player of S.cat)player.price=S.prices[player.id]||MINP}
 
 /* ---------- βοηθητικά νέου backend ---------- */
 const isAutoLg=()=>S.leagues.find(l=>l.id===S.lg)?.kind==='auto';
@@ -1015,7 +1031,7 @@ function sumCard(mt){const S2=seasonStats(mt.id),B=boardTarget(mt.id),ppg=S2.pla
     <div class="sum-p"><span>Πρόοδος σεζόν</span><div class="sum-pr">${bar(S2.played,S2.total)}<b>${S2.played}/${S2.total}</b></div></div>
     <button class="goal ${ok?'ok':''}" data-act="goal">${ico('target')}<span>Στόχος Διοίκησης: <b>${B.label}</b></span></button></div></section>`}
 function formCard(mt){const f=(seasonStats(mt.id).s.form||[]).slice(-5);
-  return `<section class="pnl"><div class="ph">${ico('wave')}<b>Φόρμα</b><small>(τελευταίοι 5)</small></div><div class="frm">${f.length?f.map(x=>`<i class="fm ${x}" title="${x==='W'?'Νίκη':x==='D'?'Ισοπαλία':'Ήττα'}">${x==='W'?'Ν':x==='D'?'Ι':'Η'}</i>`).join(''):'<span class="small muted">Κανένας αγώνας ακόμα.</span>'}</div></section>`}
+  return `<section class="pnl"><div class="ph">${ico('wave')}<b>Φόρμα</b><small>(τελευταίοι 5)</small></div><div class="frm">${f.length?f.map(x=>`<i class="fm ${x}" title="${x==='W'?'Νίκη':x==='D'?'Ισοπαλία':'Ήττα'}">${x==='W'?'Ν':x==='D'?'Ι':'Η'}</i>`).join(''):'<span class="small muted form-empty">Κανένας αγώνας ακόμα.</span>'}</div></section>`}
 function nextStepCard(mt){const L=myTodoItems(mt),x=L[0];let inner;
   if(x)inner=goTo(x.a,`${ico('clip')}<span class="ns-t"><b>${x.t}</b><small>${x.s}</small></span>${ico('chev','chv')}`,'ns-row');
   else{const nm=S.allMatches.filter(m=>m.status!=='final'&&(m.home===mt.id||m.away===mt.id)).sort((a,b)=>a.md-b.md)[0];
