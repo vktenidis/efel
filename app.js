@@ -2,7 +2,7 @@
 {
 const GROUP={GK:'GK',CB:'DEF',LB:'DEF',RB:'DEF',DMF:'MID',CMF:'MID',AMF:'MID',LMF:'MID',RMF:'MID',LWF:'FWD',RWF:'FWD',SS:'FWD',CF:'FWD'};
 const GNAME={GK:'Τερματοφύλακες',DEF:'Αμυντικοί',MID:'Μέσοι',FWD:'Επιθετικοί'};
-const QUOTA={GK:3,DEF:9,MID:9,FWD:7},MAXR=25,MINP=5000;
+const QUOTA={GK:4,DEF:10,MID:10,FWD:8},MINP=5000;let MAXR=30;
 const CLUBS=[['Real Madrid','RMA','#d6a72a'],['Barcelona','BAR','#a50044'],['Manchester City','MCI','#6cabdd'],['Bayern München','BAY','#0066b2'],['Liverpool','LIV','#c8102e'],['Arsenal','ARS','#ef0107'],['Paris Saint-Germain','PSG','#004170'],['Inter','INT','#111111'],['Juventus','JUV','#333333'],['Chelsea','CHE','#034694']];
 const ECON={budget:600000,winBonus:10000,drawBonus:3000,prizes:[100000,70000,50000,35000,25000,20000,15000,10000]};
 function priceByRank(r,T){T=T||8;const tiers=[[2*T,130000,90000],[7*T,70000,40000],[17*T,35000,15000],[27*T,12000,6000]];let lo=0;
@@ -80,7 +80,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod03').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod04').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -276,7 +276,8 @@ async function loadAll(){if(!sb||!S.me)return;if(loading)return loading.catch(()
   S.cfg={name:'eFootball Evolution League',budget:+C.budget,winBonus:+C.win_bonus,drawBonus:+C.draw_bonus,prizes:C.prizes,
     bidsPerRound:+C.bids_per_round,phase:C.phase,windowOpen:!!C.window_open,biddingOpen:!!openR,round:openR?openR.no:(rd?rd.no+1:1),
     roundClosesAt:openR?.closes_at,deadline:openR?.closes_at?fmtDT(openR.closes_at):'',seasonStart:C.season_start,mdEvery:+C.md_every_days,
-    seasonNo,activationHours:+C.activation_hours,coverMax:+C.cover_max_ovr,catalog:'standard',windowAuto:!!C.window_auto,contractSeasons:+C.contract_seasons||2,renewPct:+C.renew_pct||30,counterRounds:+C.counter_rounds||4,windowMid:+C.window_mid_after_md||9,windowDays:+C.window_days||7,efb:C.efb_gp||{},ratio:+C.efel_ratio||3,homeGate:+C.home_gate||0};
+    seasonNo,activationHours:+C.activation_hours,coverMax:+C.cover_max_ovr,catalog:'standard',windowAuto:!!C.window_auto,contractSeasons:+C.contract_seasons||2,renewPct:+C.renew_pct||30,counterRounds:+C.counter_rounds||4,windowMid:+C.window_mid_after_md||9,windowDays:+C.window_days||7,efb:C.efb_gp||{},ratio:+C.efel_ratio||3,homeGate:+C.home_gate||0,frFee:+C.friendly_fee||1500,frWin:+C.friendly_win||500,frWeek:+C.friendly_week_max||2,frPair:+C.friendly_pair_week_max||1};
+  MAXR=+C.max_roster||30;SQT=+C.squad_target||25;if(C.quota)Object.assign(QUOTA,C.quota);
   try{S.windows=await rpc('efel_window_dates')}catch(e){S.windows=[]}
   if(S.me!==user)return;
   S.prof={};for(const p of pf.data||[]){S.names[p.id]=p.display_name;S.prof[p.id]=p}
@@ -288,7 +289,7 @@ async function loadAll(){if(!sb||!S.me)return;if(loading)return loading.catch(()
   const ros={};for(const r of ro.data||[])(ros[r.club_id]=ros[r.club_id]||[]).push({pid:spid(r.player_id),paid:r.paid,activation:r.activation,deadline:r.activation_deadline,via:r.via,at:Date.parse(r.acquired_at),cu:r.contract_until});
   S.all=(cl.data||[]).map(c=>({id:sid(c.id),name:c.name,abbr:c.abbr,color:c.color,budget:+c.budget,earned:+c.earned,is_auto:c.is_auto,status:c.status,
     league_id:sid(c.league_id),order:c.id,manager:mg[c.id]||null,roster:ros[c.id]||[],
-    lineup:c.lineup?{f:c.lineup.f,xi:(c.lineup.xi||[]).map(x=>x?spid(x):null)}:null}));
+    lineup:c.lineup?{f:c.lineup.f,xi:(c.lineup.xi||[]).map(x=>x?spid(x):null),bench:(c.lineup.bench||[]).map(x=>spid(x))}:null}));
   rosterOwners=new Map(S.all.flatMap(t=>t.roster.map(r=>[r.pid,t])));
   S.allMatches=(ma.data||[]).filter(m=>m.season_no===seasonNo).map(m=>({id:sid(m.id),league_id:sid(m.league_id),md:m.md,home:sid(m.home),away:sid(m.away),
     hs:m.hg,as:m.ag,status:m.status,by:sid(m.reported_by),tprop:m.time_proposed,tpropBy:sid(m.time_proposed_by),tagreed:m.time_agreed,sim:m.simulated,up:m.updated_at,proof:httpsURL(m.proof_url),slots:m.time_slots||(m.time_proposed?[m.time_proposed]:[])}));
@@ -303,6 +304,8 @@ async function loadAll(){if(!sb||!S.me)return;if(loading)return loading.catch(()
   S.news=(ne.data||[]).map(mapNews);
   const mt=myTeam();S.fin=null;
   if(mt){try{S.fin=await rpc('efel_finance',{c:+mt.id})}catch(e){}}
+  if(S.me!==user)return;
+  try{await loadExtras(user)}catch(e){}
   if(S.me!==user)return;
   pickCat();S.loaded=true;render();setTimeout(()=>{if(S.me!==user)return;if(!LS.get('onb_'+S.me,0)&&!myTeam()){LS.set('onb_'+S.me,1);onboarding(0)}else momentsCheck()},700)})();try{await loading}catch(error){if(S.me===user){S.loadFailed=true;render();toast(error.message||'Η λίγκα δεν φόρτωσε.')}}finally{loading=null;if(S.me&&S.me!==user)loadAll()}}
 function pickCat(){for(const player of S.cat)player.price=S.prices[player.id]||MINP}
@@ -379,15 +382,16 @@ function standings(lg){lg=lg||S.lg;const T={};for(const t of S.all.filter(t=>t.l
 function vRules(){const c=cfg(),B=c.budget||ECON.budget,T=S.all.length||24,pz=c.prizes||ECON.prizes,sec=(t,b)=>`<section class="card"><h2>${t}</h2>${b}</section>`;
   return `<div class="rules" style="display:grid;gap:14px;max-width:900px"><div class="rsearch"><input type="search" id="rq" placeholder="🔎 Αναζήτηση στον κανονισμό (π.χ. συμβόλαιο, αντιπρόταση)" aria-label="Αναζήτηση στον κανονισμό"></div>
   ${sec('1. Ομάδες και μάνατζερ',`<ul><li>8 ομάδες στην ανθρώπινη λίγκα, μία ανά μάνατζερ. Κάθε μάνατζερ αναλαμβάνει την ομάδα του από τη σελίδα Ομάδες.</li><li>Όλοι ξεκινούν με <b>${gp(B)}</b> budget λίγκας και άδειο ρόστερ.</li><li>Κάθε παίκτης ανήκει σε <b>μία μόνο ομάδα</b>. Για να τον πάρεις από άλλον, του κάνεις πρόταση.</li></ul>`)}
-  ${sec('2. Ρόστερ',`<ul><li>Έως <b>${MAXR} παίκτες</b>. Όρια ανά θέση: ${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${QUOTA[g]}`).join(' · ')}.</li><li><b>Δεσμευμένο υπόλοιπο:</b> δεν μπορείς να ξοδέψεις τόσα που να μη σου μένουν ${gp(MINP)} για κάθε κενή θέση ως τους ${MAXR}.</li><li>Στους αγώνες χρησιμοποιείς <b>μόνο</b> παίκτες του ρόστερ σου, και πρέπει να τους έχεις αγοράσει και στο eFootball.</li></ul>`)}
+  ${sec('2. Ρόστερ',`<ul><li>Κανονικό ρόστερ <b>${SQT} παίκτες</b> και έως <b>${MAXR}</b> (${MAXR-SQT} επιπλέον θέσεις για ευελιξία). Στην ομάδα: 11 βασικοί, 12 αναπληρωματικοί και ρεζέρβες. Όρια ανά θέση: ${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${QUOTA[g]}`).join(' · ')}.</li><li><b>Δεσμευμένο υπόλοιπο:</b> δεν μπορείς να ξοδέψεις τόσα που να μη σου μένουν ${gp(MINP)} για κάθε κενή θέση ως τους ${SQT}. Οι θέσεις από ${SQT+1} ως ${MAXR} δεν δεσμεύουν GP.</li><li>Στους αγώνες χρησιμοποιείς <b>μόνο</b> παίκτες του ρόστερ σου, και πρέπει να τους έχεις αγοράσει και στο eFootball.</li></ul>`)}
   ${sec('3. Χτίσιμο ομάδων: κρυφές προσφορές',`<ul><li>Το χτίσιμο γίνεται σε γύρους. Σε κάθε γύρο κάνεις έως <b>${c.bidsPerRound||8} κρυφές προσφορές</b> και κανείς δεν βλέπει τι έδωσες.</li><li>Η ελάχιστη προσφορά είναι η βασική τιμή του παίκτη.</li><li>Στο κλείσιμο του γύρου ο παίκτης πάει σε <b>όποιον έδωσε τα περισσότερα</b>. Σε ισοπαλία τον παίρνει όποιος έχει ξοδέψει λιγότερα σε παίκτες ως εκείνη την κατακύρωση. Αν έχουν ξοδέψει και τα ίδια, ο παίκτης <b>απορρίπτει τις προτάσεις</b> και μένει ελεύθερος.</li><li>Οι παίκτες κατακυρώνονται με σειρά από τη μεγαλύτερη προσφορά προς τη μικρότερη. Μετά το κλείσιμο βλέπεις για κάθε προσφορά σου γιατί κέρδισες ή έχασες.</li><li>Τα GP χρεώνονται μόνο αν κερδίσεις τον παίκτη.</li></ul>`)}
   ${sec('4. Αξία παικτών',`<ul><li>Κάθε παίκτης δείχνει δύο αξίες: <b>αξία στο eFootball</b> (περίπου τι κοστίζει η standard κάρτα του στο παιχνίδι) και <b>αξία στην EFEL</b>, που είναι η ελάχιστη τιμή του στη λίγκα.</li><li>Αξία EFEL = αξία eFootball ÷ ${c.ratio||3}, οπότε η αναλογία ακολουθεί την αγορά του παιχνιδιού. Εξαρτάται μόνο από το OVR: ίδιο OVR, ίδια αξία.</li><li>Παραδείγματα: 85 → ${gp(Math.round(efbVal(85)/(c.ratio||3)/1000)*1000)} · 80 → ${gp(Math.round(efbVal(80)/(c.ratio||3)/1000)*1000)} · 77 → ${gp(Math.round(efbVal(77)/(c.ratio||3)/1000)*1000)} · 75 → ${gp(Math.round(efbVal(75)/(c.ratio||3)/1000)*1000)}. <button class="lnk" data-act="help" data-id="tiers">Όλος ο πίνακας</button></li></ul>`)}
-  ${sec('5. Αγώνες',`<ul><li><b>Διπλός γύρος</b>, μία αγωνιστική κάθε ${c.mdEvery||3} μέρες (δες το Ημερολόγιο).</li><li>Ο αγώνας παίζεται στο eFootball. Ο ένας δηλώνει το σκορ στην εφαρμογή και ο αντίπαλος το <b>επιβεβαιώνει</b>. Αν διαφωνεί, πατά «Λάθος» και το σκορ δηλώνεται ξανά.</li><li>Κρατάτε screenshot του τελικού σκορ για τυχόν διαφωνία. Τελική απόφαση έχει η διοργάνωση.</li><li>Βαθμοί: νίκη 3, ισοπαλία 1. Ισοβαθμία: διαφορά τερμάτων, μετά γκολ υπέρ.</li></ul>`)}
+  ${sec('5. Αγώνες',`<ul><li><b>Διπλός γύρος</b>, μία αγωνιστική κάθε ${c.mdEvery||3} μέρες (δες το Ημερολόγιο).</li><li>Ο αγώνας παίζεται στο eFootball. Ο ένας δηλώνει το σκορ στην εφαρμογή και ο αντίπαλος το <b>επιβεβαιώνει</b>. Αν διαφωνεί, πατά «Λάθος» και το σκορ δηλώνεται ξανά.</li><li>Κρατάτε screenshot του τελικού σκορ για τυχόν διαφωνία (το ανεβάζετε με «📷 Screenshot» δίπλα στη δήλωση σκορ). Τελική απόφαση έχει η διοργάνωση.</li><li><b>Φιλικά:</b> κανονίζονται από τη σελίδα Αγώνες με όποιον manager θέλετε. Με επιβεβαιωμένο σκορ παίρνετε και οι δύο ${gp(c.frFee||1500)} και ο νικητής +${gp(c.frWin||500)} (έως ${c.frWeek||2} πληρωμένα φιλικά ανά σύλλογο και ${c.frPair||1} ανά ζευγάρι κάθε 7 μέρες). Δεν μετρούν στη βαθμολογία.</li><li>Βαθμοί: νίκη 3, ισοπαλία 1. Ισοβαθμία: διαφορά τερμάτων, μετά γκολ υπέρ.</li></ul>`)}
   ${sec('6. Έπαθλα',`<ul><li>Νίκη <b>+${gp(c.winBonus??ECON.winBonus)}</b>, ισοπαλία <b>+${gp(c.drawBonus??ECON.drawBonus)}</b>, αμέσως μόλις επιβεβαιωθεί το σκορ.</li><li><b>Έσοδα έδρας:</b> ο γηπεδούχος παίρνει επιπλέον <b>+${gp(c.homeGate||0)}</b> από εισιτήρια σε κάθε αγώνα, ό,τι κι αν γίνει.</li><li>Τελική θέση: ${pz.map((v,i)=>`${i+1}η ${gp(v)}`).join(' · ')}.</li></ul>`)}
   ${sec('7. Μεταγραφές',`<ul><li>Όσο η μεταγραφική περίοδος είναι ανοιχτή, αγοράζεις ελεύθερους στη βασική τους τιμή.</li><li>Για παίκτη άλλης ομάδας στέλνεις <b>πρόταση</b> με GP, ανταλλαγή ή και τα δύο. Ο κάτοχος τη δέχεται ή την απορρίπτει.</li><li><b>Αποδέσμευση:</b> παίρνεις πίσω το 50% από όσα πλήρωσες.</li></ul>`)}
   ${sec('8. Ενεργοποίηση κάρτας',`<ul><li>Κάθε απόκτηση ξεκινά σε <b>αναμονή ενεργοποίησης</b>. Έχεις <b>${c.activationHours||72} ώρες</b> από την ολοκλήρωση να δηλώσεις ότι έχεις την κάρτα στο eFootball.</li><li>Η μεταγραφή είναι οριστική: τα GP και τα ανταλλάγματα <b>δεν επιστρέφονται</b> αν δεν αποκτήσεις την κάρτα.</li><li>Αν δηλώσεις αδυναμία ή περάσει η προθεσμία, η θέση καλύπτεται προσωρινά από παίκτη <b>έως OVR ${c.coverMax||65}</b> που έχεις, και η ενεργοποίηση κλειδώνει μέχρι το επόμενο μεταγραφικό παράθυρο.</li><li>Ο παίκτης μένει δικός σου: μπορείς να τον ενεργοποιήσεις, να τον πουλήσεις ή να τον αποδεσμεύσεις στο επόμενο παράθυρο.</li></ul>`)}
   ${sec('Συμβόλαια και μεταγραφική περίοδος',`<ul><li>Κάθε νέα απόκτηση έρχεται με συμβόλαιο <b>${c.contractSeasons||2} σεζόν</b>. Τη λήξη τη βλέπεις στα στοιχεία κάθε παίκτη.</li><li>Στην τελευταία σεζόν του συμβολαίου μπορείς να τον <b>ανανεώσεις</b> για 1 ή 2 σεζόν, με κόστος ${c.renewPct||30}% της τιμής του ανά σεζόν.</li><li>Αν δεν ανανεωθεί, στο τέλος της σεζόν μένει <b>ελεύθερος</b> και τον διεκδικεί όποιος θέλει. Έτσι κανένας σταρ δεν μένει για πάντα σε μία ομάδα.</li><li>Η μεταγραφική περίοδος ανοίγει <b>μόνη της</b>: μία εβδομάδα πριν την πρεμιέρα και μία εβδομάδα μετά την ${c.windowMid||9}η αγωνιστική. Φαίνεται στο Ημερολόγιο.</li><li>Σε κάθε πρόταση μπορείς να κάνεις <b>αντιπρόταση</b>, και με ανθρώπους και με αυτόματους συλλόγους, έως ${c.counterRounds||4} γύρους. Προτάσεις στέλνεις <b>όλη τη σεζόν</b>. Με κλειστή μεταγραφική η συμφωνία γίνεται <b>προσυμφωνία</b> και ολοκληρώνεται αυτόματα με το άνοιγμα. Αγορές ελεύθερων και αποδεσμεύσεις γίνονται μόνο με ανοιχτή μεταγραφική.</li></ul>`)}
   ${sec('9. Κόσμος EFEL',`<ul><li>Τρεις λίγκες: η <b>EFEL Premier</b> των managers και δύο αυτόματες (<b>Europa</b>, <b>Classic</b>) που παίζουν μόνες τους στις ημερομηνίες τους.</li><li>Κάθε παίκτης ανήκει σε <b>έναν σύλλογο σε όλο τον κόσμο</b>. Οι αυτόματοι σύλλογοι αγοράζουν, πουλάνε και κάνουν προτάσεις με πραγματικό λόγο (τι θέση θέλουν να αναβαθμίσουν).</li><li>Αποτελέσματα αυτόματων λιγκών δεν μπαίνουν ποτέ στη βαθμολογία της ανθρώπινης.</li><li><b>Αποχωρεί ο manager, δεν διαλύεται η ομάδα:</b> ρόστερ, βαθμοί και GP μένουν στον σύλλογο για τον επόμενο.</li></ul>`)}
+  ${sec('Ενστάσεις και αποδεικτικά',RULE_COMPLAINTS)}
   ${sec('10. Συμπεριφορά',`<ul><li>Παίζουμε τους αγώνες μας στην ώρα τους και ενημερώνουμε αν κάτι μας εμποδίζει.</li><li>Σεβασμός σε αντιπάλους και διοργάνωση. Η διοργάνωση μπορεί να διορθώσει αποτελέσματα ή να αφαιρέσει μάνατζερ που δεν συμμετέχει.</li></ul>`)}
   </div>`}
 /* ---------- render ---------- */
@@ -1089,7 +1093,7 @@ function vHome(){
    <div class="pair">${xiCard(mt)}${newsCard()}</div>
    ${paperTeaser()}
    <div class="more4">${officeHTML(mt)}
-    <section class="box"><div class="bh">Budget<small>${ros.length}/${MAXR} παίκτες</small></div><div class="big">${Number(mt.budget).toLocaleString('el-GR')} <small>GP</small></div><div class="small muted" style="margin-top:8px">${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${c[g]}/${QUOTA[g]}`).join(' · ')}</div></section>
+    <section class="box"><div class="bh">Budget<small>${ros.length}/${MAXR} παίκτες · <button class="lnk" style="color:#ffd766" data-act="gpinfo">Ανάλυση ›</button></small></div><div class="big">${Number(mt.budget).toLocaleString('el-GR')} <small>GP</small></div><div class="small muted" style="margin-top:8px">${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${c[g]}/${QUOTA[g]}`).join(' · ')}</div></section>
     <section class="box"><div class="bh">${esc(leagueName(S.lg))}<small><a href="#table" style="color:#cfe0ff">Όλη</a></small></div>${n?`<table class="st"><thead><tr><th></th><th></th><th></th><th class="num" title="Αγώνες">Αγ</th><th class="num" title="Βαθμοί">Β</th></tr></thead><tbody>${tb}</tbody></table>`:''}</section>
     <section class="box"><div class="bh">Μεταγραφές-ρεκόρ</div>${rec.length?`<table class="st"><tbody>${rec.map((x,i)=>`<tr class="zm"><td class="ps">${i+1}</td><td>${crest(x.t,20)}</td><td class="n">${plink(x.r.pid)}</td><td class="num"><b>${gp(x.r.paid)}</b></td></tr>`).join('')}</tbody></table>`:'<p class="muted small">Καμία μεταγραφή ακόμα.</p>'}</section>
     <section class="box cal"><div class="bh">Πρόγραμμα<small>${esc(mt.name)}</small></div>${cal}</section></div>
@@ -1200,6 +1204,217 @@ Object.assign(A,{
 document.addEventListener('input',e=>{if(e.target.id==='sq'){S.sf.q=e.target.value;S.sf.offset=0;clearTimeout(S._sq);S._sq=setTimeout(()=>{render(true);const i=$('#sq');if(i){i.focus({preventScroll:true});i.setSelectionRange(i.value.length,i.value.length)}},250)}});
 document.addEventListener('change',e=>{const M={sav:'av',ssort:'sort',spos:'pos',sg:'g',somin:'omin',somax:'omax',spmax:'pmax'};if(M[e.target.id]){S.sf[M[e.target.id]]=e.target.value;S.sf.offset=0;render(true)}if(e.target.id==='saff'){S.sf.afford=e.target.checked;render(true)}});
 document.addEventListener('scroll',e=>{const c=e.target;if(c.id!=='ncar')return;const i=Math.round(c.scrollLeft/Math.max(1,c.clientWidth));c.parentElement.querySelectorAll('.ndots button').forEach((b,k)=>b.classList.toggle('on',k===i))},true);
+
+/* ================= v5 (26/11 απόγευμα): ενεργοποίηση, γηπεδάκι PES 6, ρόστερ 25+5, κάρτα, νέα με φωτογραφίες, budget, φιλικά, ενστάσεις ================= */
+let SQT=25;
+const ZC={GK:'#f2cf1d',DEF:'#2266e0',MID:'#1ea944',FWD:'#e2262f'};
+const CONDA={active:['→','#2fd05a','Ενεργός'],pending:['↘','#ff9a1f','Περιμένει ενεργοποίηση'],unable:['↓','#a45cff','Δεν παίζει (κάλυψη)'],locked:['↓','#a45cff','Κλειδωμένος']};
+function condArrow(r){const c=CONDA[r?.activation||'active']||CONDA.active;return `<i class="cond" style="--cc:${c[1]}" title="${c[2]}">${c[0]}</i>`}
+const MOVE={LB:[0,-9],RB:[0,-9],LMF:[0,-7],RMF:[0,-7],LWF:[5,-6],RWF:[-5,-6],CF:[0,-5],SS:[0,-6],AMF:[0,-6],CMF:[0,-5]};
+function pitchStyle(){return LS.get('pitch_'+S.me,'pes')}
+function rosterRow(mt,pid){return (mt?.roster||[]).find(r=>r.pid===pid)}
+/* γηπεδάκι όπως στο PES 6: πράσινο με λωρίδες, βούλες ανά ζώνη, βελάκια κίνησης, όνομα και βελάκι κατάστασης */
+function pesPitch(mt,edit){const L=edit?S.lu:getLU(mt),sel=S.sel;
+  const lines=`<svg class="pes-lines" viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true"><rect x="3" y="3" width="94" height="134"/><line x1="3" y1="70" x2="97" y2="70"/><circle cx="50" cy="70" r="11"/><circle cx="50" cy="70" r=".9" class="f"/><rect x="24" y="3" width="52" height="21"/><rect x="38" y="3" width="24" height="8"/><rect x="24" y="116" width="52" height="21"/><rect x="38" y="129" width="24" height="8"/><path d="M41 24a11 9 0 0 0 18 0M41 116a11 9 0 0 1 18 0"/></svg>`;
+  const arrows=`<svg class="pes-arrows" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="pah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fff4b0"/></marker></defs>${FORM[L.f].map(([pos,x,y],i)=>{const mv=MOVE[pos];if(!mv||!L.xi[i])return '';return `<line x1="${x}" y1="${y-5}" x2="${x+mv[0]}" y2="${y-5+mv[1]}" marker-end="url(#pah)"/>`}).join('')}</svg>`;
+  const dots=FORM[L.f].map(([pos,x,y],i)=>{const id=L.xi[i],p=id?pl(id):null,z=grp(pos),bad=p&&grp(p.pos)!==z,r=p?rosterRow(mt,id):null;
+    const inner=`<span class="pd" style="--zc:${ZC[z]}">${esc(pos)}</span><span class="pn">${p?`<b>${i+1}</b>${esc(p.name.split(' ').slice(-1)[0])}${condArrow(r)}`:'Κενή θέση'}</span>${p?`<span class="po">${p.ovr}</span>`:''}`;
+    const st=`left:${x}%;top:${y}%`;
+    return edit?`<button class="pdot ${p?'':'e'} ${bad?'bad':''} ${sel&&sel.k==='x'&&sel.i===i?'sel':''}" style="${st}" data-act="slot" data-id="${i}" aria-label="${pos}${p?': '+esc(p.name):''}">${inner}</button>`
+      :p?`<button class="pdot" style="${st}" data-act="pinfo" data-id="${esc(p.id)}" aria-label="${pos}: ${esc(p.name)}">${inner}</button>`:`<a class="pdot e" style="${st}" href="#club">${inner}</a>`}).join('');
+  return `<div class="pes"><div class="pes-field">${lines}${arrows}${dots}</div></div>`}
+function pesLegend(){return `<div class="pes-leg"><span><i style="background:${ZC.GK}"></i>GK</span><span><i style="background:${ZC.DEF}"></i>Άμυνα</span><span><i style="background:${ZC.MID}"></i>Μέση</span><span><i style="background:${ZC.FWD}"></i>Επίθεση</span><span>${condArrow({activation:'active'})} ενεργός</span><span>${condArrow({activation:'pending'})} αναμονή</span></div>`}
+function pitchToggle(){const s=pitchStyle();return `<span class="ptog" role="group" aria-label="Εμφάνιση γηπέδου"><button class="${s==='pes'?'on':''}" data-act="pstyle" data-id="pes">PES</button><button class="${s==='faces'?'on':''}" data-act="pstyle" data-id="faces">Πρόσωπα</button></span>`}
+xiCard=function(mt){return `<section class="pnl xic"><div class="ph">${ico('shirt','gold')}<b>Ενδεκάδα</b><a class="fmt" href="#club">${esc(getLU(mt).f)}</a></div><div class="xiw">${pitchStyle()==='pes'?pesPitch(mt,false):lineup(mt)}${pitchToggle()}</div></section>`};
+const squadPitch0=squadPitch;
+squadPitch=function(mt){const html=squadPitch0(mt);if(!S.lu.bench)S.lu.bench=benchInit(mt);return pitchStyle()==='pes'?`${pesPitch(mt,true)}${pesLegend()}`:html};
+/* πάγκος 12 + ρεζέρβες + κενές θέσεις ως τις MAXR */
+function benchInit(mt){const xi=new Set(S.lu.xi.filter(Boolean)),ids=(mt.roster||[]).map(r=>r.pid).filter(id=>!xi.has(id));
+  const saved=(mt.lineup?.bench||[]).map(String).filter(id=>ids.includes(id));
+  const rest=ids.filter(id=>!saved.includes(id)).sort((a,b)=>['GK','DEF','MID','FWD'].indexOf(grp(pl(a).pos))-['GK','DEF','MID','FWD'].indexOf(grp(pl(b).pos))||pl(b).ovr-pl(a).ovr);
+  const order=[...saved,...rest];
+  if(!saved.length){const pick=[],gk=order.find(id=>grp(pl(id).pos)==='GK');if(gk)pick.push(gk);for(const id of order.slice().sort((a,b)=>pl(b).ovr-pl(a).ovr))if(pick.length<12&&!pick.includes(id))pick.push(id);return pick}
+  return order.slice(0,12)}
+function benchSync(mt){const L=S.lu,xi=new Set(L.xi.filter(Boolean)),ids=new Set((mt.roster||[]).map(r=>r.pid));L.bench=(L.bench||[]).filter(id=>ids.has(id)&&!xi.has(id)).slice(0,12)}
+function squadRow(mt,p,num,kind){const r=rosterRow(mt,p.id),z=grp(p.pos),sel=S.sel&&S.sel.k==='b'&&S.sel.pid===p.id;
+  return `<div class="sqr ${sel?'sel':''}"><button class="sqb" data-act="bench" data-id="${esc(p.id)}"><span class="sqn" style="--zc:${ZC[z]}">${num}</span><span class="sqp">${esc(p.pos)}</span><span class="sqm">${esc(p.name)}</span><span class="sqo">${p.ovr}</span>${condArrow(r)}</button><button class="sbtn sm" data-act="pinfo" data-id="${esc(p.id)}" aria-label="Κάρτα ${esc(p.name)}">Κάρτα</button></div>`}
+squadBench=function(mt){const L=S.lu;if(!L.bench)L.bench=benchInit(mt);benchSync(mt);
+  const xi=L.xi.map((id,i)=>id?{p:pl(id),i}:null).filter(Boolean),inXI=new Set(L.xi.filter(Boolean)),bench=L.bench.map(pl);
+  const res=(mt.roster||[]).map(r=>r.pid).filter(id=>!inXI.has(id)&&!L.bench.includes(id)).map(pl).sort((a,b)=>b.ovr-a.ovr);
+  const n=(mt.roster||[]).length,empty=Math.max(0,MAXR-n);
+  return `<div class="row" style="margin-bottom:10px"><label class="small">Σχηματισμός <select id="fsel" aria-label="Σχηματισμός">${Object.keys(FORM).map(f=>`<option ${f===L.f?'selected':''}>${f}</option>`).join('')}</select></label><button class="ghost" data-act="autoLU">Αυτόματη</button><button data-act="saveLU" ${L.dirty?'':'disabled'}>Αποθήκευση</button><span class="small muted">Μ.Ο. OVR ${xiAvg({...mt,lineup:{f:L.f,xi:L.xi}})}</span></div>
+   ${L.dirty?'<p class="note small">Έχεις αλλαγές που δεν αποθηκεύτηκαν.</p>':''}
+   <p class="small muted">Πάτα μια βούλα στο γήπεδο και μετά έναν παίκτη της λίστας για να μπει στη θέση της. Μέσα στη λίστα, πάτα δύο παίκτες για να αλλάξουν θέση (π.χ. ρεζέρβα με αναπληρωματικό). Κόκκινο περίγραμμα: παίκτης εκτός θέσης.</p>
+   <div class="sqh"><b>Βασικοί</b><span>${xi.length}/11</span></div><div class="sql">${xi.map(({p,i})=>squadRow(mt,p,i+1,'x')).join('')}</div>
+   <div class="sqh"><b>Αναπληρωματικοί</b><span>${bench.length}/12</span></div><div class="sql">${bench.length?bench.map((p,k)=>squadRow(mt,p,12+k,'b')).join(''):'<p class="small muted">Κανένας.</p>'}</div>
+   <div class="sqh"><b>Ρεζέρβες</b><span>${res.length}</span></div><div class="sql">${res.length?res.map(p=>squadRow(mt,p,'R','r')).join(''):'<p class="small muted">Καμία ρεζέρβα.</p>'}</div>
+   <div class="sqh"><b>Κενές θέσεις</b><span>${empty} από ${MAXR}</span></div><div class="sql">${Array.from({length:empty},()=>`<a class="sqr empty" href="#transfers"><span class="sqn">+</span><span class="sqm">Κενή θέση · βρες παίκτη</span>${ico('chev','chv')}</a>`).join('')}</div>
+   <div class="sqfoot">${pesLegend()}<p class="small muted">Κανονικό ρόστερ ${SQT} παίκτες, όριο ${MAXR}: οι ${MAXR-SQT} επιπλέον θέσεις είναι για ευελιξία και δεν δεσμεύουν GP.</p></div>`};
+Object.assign(A,{
+  pstyle(k){LS.set('pitch_'+S.me,k);render(true)},
+  slot(i){i=+i;const L=S.lu;if(!L)return;const s=S.sel;L.bench=L.bench||[];
+    if(!s)S.sel={k:'x',i};else if(s.k==='x'){if(s.i!==i){const t=L.xi[i];L.xi[i]=L.xi[s.i];L.xi[s.i]=t;L.dirty=1}S.sel=null}
+    else{const old=L.xi[i],j=L.bench.indexOf(s.pid);L.xi[i]=s.pid;if(j>=0){if(old)L.bench[j]=old;else L.bench.splice(j,1)}L.dirty=1;S.sel=null}render(true)},
+  bench(pid){const L=S.lu;if(!L)return;const s=S.sel;L.bench=L.bench||[];
+    if(s&&s.k==='x')return A.slot2(s.i,pid);
+    if(s&&s.k==='b'&&s.pid!==pid){const a=L.bench.indexOf(s.pid),b=L.bench.indexOf(pid);
+      if(a>=0&&b>=0){L.bench[a]=pid;L.bench[b]=s.pid}else if(a>=0)L.bench[a]=pid;else if(b>=0)L.bench[b]=s.pid;L.dirty=1;S.sel=null}
+    else S.sel=s&&s.k==='b'&&s.pid===pid?null:{k:'b',pid};render(true)},
+  slot2(i,pid){const L=S.lu,old=L.xi[i],j=L.bench.indexOf(pid);S.sel=null;L.xi[i]=pid;if(j>=0){if(old)L.bench[j]=old;else L.bench.splice(j,1)}L.dirty=1;render(true)},
+  async saveLU(){const L=S.lu;await w(async()=>{await rpc('efel_save_lineup',{p_f:L.f,p_xi:L.xi.map(npid)});await rpc('efel_save_bench',{p_bench:(L.bench||[]).map(npid)});L.dirty=0},'Η ενδεκάδα και ο πάγκος αποθηκεύτηκαν')},
+  autoLU(){const mt=myTeam();S.lu={f:S.lu.f,xi:autoXI(mt,S.lu.f),dirty:1,t:mt.id};S.lu.bench=benchInit(mt);S.sel=null;render(true)},
+  /* ενεργοποίηση */
+  actConfirm(pid){const p=pl(pid);openM(`<div class="box"><div class="bh">Ενεργοποίηση κάρτας</div>${pcardHTML(pid)}
+    <label class="actchk"><span class="act-arrow" aria-hidden="true">➜</span><input type="checkbox" id="actTerms"><span class="act-box" aria-hidden="true"></span><span class="act-txt">Δηλώνω ότι έχω την κάρτα <b>${esc(p.name)}</b> (standard) στον λογαριασμό μου στο eFootball.</span></label>
+    <div class="row" style="justify-content:flex-end;gap:8px"><button class="ghost" data-act="actUnable" data-id="${esc(pid)}">Δεν μπορώ να την πάρω</button><button class="pbtn" data-act="actDo" data-id="${esc(pid)}">Ενεργοποίηση</button></div>
+    <p class="small muted" style="margin-top:10px">Αν δεν μπορείς να πάρεις την κάρτα, η θέση καλύπτεται προσωρινά από παίκτη σου έως OVR ${cfg().coverMax||65}.</p></div>`)},
+  async actUnable(pid){closeM();await w(()=>rpc('efel_declare_unable',{p_player:npid(pid)}),'Καταγράφηκε. Η θέση καλύπτεται προσωρινά από παίκτη έως OVR '+(cfg().coverMax||65)+' που έχεις.')},
+  /* budget */
+  gpinfo(){openM(budgetHTML())},
+  /* φιλικά */
+  frNew(opp){const mt=myTeam();if(!mt)return;const opts=S.all.filter(t=>t.id!==mt.id&&t.manager&&!t.is_auto);
+    if(!opts.length)return toast('Δεν υπάρχει άλλος σύλλογος με manager ακόμα');
+    const dt=k=>{const d=new Date(Date.now()+(k+1)*864e5);d.setHours(21,0,0,0);return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,16)};
+    openM(`<div class="box"><div class="bh">Νέο φιλικό</div><p class="small muted">Το φιλικό παίζεται στο eFootball με τα ρόστερ της EFEL. Μόλις ο αντίπαλος επιβεβαιώσει το σκορ, παίρνετε και οι δύο ${gp(cfg().frFee||1500)} (+${gp(cfg().frWin||500)} ο νικητής).</p>
+     <label class="small">Αντίπαλος<select id="fr_opp">${opts.map(t=>`<option value="${esc(t.id)}" ${t.id===opp?'selected':''}>${esc(t.name)} · ${esc(S.names[t.manager]||'')}</option>`).join('')}</select></label>
+     <div class="seg mini" style="margin:10px 0"><button class="on" data-act="frHome" data-id="1" id="fr_h1">Έδρα μου</button><button data-act="frHome" data-id="0" id="fr_h0">Έδρα αντιπάλου</button></div>
+     <div class="small" style="margin:6px 0">Πρότεινε έως 3 ώρες</div>${[0,1,2].map(k=>`<input type="datetime-local" id="fr_t${k}" ${k===0?`value="${dt(0)}"`:''} style="margin-bottom:6px">`).join('')}
+     <label class="small">Σημείωμα (προαιρετικό)<input id="fr_note" maxlength="140" placeholder="π.χ. Δοκιμή του νέου 4-3-3"></label>
+     <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="closeM">Άκυρο</button><button class="pbtn" data-act="frSend">Αποστολή πρόσκλησης</button></div></div>`);S.frHome=true},
+  frHome(v){S.frHome=v==='1';$('#fr_h1')?.classList.toggle('on',S.frHome);$('#fr_h0')?.classList.toggle('on',!S.frHome)},
+  async frSend(){const times=[0,1,2].map(k=>$('#fr_t'+k)?.value).filter(Boolean).map(v=>new Date(v).toISOString());if(!times.length)return toast('Πρότεινε τουλάχιστον μία ώρα');
+    const opp=+$('#fr_opp').value,note=$('#fr_note').value;closeM();await w(()=>rpc('efel_friendly_invite',{p_opp:opp,p_home:S.frHome!==false,p_times:times,p_note:note}),'Η πρόσκληση στάλθηκε')},
+  frSlots(id){openM(`<div class="box"><div class="bh">Άλλες ώρες για το φιλικό</div>${[0,1,2].map(k=>`<input type="datetime-local" id="fs_t${k}" style="margin-bottom:6px">`).join('')}<div class="row" style="justify-content:flex-end"><button class="ghost" data-act="closeM">Άκυρο</button><button class="pbtn" data-act="frSlotsDo" data-id="${id}">Αποστολή</button></div></div>`)},
+  async frSlotsDo(id){const times=[0,1,2].map(k=>$('#fs_t'+k)?.value).filter(Boolean).map(v=>new Date(v).toISOString());if(!times.length)return toast('Πρότεινε τουλάχιστον μία ώρα');closeM();await w(()=>rpc('efel_friendly_slots',{p_id:+id,p_times:times}),'Οι ώρες στάλθηκαν')},
+  async frPick(v){const [id,t]=v.split('|');await w(()=>rpc('efel_friendly_accept',{p_id:+id,p_time:t}),'Το φιλικό κλείστηκε!')},
+  async frCancel(id){await w(()=>rpc('efel_friendly_cancel',{p_id:+id}),'Το φιλικό ακυρώθηκε')},
+  async frReport(id){const hs=$('#fh_'+id)?.value,as=$('#fa_'+id)?.value;if(hs===''||as==='')return toast('Συμπλήρωσε και τα δύο σκορ');const file=$('#fp_'+id)?.files?.[0];
+    await w(async()=>{await rpc('efel_friendly_report',{p_id:+id,p_hg:+hs,p_ag:+as});
+      if(file&&file.size<=4e6){const path=`${S.me}/f${id}-${Date.now()}.${file.type.split('/')[1]||'jpg'}`;const {error}=await sb.storage.from('proofs').upload(path,file,{contentType:file.type});if(!error)await rpc('efel_friendly_proof',{p_id:+id,p_url:sb.storage.from('proofs').getPublicUrl(path).data.publicUrl})}},'Στάλθηκε στον αντίπαλο για επιβεβαίωση')},
+  async frConfirm(id){await w(()=>rpc('efel_friendly_confirm',{p_id:+id}),'Το φιλικό επιβεβαιώθηκε, τα έσοδα μπήκαν')},
+  async frDispute(id){await w(()=>rpc('efel_friendly_dispute',{p_id:+id}),'Καταγράφηκε η διαφωνία. Δηλώστε ξανά το σωστό σκορ')},
+  async frAdmin(v){const [id,h,a]=v.split('|');await w(()=>rpc('efel_admin_friendly',{p_id:+id,p_hg:h===''?null:+h,p_ag:a===''?null:+a}),'Καταχωρήθηκε')},
+  /* ενστάσεις */
+  cpNew(v){const [k,id]=v.split('|');openM(`<div class="box"><div class="bh">Ένσταση για παράβαση κανονισμού</div>
+    <div class="note small"><b>Χωρίς αποδεικτικό υλικό η ένσταση δεν γίνεται δεκτή.</b> Βάλε σύνδεσμο σε καταγραφή του αγώνα, live ή screenshot (https). Ο αντίπαλος μπορεί να απαντήσει με δικά του στοιχεία και τελικά κρίνει η διοργάνωση.</div>
+    <label class="small">Τι έγινε<textarea id="cp_r" rows="4" maxlength="2000" placeholder="π.χ. Ο αντίπαλος έπαιζε με ενεργό smart assist σε όλο το δεύτερο ημίχρονο (από 46′)."></textarea></label>
+    ${[0,1,2].map(i=>`<input id="cp_e${i}" type="url" inputmode="url" placeholder="https://… ${i?'(προαιρετικό)':'(υποχρεωτικό)'}" style="margin-top:6px">`).join('')}
+    <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="closeM">Άκυρο</button><button class="pbtn" data-act="cpSend" data-id="${esc(k)}|${esc(id)}">Υποβολή ένστασης</button></div></div>`)},
+  async cpSend(v){const [k,id]=v.split('|'),ev=[0,1,2].map(i=>$('#cp_e'+i)?.value.trim()).filter(Boolean),r=$('#cp_r').value;
+    if(!ev.some(x=>/^https:\/\//.test(x)))return toast('Χρειάζεται τουλάχιστον ένας σύνδεσμος https με αποδεικτικό');closeM();
+    await w(()=>rpc('efel_complaint_file',{p_match:k==='m'?+id:null,p_friendly:k==='f'?+id:null,p_reason:r,p_evidence:ev}),'Η ένσταση καταχωρήθηκε. Η διοργάνωση θα εξετάσει τα στοιχεία')},
+  cpDefend(id){openM(`<div class="box"><div class="bh">Απάντηση σε ένσταση</div><p class="small muted">Υπερασπίσου τον εαυτό σου με αποδεικτικά (π.χ. καταγραφή όπου φαίνεται ότι το smart assist ήταν κλειστό). Απάντηση χωρίς στοιχεία δεν λαμβάνεται υπόψη.</p>
+    <label class="small">Η απάντησή σου<textarea id="cd_t" rows="4" maxlength="2000"></textarea></label>${[0,1,2].map(i=>`<input id="cd_e${i}" type="url" placeholder="https://…" style="margin-top:6px">`).join('')}
+    <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="closeM">Άκυρο</button><button class="pbtn" data-act="cpDefendDo" data-id="${id}">Αποστολή</button></div></div>`)},
+  async cpDefendDo(id){const ev=[0,1,2].map(i=>$('#cd_e'+i)?.value.trim()).filter(Boolean);const t=$('#cd_t').value;closeM();await w(()=>rpc('efel_complaint_defend',{p_id:+id,p_text:t,p_evidence:ev}),'Η απάντησή σου καταχωρήθηκε')},
+  async cpWithdraw(id){await w(()=>rpc('efel_complaint_withdraw',{p_id:+id}),'Η ένσταση αποσύρθηκε')},
+  cpDecide(v){const [id,up]=v.split('|');openM(`<div class="box"><div class="bh">${up==='1'?'Δεκτή ένσταση':'Απόρριψη ένστασης'}</div><label class="small">Αιτιολόγηση (φαίνεται στους δύο συλλόγους)<textarea id="cx_t" rows="3"></textarea></label><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="closeM">Άκυρο</button><button class="pbtn" data-act="cpDecideDo" data-id="${id}|${up}">Οριστικό</button></div></div>`)},
+  async cpDecideDo(v){const [id,up]=v.split('|'),t=$('#cx_t').value;closeM();await w(()=>rpc('efel_admin_complaint',{p_id:+id,p_upheld:up==='1',p_note:t}),'Η απόφαση καταχωρήθηκε')}
+});
+/* ειδοποίηση ενεργοποίησης → ανοίγει κατευθείαν την ενεργοποίηση */
+{const base=myTodoItems;myTodoItems=function(mt){const L=base(mt).map(x=>x.a&&x.a.startsWith('data-act="pinfo"')&&/^Ενεργοποίησε/.test(x.t)?{...x,a:x.a.replace('data-act="pinfo"','data-act="actConfirm"')}:x);
+  const id=mt.id;
+  for(const f of S.friendlies||[]){if(f.home!==id&&f.away!==id)continue;const op=team(f.home===id?f.away:f.home)?.name||'';
+    if(f.status==='proposed'&&f.proposed_by!==id)L.push({t:`Πρόσκληση για φιλικό`,s:`Από ${esc(op)} · διάλεξε ώρα`,a:'#matches',row:`<div><span>Η ${esc(op)} σε προσκαλεί σε φιλικό</span><a href="#matches"><button class="ghost" style="min-height:34px;padding:0 10px">Απάντηση</button></a></div>`});
+    if(f.status==='reported'&&f.reported_by!==id)L.push({t:`Επιβεβαίωσε το φιλικό ${f.hg}-${f.ag}`,s:`${esc(team(f.home)?.name||'')} - ${esc(team(f.away)?.name||'')}`,a:'#matches',row:`<div><span>Επιβεβαίωσε το φιλικό <b>${tname(f.home)} ${f.hg}-${f.ag} ${tname(f.away)}</b></span><button style="min-height:34px;padding:0 10px" data-act="frConfirm" data-id="${f.id}">Σωστό</button></div>`})}
+  for(const k of S.complaints||[])if(k.status==='open'&&k.against_club===id&&!k.defended_at)L.unshift({t:'Ένσταση εναντίον σου',s:'Απάντησε με αποδεικτικά',a:'#matches',row:`<div><span><span class="tag n">Ένσταση</span> από ${tname(k.by_club)}: απάντησε με αποδεικτικά</span><button class="ghost" style="min-height:34px;padding:0 10px" data-act="cpDefend" data-id="${k.id}">Απάντηση</button></div>`});
+  return L}}
+/* στοιχεία παίκτη: κουμπιά ενεργοποίησης όταν περιμένει */
+{const base=playerHTML;playerHTML=function(pid){let h=base(pid);const mt=myTeam(),r=mt&&rosterRow(mt,pid);
+  if(r&&r.activation==='pending')h=h.replace('<div class="kv">',`<div class="actcta"><div><b>Η κάρτα περιμένει ενεργοποίηση</b><span>${r.deadline?'Προθεσμία ως '+fmtDT(r.deadline):'Επιβεβαίωσε ότι την έχεις στο eFootball'}</span></div><button class="pbtn" data-act="actConfirm" data-id="${esc(pid)}">Ενεργοποίηση ${ico('chev')}</button><button class="sbtn sm" data-act="actUnable" data-id="${esc(pid)}">Δεν μπορώ</button></div><div class="kv">`);
+  return h}}
+/* ---- κάρτα παίκτη v5 ---- */
+efelCard=function(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180,d=DET[p.name+'|'+p.ovr];
+  const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
+  const st=d&&d.st?d.st.slice().sort((a,b)=>b[1]-a[1]).slice(0,3):null;
+  const foot=st?st.map(([k,v])=>`<span><b>${v}</b>${esc((SN[k]||k).slice(0,9))}</span>`).join(''):`<span><b>${Math.round(p.price/1000)}K</b>EFEL</span><span><b>${Math.round(efbVal(p.ovr)/1000)}K</b>eFootball</span><span><b>${{GK:'Τέρμα',DEF:'Άμυνα',MID:'Μέση',FWD:'Επίθεση'}[grp(p.pos)]||''}</b>ζώνη</span>`;
+  return `<div class="ecard e5 t-${tk} ${p.ovr>=88?'holo':''}" style="--s:${sc}"><div class="e5-in"><i class="e5-foil" aria-hidden="true"></i><i class="e5-glow" aria-hidden="true"></i>
+   <div class="e5-l"><b class="e5-ovr">${p.ovr}</b><span class="e5-pos">${esc(p.pos)}</span><span class="e5-crest">${o?crest(o,Math.round(22*sc)):''}</span></div>
+   <span class="e5-mark">EF<b>E</b>L</span>
+   <div class="e5-face">${faceImg(p,Math.round(128*sc))}</div>
+   <div class="e5-name">${first?`<small>${esc(first)}</small>`:''}<b>${esc(last)}</b></div>
+   <div class="e5-tier"><span>${T[1]}</span></div>
+   <div class="e5-foot">${foot}</div><i class="e5-shine" aria-hidden="true"></i></div></div>`};
+/* ---- νέα με φωτογραφία φόντου ---- */
+const NBG={transfer:'transfers',agreed:'transfers',buy:'transfers',release:'transfers',renew:'transfers',contract_end:'club',result:'matches',friendly:'home',round:'market',prizes:'paper',note:'paper'};
+{const base=newsMedia;newsMedia=function(n){const h=base(n),bg=NBG[n.type]||'paper';return `<div class="nc-photo" style="background-image:url(assets/ui/${bg}.webp)">${h}</div>`}}
+NTAG.friendly='Φιλικό';
+{const base=newsLine;newsLine=function(n){if(n.type!=='friendly')return base(n);const p=n.pay||{};return {tag:'<span class="tag">Φιλικό</span>',h:`${tname(n.home)} ${n.hg}-${n.ag} ${tname(n.away)}`,b:(p.h||p.a)?`Έσοδα φιλικού: ${esc(team(n.home)?.abbr||'')} +${gp(p.h||0)} · ${esc(team(n.away)?.abbr||'')} +${gp(p.a||0)}`:'Χωρίς έσοδα (έχει συμπληρωθεί το όριο της εβδομάδας)'}}}
+/* ---- budget ---- */
+function budgetHTML(){const mt=myTeam();if(!mt)return '';const f=S.fin||{},c=cfg(),ros=mt.roster||[],id=mt.id;
+  const val=ros.reduce((a,r)=>a+pl(r.pid).price,0),paid=ros.reduce((a,r)=>a+(+r.paid||0),0),efb=ros.reduce((a,r)=>a+efbVal(pl(r.pid).ovr),0);
+  const rem=S.allMatches.filter(m=>m.status!=='final'&&(m.home===id||m.away===id)),remH=rem.filter(m=>m.home===id).length;
+  const pz=c.prizes||[],gate=remH*(c.homeGate||0),winMax=rem.length*(c.winBonus||0),pMin=pz.length?Math.min(...pz):0,pMax=pz.length?Math.max(...pz):0;
+  const st=standings(mt.league_id),pos=st.findIndex(s=>s.id===id)+1,pNow=pos&&pz[pos-1]||0;
+  const weeks=Math.max(0,Math.ceil(rem.length*(c.mdEvery||3)/7)),frMax=weeks*(c.frWeek||2)*((c.frFee||1500)+(c.frWin||500));
+  const ends=ros.filter(contractEnds),renew=ends.reduce((a,r)=>a+Math.ceil(pl(r.pid).price*(c.renewPct||30)/100/1000)*1000,0);
+  const top=ros.map(r=>pl(r.pid)).sort((a,b)=>b.price-a.price)[0];
+  const minT=gate+pMin,maxT=gate+winMax+pMax;
+  const line=(l,v,s)=>`<div class="bl-row"><span>${l}${s?`<small>${s}</small>`:''}</span><b>${v}</b></div>`;
+  return `<div class="box bud"><div class="bh">Budget και αξία συλλόγου<small>${esc(mt.name)}</small></div>
+   <div class="bud-hero"><div><span>Ελεύθερα GP</span><b>${gp(f.free??mt.budget)}</b></div><div><span>Συνολική αξία συλλόγου</span><b>${gp((+mt.budget)+val)}</b><small>budget + αξία ρόστερ</small></div></div>
+   <h4>Αναμενόμενα έσοδα υπόλοιπης σεζόν</h4>
+   <div class="bud-range"><b>${gp(minT)}</b><i></i><b>${gp(maxT)}</b></div><p class="small muted" style="text-align:center;margin:2px 0 8px">ελάχιστο (καμία νίκη, τελευταία θέση) · μέγιστο (όλες νίκες, 1η θέση)</p>
+   ${line('Έσοδα έδρας',gp(gate),`${remH} αγώνες στην έδρα × ${gp(c.homeGate||0)}`)}
+   ${line('Μπόνους νικών',`0 – ${gp(winMax)}`,`${rem.length} αγώνες × ${gp(c.winBonus||0)} ανά νίκη (ισοπαλία ${gp(c.drawBonus||0)})`)}
+   ${line('Έπαθλο θέσης',`${gp(pMin)} – ${gp(pMax)}`,pos?`σήμερα ${pos}η: ${gp(pNow)}`:'')}
+   ${line('Φιλικά (επιπλέον)',`έως ${gp(frMax)}`,`έως ${c.frWeek||2} πληρωμένα φιλικά την εβδομάδα`)}
+   <h4>Ρόστερ</h4>
+   ${line('Αξία ρόστερ στην EFEL',gp(val),`${ros.length} παίκτες · μέση αξία ${gp(ros.length?Math.round(val/ros.length/1000)*1000:0)}`)}
+   ${line('Κόστος απόκτησης',gp(paid),val>=paid?`υπεραξία +${gp(val-paid)}`:`κάτω από το κόστος −${gp(paid-val)}`)}
+   ${line('Αξία στο eFootball',`≈ ${gp(efb)}`,'standard κάρτες, εκτίμηση')}
+   ${top?line('Πιο ακριβός παίκτης',esc(top.name),gp(top.price)):''}
+   ${line('Θέσεις',`${ros.length}/${MAXR}`,`κανονικό ρόστερ ${SQT} · ${Math.max(0,MAXR-ros.length)} κενές`)}
+   <h4>Δεσμεύσεις</h4>
+   ${line('Σε προτάσεις και προσφορές',gp((f.in_offers||0)+(f.in_bids||0)))}
+   ${line('Απόθεμα ρόστερ',gp(f.reserve||0),`${gp(MINP)} για κάθε κενή θέση ως τους ${SQT}`)}
+   ${line('Ανανεώσεις που έρχονται',gp(renew),ends.length?`${ends.length} συμβόλαια λήγουν`:'κανένα συμβόλαιο δεν λήγει')}
+   <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="sbtn" data-act="clubGo" data-id="finance">Αναλυτικά οικονομικά ${ico('chev')}</button></div></div>`}
+/* ---- φιλικά και ενστάσεις στη σελίδα Αγώνες ---- */
+function friendlyRow(f,mt){const id=mt?.id,mine=id&&(f.home===id||f.away===id),me=id;let act='';
+  const sc=f.hg!=null?`<b>${f.hg} - ${f.ag}</b>`:'<span class="muted">vs</span>';
+  if(mine){
+    if(f.status==='proposed'&&f.proposed_by!==me)act=`${(f.slots||[]).map(x=>`<button data-act="frPick" data-id="${f.id}|${esc(x)}">${fmtDT(x)} ✓</button>`).join('')}<button class="ghost" data-act="frSlots" data-id="${f.id}">Άλλες ώρες</button><button class="ghost" data-act="frCancel" data-id="${f.id}">Όχι</button>`;
+    else if(f.status==='proposed')act=`<span class="small muted">Πρότεινες ${(f.slots||[]).map(x=>fmtDT(x)).join(' / ')} · περιμένεις απάντηση</span><button class="ghost" data-act="frCancel" data-id="${f.id}">Ακύρωση</button>`;
+    else if(f.status==='scheduled'||f.status==='disputed')act=`${f.status==='disputed'?'<span class="tag n">Διαφωνία</span> ':''}<span class="small"><b>${fmtDT(f.time_agreed)}</b></span>${stepper('fh_'+f.id,'Γκολ γηπεδούχου')}<span class="sep">-</span>${stepper('fa_'+f.id,'Γκολ φιλοξενούμενου')}<label class="proofbtn"><input type="file" id="fp_${f.id}" accept="image/png,image/jpeg,image/webp" hidden><span>📷 Screenshot</span></label><button data-act="frReport" data-id="${f.id}">Δήλωση σκορ</button>${f.status==='scheduled'?`<button class="ghost" data-act="frCancel" data-id="${f.id}">Ακύρωση</button>`:''}`;
+    else if(f.status==='reported')act=f.reported_by!==me?`<span class="small muted">Το δήλωσε η ${tname(f.reported_by)}. Είναι σωστό;</span><button data-act="frConfirm" data-id="${f.id}">Επιβεβαίωση</button><button class="ghost" data-act="frDispute" data-id="${f.id}">Λάθος</button>`:'<span class="small muted">Περιμένει επιβεβαίωση από τον αντίπαλο</span>';
+    else if(f.status==='final'){const p=f.paid||{},my=f.home===me?p.h:p.a;act=`<span class="small">${my?`Έσοδα <b>+${gp(my)}</b>`:'Χωρίς έσοδα (όριο εβδομάδας)'}</span>`}
+    if(['scheduled','reported','final','disputed'].includes(f.status))act+=`<button class="ghost" data-act="cpNew" data-id="f|${f.id}" title="Ένσταση για παράβαση κανονισμού">Ένσταση</button>`}
+  if(S.owner&&['reported','disputed','scheduled'].includes(f.status))act+=`<button class="ghost" data-act="frAdmin" data-id="${f.id}|${f.hg??0}|${f.ag??0}">Επικύρωση (admin)</button><button class="ghost" data-act="frAdmin" data-id="${f.id}||">Ακύρωση (admin)</button>`;
+  if(f.proof_url&&httpsURL(f.proof_url))act+=`<a class="small" href="${esc(httpsURL(f.proof_url))}" target="_blank" rel="noopener">📷</a>`;
+  const lab={proposed:'Πρόσκληση',scheduled:'Κλεισμένο',reported:'Σκορ προς επιβεβαίωση',final:'Ολοκληρώθηκε',declined:'Απορρίφθηκε',cancelled:'Ακυρώθηκε',disputed:'Διαφωνία'}[f.status];
+  return `<div class="match fr"><div class="h">${tlink(f.home)} ${tdot(f.home)}</div><div class="score">${sc}</div><div class="a">${tdot(f.away)}${tlink(f.away)}</div><div class="mact"><span class="tag">${lab}</span>${f.note?`<span class="small muted">«${esc(f.note)}»</span>`:''}${act}</div></div>`}
+function friendliesHTML(){const mt=myTeam(),c=cfg(),L=(S.friendlies||[]).filter(f=>!['declined','cancelled'].includes(f.status)||(mt&&(f.home===mt.id||f.away===mt.id)&&Date.now()-Date.parse(f.updated_at)<3*864e5));
+  const mine=mt?L.filter(f=>f.home===mt.id||f.away===mt.id):[],other=L.filter(f=>!mine.includes(f)&&f.status==='final').slice(0,6);
+  return `<section class="pnl frs"><div class="ph">${ico('cal','gold')}<b>Φιλικά</b>${mt?`<button class="pbtn sm" style="margin-left:auto" data-act="frNew">+ Νέο φιλικό</button>`:''}</div>
+   <p class="small muted">Κανονίστε φιλικό με όποιον manager θέλετε. Όταν ο αντίπαλος επιβεβαιώσει το σκορ, παίρνετε και οι δύο <b>${gp(c.frFee||1500)}</b> και ο νικητής <b>+${gp(c.frWin||500)}</b> (ισοπαλία +${gp(Math.floor((c.frWin||500)/2))} ο καθένας). Πληρώνονται έως ${c.frWeek||2} φιλικά ανά σύλλογο και ${c.frPair||1} ανά ζευγάρι κάθε 7 μέρες. Τα φιλικά δεν μετρούν στη βαθμολογία.</p>
+   ${mine.length?mine.map(f=>friendlyRow(f,mt)).join(''):'<p class="tempty">Δεν έχεις φιλικά. Πάτα «+ Νέο φιλικό».</p>'}
+   ${other.length?`<div class="small muted" style="margin:10px 0 4px">Τελευταία φιλικά της λίγκας</div>${other.map(f=>friendlyRow(f,mt)).join('')}`:''}</section>`}
+function complaintsHTML(){const mt=myTeam(),L=S.complaints||[];if(!L.length&&!S.owner)return '';
+  const st={open:'Υπό εξέταση',upheld:'Δεκτή',rejected:'Απορρίφθηκε',withdrawn:'Αποσύρθηκε'};
+  const links=a=>(a||[]).map((u,i)=>httpsURL(u)?`<a href="${esc(httpsURL(u))}" target="_blank" rel="noopener">Στοιχείο ${i+1} ↗</a>`:'').join(' · ');
+  return `<section class="pnl cps"><div class="ph">${ico('target','gold')}<b>Ενστάσεις</b><button class="lnk more" data-act="help" data-id="complaints">Κανόνας</button></div>
+   ${L.length?L.map(k=>{const what=k.match_id?(()=>{const m=S.allMatches.find(x=>x.id===k.match_id);return m?`${m.md}η · ${tname(m.home)} - ${tname(m.away)}`:'Αγώνας'})():'Φιλικό';
+    let act='';if(k.status==='open'){if(mt&&k.against_club===mt.id)act+=`<button class="pbtn sm" data-act="cpDefend" data-id="${k.id}">${k.defended_at?'Νέα απάντηση':'Απάντηση με αποδεικτικά'}</button>`;if(mt&&k.by_club===mt.id)act+=`<button class="ghost" data-act="cpWithdraw" data-id="${k.id}">Απόσυρση</button>`;if(S.owner)act+=`<button data-act="cpDecide" data-id="${k.id}|1">Δεκτή</button><button class="ghost" data-act="cpDecide" data-id="${k.id}|0">Απόρριψη</button>`}
+    return `<article class="cp s-${k.status}"><div class="cp-h"><b>${what}</b><span class="tag">${st[k.status]}</span></div><p class="small">${tname(k.by_club)} κατά ${tname(k.against_club)}: ${esc(k.reason)}</p><p class="small">Αποδεικτικά: ${links(k.evidence)||'—'}</p>
+     ${k.defended_at?`<p class="small"><b>Απάντηση:</b> ${esc(k.defence||'')} ${links(k.defence_evidence)?'· '+links(k.defence_evidence):'<span class="muted">(χωρίς αποδεικτικά)</span>'}</p>`:k.status==='open'?'<p class="small muted">Ο αντίπαλος δεν έχει απαντήσει ακόμα.</p>':''}
+     ${k.decision?`<p class="small"><b>Απόφαση:</b> ${esc(k.decision)}</p>`:''}<div class="row" style="gap:6px">${act}</div></article>`}).join(''):'<p class="small muted">Καμία ένσταση.</p>'}</section>`}
+{const base=vMatches;vMatches=function(){let h=base().replace('<h2>Αγώνες</h2>','<h2>Αγώνες<button class="lnk tofr" data-act="toFr">Φιλικά ↓</button></h2>');return h+friendliesHTML()+complaintsHTML()}}
+A.toFr=()=>$('.frs')?.scrollIntoView({behavior:'smooth',block:'start'});
+/* καρτέλα αγώνα: κανόνισε ώρα, δήλωσε σκορ, ένσταση */
+{const base=matchHTML;matchHTML=function(id){let h=base(id);const m=S.allMatches.find(x=>x.id===id),mt=myTeam();if(!m||!mt||(m.home!==mt.id&&m.away!==mt.id))return h;
+  const plan=m.status==='final'?'':`<div class="mplan"><div class="ph">${ico('cal','gold')}<b>Κανόνισε τον αγώνα</b></div><ol class="small"><li>Συμφωνήστε ώρα: ${m.tagreed?`<b>${fmtDT(m.tagreed)}</b> ✓`:'πρότεινε έως 3 ώρες ή διάλεξε από όσες σου πρότεινε ο αντίπαλος.'}</li><li>Παίξτε στο eFootball (φιλικός αγώνας με τον αντίπαλο) με τα ρόστερ της EFEL.</li><li>Ένας από τους δύο δηλώνει το σκορ με screenshot· ο άλλος το επιβεβαιώνει.</li></ol><div class="row" style="gap:6px">${timeUI(m,mt)}<button class="pbtn sm" data-act="gomd" data-id="${m.id}">Δήλωση σκορ ${ico('chev')}</button></div></div>`;
+  const cp=['final','reported','disputed'].includes(m.status)&&!m.sim?`<div class="row" style="justify-content:flex-end;margin-top:8px"><button class="ghost" data-act="cpNew" data-id="m|${m.id}">Ένσταση για παράβαση κανονισμού</button></div>`:'';
+  return h.replace(/<\/div>\s*$/,plan+cp+'</div>')}}
+
+{const base=mapNews;mapNews=function(n){if(n.type!=='friendly')return base(n);const p=n.payload||{};return {type:'friendly',ts:Date.parse(n.ts),league:sid(n.league_id),home:sid(p.home),away:sid(p.away),hg:p.hg,ag:p.ag,pay:p.pay}}}
+async function loadExtras(user){if(!sb)return;
+  const [fr,cp]=await Promise.all([sb.from('friendlies').select('*').order('id',{ascending:false}).limit(200),sb.from('complaints').select('*').order('id',{ascending:false}).limit(100)]);
+  if(S.me!==user)return;
+  S.friendlies=(fr.data||[]).map(f=>({...f,home:sid(f.home),away:sid(f.away),proposed_by:sid(f.proposed_by),reported_by:sid(f.reported_by)}));
+  S.complaints=(cp.data||[]).map(k=>({...k,by_club:sid(k.by_club),against_club:sid(k.against_club),match_id:sid(k.match_id)}))}
+{const base=A.help;A.help=function(k,el){if(k!=='complaints')return base.call(this,k,el);openM(`<div class="box"><div class="bh">Ενστάσεις και αποδεικτικά</div>${RULE_COMPLAINTS}</div>`)}}
+const RULE_COMPLAINTS=`<ul><li>Όποιος κάνει ένσταση για παράβαση κανονισμού (π.χ. χρήση smart assist ή οτιδήποτε κακόβουλο) <b>οφείλει να υποστηρίξει τους ισχυρισμούς του με υλικό</b>: καταγραφή αγώνα, live link, screenshot.</li><li>Η διοργάνωση εξετάζει τα στοιχεία. Αν η κρίση γέρνει εις βάρος του κατηγορούμενου και εκείνος <b>δεν έχει υλικό για να αποδείξει το αντίθετο</b> (π.χ. καταγραφή όπου φαίνεται ότι μπήκε στον αγώνα με το smart assist κλειστό), η απόφαση βγαίνει υπέρ του παίκτη που έκανε την ένσταση.</li><li>Κατηγορίες και υπερασπίσεις μόνο με τη βαρύτητα του λόγου σας <b>δεν λαμβάνονται υπόψη</b>, βάσει πρωτοκόλλου. Οφείλετε να μπορείτε να υπερασπιστείτε τον εαυτό σας με αποδεικτικά στοιχεία: κρατάτε καταγραφή ή screenshot από τους αγώνες σας.</li><li>Η ένσταση υποβάλλεται από την καρτέλα του αγώνα ή του φιλικού («Ένσταση»), με τουλάχιστον έναν σύνδεσμο https. Ο κατηγορούμενος απαντά από τη σελίδα Αγώνες. Τελική απόφαση έχει η διοργάνωση.</li></ul>`;
 
 boot();
 }
