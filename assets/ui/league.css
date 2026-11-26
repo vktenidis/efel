@@ -1,0 +1,184 @@
+:root {
+  --surface: #111e31;
+  --surface-raised: #192a41;
+  --edge: #344860;
+  --text: #f0f4fb;
+  --subtle: #b1c2d9;
+  --primary: #f1c567;
+  --focus: #81cef3;
+  --pn: var(--surface);
+  --pb: var(--edge);
+  --r: 10px;
+}
+
+html, body { background: #080f1c; }
+body { font-size: 16px; }
+main { width: min(100%, 1320px); max-width: none; }
+.top { background: #101a2b; box-shadow: none; border-image: none; }
+.top::after { background: var(--edge); opacity: 1; }
+nav { background: #101a2b; }
+#nav a {
+  transform: none;
+  background: transparent;
+  box-shadow: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 4px 4px 0 0;
+  min-height: 44px;
+}
+#nav a > * { transform: none; }
+#nav a.on { background: var(--surface-raised); color: var(--primary); border-color: var(--primary); }
+#nav a:hover { background: var(--surface-raised); }
+.ticker { background: #0b1322; border-color: var(--edge); }
+.ticker div { animation: none; padding: 5px max(3vw, 12px); }
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+.card, .pnl, .box, .mdl, .srow, .moregrid .morebtn {
+  background: var(--surface);
+  border-color: var(--edge);
+  border-radius: var(--r);
+  box-shadow: none;
+}
+.card > h2:first-child, .box > .bh {
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--edge);
+  color: var(--text);
+  text-shadow: none;
+}
+.modal :where(button, a), .mx { touch-action: manipulation; }
+.mx { min-width: 42px; min-height: 42px; }
+body:has(#ov:not([hidden])) { overflow: hidden; }
+.mdl { max-height: 92dvh; }
+.srow, .toptg, .wban, .ns { box-shadow: none; }
+.pbtn, .seg button.on, .ribbon {
+  background: var(--primary);
+  color: #19170e;
+  box-shadow: none;
+  text-shadow: none;
+}
+.posb { background: #245083; }
+.posb.GK { background: #82520b; }
+.posb.DEF { background: #196141; }
+.posb.FWD { background: #912f42; }
+.own.fr { color: #81dfae; }
+.moregrid .morebtn::after { display: none; }
+.moregrid .morebtn { min-height: 90px; }
+.pager { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 14px; margin-block: 16px 2px; }
+.pager button { min-height: 44px; }
+.pager button:disabled { opacity: .45; }
+.signin {
+  display: grid;
+  align-items: center;
+  min-height: clamp(390px, 68vh, 690px);
+  padding: clamp(24px, 7vw, 96px);
+  border: 1px solid var(--edge);
+  border-radius: var(--r);
+  background: linear-gradient(90deg, #080f1cec, #101c37ae 56%, #0a142841), #101b30 url(home.webp) center / cover;
+}
+.signin-content { max-width: 36rem; color: var(--text); }
+.signin h2 { font-size: clamp(2.75rem, 7vw, 6rem); letter-spacing: -.03em; text-wrap: balance; }
+.signin p { color: var(--subtle); max-width: 30rem; margin: 18px 0 26px; }
+.signin button { min-height: 48px; background: var(--primary); color: #1a170d; box-shadow: none; }
+#view { --section-image: url(home.webp); }
+#view[data-route="club"], #view[data-route="teams"] { --section-image: url(club.webp); }
+#view[data-route="market"] { --section-image: url(market.webp); }
+#view[data-route="transfers"] { --section-image: url(transfers.webp); }
+#view:is([data-route="matches"], [data-route="calendar"], [data-route="table"], [data-route="squad"]) { --section-image: url(matches.webp); }
+#view[data-route="paper"] { --section-image: url(paper.webp); }
+#view:is([data-route="home"], [data-route="transfers"], [data-route="club"], [data-route="squad"]) .ptitle,
+#view:is([data-route="market"], [data-route="matches"], [data-route="calendar"], [data-route="teams"], [data-route="table"], [data-route="paper"]) > .card:first-child > h2:first-child {
+  background: linear-gradient(90deg, #101b2df5, #101b2d7a), var(--section-image) center 51% / cover, var(--surface-raised);
+  min-height: clamp(68px, 11vw, 120px);
+  padding: 14px clamp(14px, 3vw, 30px);
+  border-bottom: 1px solid var(--edge);
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+}
+#view .ptitle { border-radius: var(--r); }
+.moregrid .morebtn[href="#home"]::before, .moregrid .morebtn[data-preview="home"]::before { background-image: url(home.webp); }
+.moregrid .morebtn[href="#club"]::before, .moregrid .morebtn[data-preview="club"]::before { background-image: url(club.webp); }
+.moregrid .morebtn[href="#market"]::before, .moregrid .morebtn[data-preview="market"]::before { background-image: url(market.webp); }
+.moregrid .morebtn[href="#transfers"]::before, .moregrid .morebtn[data-preview="transfers"]::before { background-image: url(transfers.webp); }
+.moregrid .morebtn[href="#matches"]::before, .moregrid .morebtn[data-preview="matches"]::before { background-image: url(matches.webp); }
+.moregrid .morebtn[href="#paper"]::before, .moregrid .morebtn[data-preview="paper"]::before { background-image: url(paper.webp); }
+.moregrid .morebtn::before { background-size: cover; opacity: .28; }
+.ecard { border-radius: 7px; background: var(--a); filter: none; }
+.ec-in { border-radius: 5px; background: #132239; }
+.ec-in::after { display: none; }
+.ec-face { background: transparent; }
+.ec-face.original { margin-top: calc(-31px * var(--s)); }
+.ec-face .media-wrap { border-radius: 50%; }
+.media-wrap > .club-media { object-fit: contain; border-radius: 0; }
+.media-wrap > img[data-ready="false"] { opacity: 0; }
+.media-credit { font-size: .8125rem; }
+.site-footer {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 12px max(3vw, 12px) 20px;
+  color: var(--subtle);
+  font-size: .8125rem;
+}
+.site-footer a { color: inherit; }
+@media (max-width: 700px) {
+  .site-footer { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  #nav a { flex: 1 1 0; padding-inline: 2px; }
+  .sign-in .hid, .sign-in nav { display: none; }
+  .signin { background-position: center, 58% center; }
+  .pitch.club4 .slot .media-wrap { width: clamp(38px, 11vw, 54px) !important; height: clamp(38px, 11vw, 54px) !important; }
+  .pitch.faces .pf .media-wrap { width: clamp(24px, 6.8vw, 44px) !important; height: clamp(24px, 6.8vw, 44px) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+[hidden] { display: none !important; }
+body.sign-in { padding-bottom: 0; }
+body.sign-in .site-footer { padding-bottom: 20px; }
+.sign-in #phase, .sign-in .ticker, .sign-in nav { display: none; }
+#nav a { font-family: "Fira Sans Condensed", system-ui, sans-serif; }
+#nav a[hidden] { display: none !important; }
+.card > h2:first-child, .box > .bh, .signin button, .pbtn, .pager button {
+  font-family: "Fira Sans Condensed", system-ui, sans-serif;
+}
+.stad { background: #101b30 url(home.webp) center / cover; }
+.stad::after { background: linear-gradient(90deg, #09142630, #0b1830); }
+.sum { box-shadow: none; border-color: var(--edge); background: var(--surface); }
+.sum-r::before { background: var(--edge); transform: none; }
+.form-empty { grid-column: 1 / -1; }
+.media-wrap > .club-media.dark-crest {
+  background: #c8d3e3;
+  border-radius: 12%;
+  padding: 4%;
+}
+#view:is([data-route="matches"], [data-route="calendar"], [data-route="table"], [data-route="teams"]) > .card > h2:first-child {
+  background: linear-gradient(90deg, #101b2df5, #101b2d7a), var(--section-image) center / cover, var(--surface-raised);
+}
+.pitch.club4 { background-color: #164d39; }
+@media (min-width: 900px) {
+  #nav a { padding-inline: 10px; }
+}
+@media (max-width: 700px) {
+  #nav a[data-m] { border-radius: 7px; background: #152740; box-shadow: none; }
+  #nav a[data-m].on { background: var(--primary); box-shadow: none; }
+  .site-footer { padding-bottom: 20px; }
+}
+.credits-page {
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: clamp(18px, 5vw, 56px) 18px;
+  font: 16px/1.55 system-ui,sans-serif;
+  color: var(--text);
+}
+.credits-page a { color: var(--focus); }
+.credits-page ul { overflow-wrap: anywhere; padding-inline-start: 22px; }
+.credits-page li { margin-block: 8px; }
+.credits-page section {
+  padding: clamp(14px, 4vw, 24px);
+  border: 1px solid var(--edge);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+.market-filters { border: 1px solid var(--edge); border-radius: 7px; padding: 0 10px; }
+.market-filters summary { min-height: 44px; padding-block: 10px; cursor: pointer; color: var(--text); }
+.market-filters .fgrid { padding-block-end: 10px; }
+.fgrid.market-sort { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.market-sort select { width: 100%; }
