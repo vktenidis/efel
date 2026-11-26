@@ -20,7 +20,16 @@ const team=id=>S.all.find(t=>t.id===id);
 const myTeam=()=>S.me?S.all.find(t=>t.manager&&t.manager===S.me):null;
 const ownerOf=pid=>{for(const t of S.all)if((t.roster||[]).some(r=>r.pid===pid))return t;return null};
 const tname=id=>esc(team(id)?.name||'—');
-function crest(t,s=40){if(!t)return '';const c=/^#[0-9a-f]{6}$/i.test(t.color||'')?t.color:'#888',k=(t.order||0)%5,id='cp'+esc(t.id);
+
+// Optional curated image catalog. Only local, explicitly approved assets are accepted.
+let MEDIA={players:{},clubs:{}};
+function mediaPath(entry){const p=entry?.path;return typeof p==='string'&&/^assets\/(players|clubs)\/[a-zA-Z0-9_-]+\.(webp|png|jpg|svg)$/.test(p)?p:null}
+function playerPortrait(p){const entry=MEDIA.players?.[p.id];return entry?.name===p.name?mediaPath(entry):null}
+function clubPortrait(t){const entry=MEDIA.clubs?.[t.id];return entry?.name===t.name?mediaPath(entry):null}
+function mediaImage(path,alt,cls,w,h,fallback){return `<span class="media-wrap" style="width:${w}px;height:${h}px">${fallback}<img class="${cls}" src="${esc(path)}" alt="${esc(alt)}" width="${w}" height="${h}" loading="lazy" decoding="async" onerror="this.remove()"></span>`}
+fetch('assets/media.json').then(r=>r.ok?r.json():null).then(d=>{if(d&&typeof d==='object'){MEDIA=d;if(S.loaded)render()}}).catch(()=>{});
+
+function crest(t,s=40){if(!t)return '';const path=clubPortrait(t);if(path)return mediaImage(path,t.name,'club-media',s,Math.round(s*1.15),crest({...t,id:null},s));const c=/^#[0-9a-f]{6}$/i.test(t.color||'')?t.color:'#888',k=(t.order||0)%5,id='cp'+esc(t.id);
   const ini=esc(t.abbr||(t.name||'?').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,3).toUpperCase());
   const P=['<path d="M8 0h5v46H8zM18 0h5v46h-5zM28 0h5v46h-5z" fill="rgba(255,255,255,.85)"/>','<path d="M-4 30 30-4h12L2 40z" fill="rgba(255,255,255,.85)"/>','<rect x="20" width="20" height="46" fill="rgba(255,255,255,.85)"/>','<path d="M0 14 20 26 40 14v9L20 35 0 23z" fill="rgba(255,255,255,.85)"/>','<circle cx="20" cy="22" r="11" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="3"/>'][k];
   return `<svg class="cr" width="${s}" height="${Math.round(s*1.15)}" viewBox="0 0 40 46" aria-hidden="true"><defs><clipPath id="${id}"><path d="M20 2 37 7v15c0 11-7 18-17 22C10 40 3 33 3 22V7z"/></clipPath></defs><g clip-path="url(#${id})"><rect width="40" height="46" fill="${c}"/>${P}</g><path d="M20 2 37 7v15c0 11-7 18-17 22C10 40 3 33 3 22V7z" fill="none" stroke="#fff" stroke-width="2"/><path d="M20 2 37 7v15c0 11-7 18-17 22C10 40 3 33 3 22V7z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width=".8"/><text x="20" y="26.5" text-anchor="middle" font-family="Fira Sans Condensed,sans-serif" font-weight="800" font-size="${ini.length>2?10:12}" fill="#fff" stroke="rgba(0,0,0,.55)" stroke-width="2.2" paint-order="stroke">${ini}</text></svg>`}
@@ -34,7 +43,7 @@ let DET={},STD=null,stdLoading=false;
 function cardImg(p,w,cls){if(!p.img)return `<span class="${cls} noimgs g-${grp(p.pos)}" style="display:inline-grid;place-items:center;width:${w}px;height:${Math.round(w*170/120)}px">${esc(p.pos)}</span>`;const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
 const TIERS=[['star','Αστέρας',90000,1e9,'#c99a12'],['top','Κορυφαίος',40000,89999,'#2b6fd6'],['core','Βασικός',15000,39999,'#1f9d55'],['squad','Ρόστερ',5001,14999,'#7d8aa0'],['base','Βασική τιμή',0,5000,'#4b5870']];
 const tierKey=pr=>(TIERS.find(t=>pr>=t[2]&&pr<=t[3])||TIERS[4])[0];
-function faceImg(p,sz){const face=p.img||faceByNamePos.get(faceKey(p));if(!face){const ini=esc(p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase());return `<span class=\"eface noimg g-${grp(p.pos)}\" style=\"width:${sz}px;height:${sz}px\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><circle cx=\"32\" cy=\"24\" r=\"12\"/><path d=\"M8 62c2-14 12-22 24-22s22 8 24 22z\"/></svg><b style=\"font-size:${Math.round(sz*.26)}px\">${ini}</b></span>`}const k=face-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
+function faceImg(p,sz){const path=playerPortrait(p);if(path)return mediaImage(path,p.name,'eface player-media',sz,sz,faceImg({...p,id:null},sz));const face=p.img||faceByNamePos.get(faceKey(p));if(!face){const ini=esc(p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase());return `<span class=\"eface noimg g-${grp(p.pos)}\" style=\"width:${sz}px;height:${sz}px\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><circle cx=\"32\" cy=\"24\" r=\"12\"/><path d=\"M8 62c2-14 12-22 24-22s22 8 24 22z\"/></svg><b style=\"font-size:${Math.round(sz*.26)}px\">${ini}</b></span>`}const k=face-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
   return `<span class="eface" style="width:${sz}px;height:${sz}px;background:url(sp/${s}.webp) ${-(c*120+47)*f}px ${-(r*170+15)*f}px/${1200*f}px ${1700*f}px no-repeat"></span>`}
 function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180;
   const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
