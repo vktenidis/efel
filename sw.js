@@ -1,5 +1,5 @@
 // EFEL service worker: γρήγορο άνοιγμα από cache για τα στατικά, πάντα φρέσκα δεδομένα από το δίκτυο
-const C='efel-g02';
+const C='efel-g03';
 const CORE=['./','index.html','config.js','logo.jpg','icon-192.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
