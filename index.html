@@ -573,6 +573,18 @@ body{background:radial-gradient(900px 420px at 80% -8%,rgba(246,184,28,.14),tran
 @media(min-width:700px){.xic .pitch.faces{aspect-ratio:4/3.2}}
 @media(max-width:600px){.seg.club{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.seg.club button{min-height:42px}}
 .morebtn span{white-space:normal;text-align:left;line-height:1.2}
+
+/* EFEL navigation refresh: compact, readable, game-inspired */
+.moregrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.moregrid .morebtn{display:grid;grid-template-columns:32px minmax(0,1fr);grid-template-rows:auto auto;align-content:center;column-gap:10px;row-gap:4px;text-align:left;min-height:76px;padding:12px;background:linear-gradient(135deg,#172c49,#0d192e);border:1px solid #29425f;border-radius:9px;position:relative;overflow:hidden}
+.moregrid .morebtn::after{content:"";position:absolute;right:0;top:0;width:22px;height:3px;background:#22b8ff;transform:skewX(-40deg);opacity:.65}
+.moregrid .morebtn>svg,.moregrid .morebtn>img,.moregrid .morebtn>.av{grid-row:1/3;align-self:center;justify-self:center;color:#72d6ff}
+.moregrid .morebtn>span{font-weight:700;line-height:1.2;grid-column:2}
+.moregrid .morebtn>small{grid-column:2;color:#9aafca;font-size:11px;font-weight:400;line-height:1.3}
+.moregrid .morebtn:hover,.moregrid .morebtn:focus-visible{border-color:#f6b81c;background:linear-gradient(135deg,#263649,#13223d)}
+@media(min-width:701px){.moregrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:350px){.moregrid .morebtn{grid-template-columns:24px minmax(0,1fr);column-gap:6px;padding:9px}}
+
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -588,6 +600,6 @@ body{background:radial-gradient(900px 420px at 80% -8%,rgba(246,184,28,.14),tran
 <div class="toast" id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
-<script src="app.js?v=g03"></script>
+<script src="app.js?v=efel-ui01"></script>
 </body>
 </html>
