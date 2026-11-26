@@ -124,6 +124,10 @@ async function test() {
         assert.equal(await page.locator('#view').evaluate(el=>el.inert),true);
         await page.keyboard.press('Escape');
         assert.equal(await page.getByRole('dialog').count(),0);
+        await page.locator('#fq').fill('Samu Costa');
+        await page.locator('button[data-act=pinfo][data-id=s16912601]').first().click();
+        await dialog.locator('.ec-face .eface[style*="sp/"]').waitFor();
+        await page.keyboard.press('Escape');
         await page.locator('#fq').fill('Harry Kane');
         await page.locator('[data-act=bid]').first().click();
         await page.locator('[data-act=go]').click();

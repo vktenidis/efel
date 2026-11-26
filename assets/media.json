@@ -22,6 +22,17 @@
       "identity": "Vitinha (footballer, born February 2000)",
       "restrictions": "personality"
     },
+    "s108959": {
+      "name": "Declan Rice",
+      "path": "assets/players/s108959.webp",
+      "commonsFile": "Declan_Rice_England_v_Ghana_23_June_2026-150.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Declan_Rice_England_v_Ghana_23_June_2026-150.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Declan Rice",
+      "restrictions": "personality"
+    },
     "s111207": {
       "name": "Gabriel Magalhães",
       "path": "assets/players/s111207.webp",
@@ -32,6 +43,17 @@
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Gabriel Magalhães",
       "restrictions": "personality"
+    },
+    "s108279": {
+      "name": "Gianluigi Donnarumma",
+      "path": "assets/players/s108279.webp",
+      "commonsFile": "Norway_Italy_-_June_2025_A_17_(Gianluigi_Donnarumma).jpg",
+      "author": "MichaelEmilio",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Norway_Italy_-_June_2025_A_17_(Gianluigi_Donnarumma).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Gianluigi Donnarumma",
+      "restrictions": ""
     },
     "s128720": {
       "name": "K. Kvaratskhelia",
@@ -649,6 +671,28 @@
       "identity": "Théo Hernández",
       "restrictions": "personality"
     },
+    "s110599": {
+      "name": "Ademola Lookman",
+      "path": "assets/players/s110599.webp",
+      "commonsFile": "Ademola_Lookman_(2019)_(cropped).jpg",
+      "author": "Willibald11",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ademola_Lookman_(2019)_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Ademola Lookman",
+      "restrictions": ""
+    },
+    "s129961": {
+      "name": "Alphonso Davies",
+      "path": "assets/players/s129961.webp",
+      "commonsFile": "Alphonso_Davies_Canada_v_Qatar_18_June_2026-007_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Alphonso_Davies_Canada_v_Qatar_18_June_2026-007_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Alphonso Davies",
+      "restrictions": "personality"
+    },
     "s42316": {
       "name": "Antoine Griezmann",
       "path": "assets/players/s42316.webp",
@@ -670,6 +714,17 @@
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Bryan Mbeumo",
       "restrictions": ""
+    },
+    "s122012": {
+      "name": "Cody Gakpo",
+      "path": "assets/players/s122012.webp",
+      "commonsFile": "Cody_Gakpo_Liverpool_FC_20261103_(1)_(cropped).JPG",
+      "author": "User:Zafer",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Cody_Gakpo_Liverpool_FC_20261103_(1)_(cropped).JPG",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Cody Gakpo",
+      "restrictions": "personality"
     },
     "s84014505": {
       "name": "Edmond Tapsoba",
@@ -715,6 +770,17 @@
       "identity": "Kim Min-jae (footballer)",
       "restrictions": ""
     },
+    "s136184": {
+      "name": "Micky van de Ven",
+      "path": "assets/players/s136184.webp",
+      "commonsFile": "Micky_Van_De_Ven_pre-match_training_(cropped).jpg",
+      "author": "KrispyKrumpets",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Micky_Van_De_Ven_pre-match_training_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Micky van de Ven",
+      "restrictions": ""
+    },
     "s103686": {
       "name": "Nicolò Barella",
       "path": "assets/players/s103686.webp",
@@ -726,6 +792,94 @@
       "identity": "Nicolò Barella",
       "restrictions": ""
     },
+    "s142088": {
+      "name": "Omar Marmoush",
+      "path": "assets/players/s142088.webp",
+      "commonsFile": "Omar_Marmoush_Argentina_v_Egypt_7_July_2026-018.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Omar_Marmoush_Argentina_v_Egypt_7_July_2026-018.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Omar Marmoush",
+      "restrictions": "personality"
+    },
+    "s84028168": {
+      "name": "Omar Marmoush",
+      "path": "assets/players/s142088.webp",
+      "commonsFile": "Omar_Marmoush_Argentina_v_Egypt_7_July_2026-018.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Omar_Marmoush_Argentina_v_Egypt_7_July_2026-018.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Omar Marmoush",
+      "restrictions": "personality"
+    },
+    "s114808": {
+      "name": "Phil Foden",
+      "path": "assets/players/s114808.webp",
+      "commonsFile": "2023-10-04_Fußball,_Männer,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2613,_Phil_Foden.jpg",
+      "author": "Steffen Prößdorf",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:2023-10-04_Fu%C3%9Fball,_M%C3%A4nner,_UEFA_Champions_League,_RB_Leipzig_-_Manchester_City_FC_1DX_2613,_Phil_Foden.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Phil Foden",
+      "restrictions": "personality"
+    },
+    "s126046": {
+      "name": "Reece James",
+      "path": "assets/players/s126046.webp",
+      "commonsFile": "Reece_James_England_v_Ghana_23_June_2026-248_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Reece_James_England_v_Ghana_23_June_2026-248_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Reece James",
+      "restrictions": "personality"
+    },
+    "s104204": {
+      "name": "Rúben Neves",
+      "path": "assets/players/s104204.webp",
+      "commonsFile": "Ruben_Neves_Croatia_v_Portugal_2_July_2026-005.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ruben_Neves_Croatia_v_Portugal_2_July_2026-005.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Rúben Neves",
+      "restrictions": "personality"
+    },
+    "s16881420": {
+      "name": "Rúben Neves",
+      "path": "assets/players/s104204.webp",
+      "commonsFile": "Ruben_Neves_Croatia_v_Portugal_2_July_2026-005.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ruben_Neves_Croatia_v_Portugal_2_July_2026-005.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Rúben Neves",
+      "restrictions": "personality"
+    },
+    "s118171": {
+      "name": "Sandro Tonali",
+      "path": "assets/players/s118171.webp",
+      "commonsFile": "Norway_Italy_-_June_2025_B_03.jpg",
+      "author": "MichaelEmilio",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Norway_Italy_-_June_2025_B_03.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Sandro Tonali",
+      "restrictions": ""
+    },
+    "s83996679": {
+      "name": "Ademola Lookman",
+      "path": "assets/players/s110599.webp",
+      "commonsFile": "Ademola_Lookman_(2019)_(cropped).jpg",
+      "author": "Willibald11",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ademola_Lookman_(2019)_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Ademola Lookman",
+      "restrictions": ""
+    },
     "s42669": {
       "name": "Casemiro",
       "path": "assets/players/s42669.webp",
@@ -735,6 +889,94 @@
       "source": "https://commons.wikimedia.org/wiki/File:Casemiro_Brazil_V_Morocco_13_June_2026-76_(cropped).jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Casemiro",
+      "restrictions": "personality"
+    },
+    "s140565": {
+      "name": "Destiny Udogie",
+      "path": "assets/players/s140565.webp",
+      "commonsFile": "Norway_Italy_-_June_2025_A_29_(cropped).jpg",
+      "author": "MichaelEmilio",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Norway_Italy_-_June_2025_A_29_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Destiny Udogie",
+      "restrictions": ""
+    },
+    "s111486": {
+      "name": "Dušan Vlahović",
+      "path": "assets/players/s111486.webp",
+      "commonsFile": "Dušan_Vlahović_20261002_(1)_(cropped).JPG",
+      "author": "User:Zafer",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Du%C5%A1an_Vlahovi%C4%87_20261002_(1)_(cropped).JPG",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Dušan Vlahović",
+      "restrictions": "personality"
+    },
+    "s114906": {
+      "name": "Eberechi Eze",
+      "path": "assets/players/s114906.webp",
+      "commonsFile": "Eberechi_Eze_England_v_Ghana_23_June_2026-039.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Eberechi_Eze_England_v_Ghana_23_June_2026-039.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Eberechi Eze",
+      "restrictions": "personality"
+    },
+    "s114390": {
+      "name": "Evan Ndicka",
+      "path": "assets/players/s84000470.webp",
+      "commonsFile": "Evan_Ndicka_Cote_D'Ivoire_v_Ecuador_14_June_2026-59.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Evan_Ndicka_Cote_D%27Ivoire_v_Ecuador_14_June_2026-59.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Evan Ndicka",
+      "restrictions": "personality"
+    },
+    "s84000470": {
+      "name": "Evan Ndicka",
+      "path": "assets/players/s84000470.webp",
+      "commonsFile": "Evan_Ndicka_Cote_D'Ivoire_v_Ecuador_14_June_2026-59.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Evan_Ndicka_Cote_D%27Ivoire_v_Ecuador_14_June_2026-59.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Evan Ndicka",
+      "restrictions": "personality"
+    },
+    "s126673": {
+      "name": "Francisco Trincão",
+      "path": "assets/players/s126673.webp",
+      "commonsFile": "Francisco_Trincão_USMNT_v_Portugal_Mar_31_2026-55_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Francisco_Trinc%C3%A3o_USMNT_v_Portugal_Mar_31_2026-55_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Francisco Trincão",
+      "restrictions": "personality"
+    },
+    "s16903889": {
+      "name": "Francisco Trincão",
+      "path": "assets/players/s126673.webp",
+      "commonsFile": "Francisco_Trincão_USMNT_v_Portugal_Mar_31_2026-55_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Francisco_Trinc%C3%A3o_USMNT_v_Portugal_Mar_31_2026-55_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Francisco Trincão",
+      "restrictions": "personality"
+    },
+    "s102290": {
+      "name": "Iñaki Williams",
+      "path": "assets/players/s102290.webp",
+      "commonsFile": "Inaki_Williams_England_v_Ghana_23_June_2026-154.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Inaki_Williams_England_v_Ghana_23_June_2026-154.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Iñaki Williams",
       "restrictions": "personality"
     },
     "s109364": {
@@ -757,6 +999,61 @@
       "source": "https://commons.wikimedia.org/wiki/File:Ivan_Toney_England_v_Ghana_23_June_2026-051.jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Ivan Toney",
+      "restrictions": "personality"
+    },
+    "s16879973": {
+      "name": "Kalidou Koulibaly",
+      "path": "assets/players/s16879973.webp",
+      "commonsFile": "Kalidou_Koulibaly_France_v_Senegal_16_June_2026-370_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Kalidou_Koulibaly_France_v_Senegal_16_June_2026-370_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kalidou Koulibaly",
+      "restrictions": "personality"
+    },
+    "s83988837": {
+      "name": "Kalidou Koulibaly",
+      "path": "assets/players/s16879973.webp",
+      "commonsFile": "Kalidou_Koulibaly_France_v_Senegal_16_June_2026-370_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Kalidou_Koulibaly_France_v_Senegal_16_June_2026-370_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kalidou Koulibaly",
+      "restrictions": "personality"
+    },
+    "s44379": {
+      "name": "Kevin De Bruyne",
+      "path": "assets/players/s44379.webp",
+      "commonsFile": "Kevin_De_Bruyne_USMNT_v_Belgium_Mar_28_2026-64_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Kevin_De_Bruyne_USMNT_v_Belgium_Mar_28_2026-64_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kevin De Bruyne",
+      "restrictions": "personality"
+    },
+    "s16837662": {
+      "name": "Kingsley Coman",
+      "path": "assets/players/s16837662.webp",
+      "commonsFile": "Kingsley_Coman_(2019)_(cropped).jpg",
+      "author": "Sven Mandel",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Kingsley_Coman_(2019)_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kingsley Coman",
+      "restrictions": ""
+    },
+    "s110638": {
+      "name": "Marcus Rashford",
+      "path": "assets/players/s110638.webp",
+      "commonsFile": "Marcus_Rashford_England_v_Ghana_23_June_2026-073.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Marcus_Rashford_England_v_Ghana_23_June_2026-073.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Marcus Rashford",
       "restrictions": "personality"
     },
     "s133678": {
@@ -790,6 +1087,17 @@
       "source": "https://commons.wikimedia.org/wiki/File:Warren_Zaire-Emery_France_v_Senegal_16_June_2026-279.jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Warren Zaïre-Emery",
+      "restrictions": "personality"
+    },
+    "s101028": {
+      "name": "Andrew Robertson",
+      "path": "assets/players/s101028.webp",
+      "commonsFile": "Andy_Robertson_Scotland_v_Bolivia_6_June_2026-43.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Andy_Robertson_Scotland_v_Bolivia_6_June_2026-43.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Andrew Robertson",
       "restrictions": "personality"
     },
     "s114235": {
@@ -921,6 +1229,39 @@
       "source": "https://commons.wikimedia.org/wiki/File:Partido_Galicia_-_Panam%C3%A1_en_Bala%C3%ADdos_182_(cropped).jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Iago Aspas",
+      "restrictions": ""
+    },
+    "s142065": {
+      "name": "Marc-Oliver Kempf",
+      "path": "assets/players/s142065.webp",
+      "commonsFile": "Marc-Oliver_Kempf.jpg",
+      "author": "Jeollo von VfB-exklusiv.de",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Marc-Oliver_Kempf.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Marc-Oliver Kempf",
+      "restrictions": ""
+    },
+    "s118895": {
+      "name": "Roberto Alvarado",
+      "path": "assets/players/s118895.webp",
+      "commonsFile": "Roberto_Alvarado.png",
+      "author": "Selección Nacional de México",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Roberto_Alvarado.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Roberto Alvarado",
+      "restrictions": ""
+    },
+    "s100299": {
+      "name": "Kieran Trippier",
+      "path": "assets/players/s100299.webp",
+      "commonsFile": "Kieran_Trippier_2018-07-14_1.jpg",
+      "author": "Кирилл Венедиктов",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Kieran_Trippier_2018-07-14_1.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Kieran Trippier",
       "restrictions": ""
     }
   },

@@ -233,7 +233,7 @@ create or replace function efel_end_manager(p_club int, p_reason text) returns v
 language plpgsql security definer set search_path=public as $$
 declare me int := efel_my_club();
 begin
-  if not (efel_is_admin() or me = p_club) then raise exception 'Δεν επιτρέπεται.'; end if;
+  if (efel_is_admin() or me = p_club) is not true then raise exception 'Δεν επιτρέπεται.'; end if;
   update club_managers set ended_at = now(), end_reason = left(coalesce(p_reason,''),200)
    where club_id = p_club and ended_at is null;
   update clubs set status = 'seeking_manager' where id = p_club;

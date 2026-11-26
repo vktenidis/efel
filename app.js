@@ -46,7 +46,7 @@ let DET={},cataloguePromise=null,supportingMediaStarted=false;
 function cardImg(p,w,cls){if(!p.img)return faceImg(p,w);const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
 const TIERS=[['star','Αστέρας',90000,1e9,'#c99a12'],['top','Κορυφαίος',40000,89999,'#2b6fd6'],['core','Βασικός',15000,39999,'#1f9d55'],['squad','Ρόστερ',5001,14999,'#7d8aa0'],['base','Βασική τιμή',0,5000,'#4b5870']];
 const tierKey=pr=>(TIERS.find(t=>pr>=t[2]&&pr<=t[3])||TIERS[4])[0];
-function faceImg(p,sz,skipMedia=false){const path=skipMedia?null:playerPortrait(p);if(path)return mediaImage(path,p.name,'eface player-media',sz,sz,faceImg(p,sz,true));const face=p.img;if(!face){const ini=esc(p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase());return `<span class=\"eface noimg g-${grp(p.pos)}\" style=\"width:${sz}px;height:${sz}px\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><circle cx=\"32\" cy=\"24\" r=\"12\"/><path d=\"M8 62c2-14 12-22 24-22s22 8 24 22z\"/></svg><b style=\"font-size:${Math.round(sz*.26)}px\">${ini}</b></span>`}const k=face-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
+function faceImg(p,sz,skipMedia=false){const path=skipMedia?null:playerPortrait(p);if(path)return mediaImage(path,p.name,'eface player-media',sz,sz,faceImg(p,sz,true));const face=p.img||p.variantFace;if(!face){const ini=esc(p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase());return `<span class=\"eface noimg g-${grp(p.pos)}\" style=\"width:${sz}px;height:${sz}px\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><circle cx=\"32\" cy=\"24\" r=\"12\"/><path d=\"M8 62c2-14 12-22 24-22s22 8 24 22z\"/></svg><b style=\"font-size:${Math.round(sz*.26)}px\">${ini}</b></span>`}const k=face-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
   return `<span class="eface" style="width:${sz}px;height:${sz}px;background:url(sp/${s}.webp) ${-(c*120+47)*f}px ${-(r*170+15)*f}px/${1200*f}px ${1700*f}px no-repeat"></span>`}
 function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180;
   const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
@@ -66,12 +66,21 @@ function loadCatalogue(){
   if(!cataloguePromise){
     cataloguePromise=fetchJson('standard.json').then(data=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
+      // The low 24 bits identify the footballer. Require an exact name match as well.
+      const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
+      const artwork=new Map();
+      for(const player of S.cat){
+        if(player.img&&!artwork.has(identity(player)))artwork.set(identity(player),player.img);
+      }
+      for(const player of S.cat){
+        if(!player.img)player.variantFace=artwork.get(identity(player));
+      }
       S.cmap=Object.fromEntries(S.cat.map(p=>[p.id,p]));
     }).catch(error=>{cataloguePromise=null;throw error});
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod02').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod03').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
