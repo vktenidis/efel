@@ -421,7 +421,7 @@ drop policy if exists parties_read on complaints;
 create policy parties_read on complaints for select to authenticated
   using (efel_is_admin() or by_club = efel_my_club() or against_club = efel_my_club());
 
-create or replace function efel_clean_links(p text[]) returns text[] language sql immutable as $$
+create or replace function efel_clean_links(p text[]) returns text[] language sql immutable set search_path=public as $$
   select coalesce(array_agg(left(trim(x), 400)), '{}') from unnest(coalesce(p, '{}')) x where trim(x) ~ '^https://[^\s]+$' $$;
 
 create or replace function efel_complaint_file(p_match int, p_friendly int, p_reason text, p_evidence text[]) returns int
