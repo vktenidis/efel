@@ -10,27 +10,30 @@ function priceByRank(r,T){T=T||8;const tiers=[[2*T,130000,90000],[7*T,70000,4000
 const tierOf=p=>p>=90000?['Αστέρας','#c99a12']:p>=40000?['Κορυφαίος','#123c86']:p>=15000?['Βασικός','#1f9d55']:['Ρόστερ','#8a96a8'];
 const tierTag=pr=>{const [l,c]=tierOf(pr);return `<span class="tag" style="background:${c};color:#fff">${l}</span>`};
 const COLORS=['#e1262d','#2f6fd6','#f2c230','#1d8a4e','#8e44ad','#f07c1e','#17a2b8','#222f3e','#c0392b','#16a085'];
-const S={all:[],allMatches:[],leagues:[],lg:null,prices:{},archive:[],fin:null,cfg:null,teams:[],cat:[],cmap:{},matches:[],offers:[],news:[],bids:[],me:null,owner:false,names:{},md:1,mf:{q:'',g:'',av:'free',pos:'',tier:'',pmin:'',pmax:'',omin:'',omax:'',sort:'ovr',afford:false,view:'list',lim:60},offerFor:null,loaded:false};
+const S={all:[],allMatches:[],leagues:[],lg:null,prices:{},archive:[],fin:null,cfg:null,teams:[],cat:[],cmap:{},matches:[],offers:[],news:[],bids:[],me:null,owner:false,names:{},md:1,mf:{q:'',g:'',av:'free',pos:'',tier:'',pmin:'',pmax:'',omin:'',omax:'',sort:'ovr',afford:false,view:'list',offset:0},offerFor:null,loaded:false};
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function httpsURL(value){try{const url=new URL(value);return url.protocol==='https:'&&!url.username&&!url.password?url.href:null}catch{return null}}
 const gp=n=>Number(n||0).toLocaleString('el-GR')+' GP';
 const grp=p=>GROUP[p]||'MID';
 const team=id=>S.all.find(t=>t.id===id);
 const myTeam=()=>S.me?S.all.find(t=>t.manager&&t.manager===S.me):null;
-const ownerOf=pid=>{for(const t of S.all)if((t.roster||[]).some(r=>r.pid===pid))return t;return null};
+let rosterOwners=new Map();
+const ownerOf=pid=>rosterOwners.get(pid)||null;
+const searchName=name=>name.normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().trim();
 const tname=id=>esc(team(id)?.name||'—');
 
-// Optional curated image catalog. Only local, explicitly approved assets are accepted.
+// Curated media keyed by catalogue and club IDs.
 let MEDIA={players:{},clubs:{}};
-function mediaPath(entry){const p=entry?.path;if(typeof entry?.commonsFile==='string'&&entry.author&&entry.license&&/^[^/\\<>]+\.(jpg|jpeg|png|webp)$/i.test(entry.commonsFile))return 'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(entry.commonsFile.replaceAll(' ','_'))+'?width=240';return typeof p==='string'&&/^assets\/(players|clubs)\/[a-zA-Z0-9_-]+\.(webp|png|jpg|svg)$/.test(p)?p:null}
-function mediaCredits(entry){if(!entry?.author||!entry?.source||!entry?.license)return '';let source,license;try{source=new URL(entry.source);license=new URL(entry.license)}catch{return ''}if(source.protocol!=='https:'||source.hostname!=='commons.wikimedia.org'||license.protocol!=='https:'||license.hostname!=='creativecommons.org')return '';return `<details class="media-credit"><summary>Πηγή φωτογραφίας</summary><small>Φωτογραφία: ${esc(entry.author)} · <a href="${esc(source.href)}" target="_blank" rel="noopener noreferrer">Πηγή</a> · <a href="${esc(license.href)}" target="_blank" rel="noopener noreferrer">Άδεια χρήσης</a> · Προσαρμογή κάδρου στην εμφάνιση.</small></details>`}
+function mediaPath(entry){const path=entry?.path;return typeof path==='string'&&/^assets\/(players|clubs)\/[a-zA-Z0-9_-]+\.(webp|png|jpg|svg)$/.test(path)?path:null}
+function mediaCredits(entry){if(!entry?.author||!entry?.source||!entry?.license)return '';let source,license;try{source=new URL(entry.source);license=new URL(entry.license)}catch{return ''}if(source.protocol!=='https:'||source.hostname!=='commons.wikimedia.org'||license.protocol!=='https:'||license.hostname!=='creativecommons.org')return '';return `<details class="media-credit"><summary>Πηγή φωτογραφίας</summary><small>Φωτογραφία: ${esc(entry.author)} · <a href="${esc(source.href)}" target="_blank" rel="noopener noreferrer">Πηγή</a> · <a href="${esc(license.href)}" target="_blank" rel="noopener noreferrer">Άδεια χρήσης</a> · Αλλαγή μεγέθους, μετατροπή σε WebP και προσαρμογή κάδρου.</small></details>`}
 function playerPortrait(p){const entry=MEDIA.players?.[p.id];return entry?.name===p.name?mediaPath(entry):null}
-function clubPortrait(t){const entry=MEDIA.clubs?.[t.id];if(entry?.name!==t.name)return null;const url=entry.crestUrl;if(typeof url==='string'&&/^https:\/\/raw\.githubusercontent\.com\/luukhopman\/football-logos\/master\/logos\/[A-Za-z0-9_%.-]+\/[A-Za-z0-9_%.-]+\.png$/.test(url))return url;return mediaPath(entry)}
-function mediaImage(path,alt,cls,w,h,fallback){return `<span class="media-wrap" style="width:${w}px;height:${h}px"><span class="media-fallback">${fallback}</span><img class="${cls}" src="${esc(path)}" alt="${esc(alt)}" width="${w}" height="${h}" referrerpolicy="no-referrer" loading="lazy" decoding="async" onload="this.previousElementSibling.hidden=true" onerror="this.remove()"></span>`}
-fetch('assets/media.json?v=efel-ui06').then(r=>r.ok?r.json():null).then(d=>{if(d&&typeof d==='object'){MEDIA=d;if(S.loaded)render()}}).catch(()=>{});
+function clubPortrait(t){const entry=MEDIA.clubs?.[t.id];if(entry?.name!==t.name)return null;const url=entry.crestUrl;if(typeof url==='string'&&/^https:\/\/raw\.githubusercontent\.com\/luukhopman\/football-logos\/(?:master|[0-9a-f]{40})\/logos\/[A-Za-z0-9_%.-]+\/[A-Za-z0-9_%.-]+\.png$/.test(url))return url;return mediaPath(entry)}
+function mediaImage(path,alt,cls,w,h,fallback){return `<span class="media-wrap" style="width:${w}px;height:${h}px"><span class="media-fallback">${fallback}</span><img class="${cls}" src="${esc(path)}" alt="${esc(alt)}" width="${w}" height="${h}" referrerpolicy="no-referrer" loading="lazy" decoding="async" data-ready="false" onload="this.previousElementSibling.hidden=true;this.dataset.ready='true'" onerror="this.remove()"></span>`}
+fetch('assets/media.json?v=efel-prod01').then(r=>r.ok?r.json():null).then(d=>{if(d&&typeof d==='object'){MEDIA=d;if(S.loaded)render()}}).catch(()=>{});
 
-function crest(t,s=40,skipMedia=false){if(!t)return '';const path=skipMedia?null:clubPortrait(t);if(path)return mediaImage(path,t.name,'club-media',s,Math.round(s*1.15),crest(t,s,true));const c=/^#[0-9a-f]{6}$/i.test(t.color||'')?t.color:'#888',k=(t.order||0)%5,id='cp'+esc(t.id);
+function crest(t,s=40,skipMedia=false){if(!t)return '';const path=skipMedia?null:clubPortrait(t);if(path)return mediaImage(path,t.name,'club-media'+(['9','16','22'].includes(String(t.id))?' dark-crest':''),s,Math.round(s*1.15),crest(t,s,true));const c=/^#[0-9a-f]{6}$/i.test(t.color||'')?t.color:'#888',k=(t.order||0)%5,id='cp'+esc(t.id);
   const ini=esc(t.abbr||(t.name||'?').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,3).toUpperCase());
   const P=['<path d="M8 0h5v46H8zM18 0h5v46h-5zM28 0h5v46h-5z" fill="rgba(255,255,255,.85)"/>','<path d="M-4 30 30-4h12L2 40z" fill="rgba(255,255,255,.85)"/>','<rect x="20" width="20" height="46" fill="rgba(255,255,255,.85)"/>','<path d="M0 14 20 26 40 14v9L20 35 0 23z" fill="rgba(255,255,255,.85)"/>','<circle cx="20" cy="22" r="11" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="3"/>'][k];
   return `<svg class="cr" width="${s}" height="${Math.round(s*1.15)}" viewBox="0 0 40 46" aria-hidden="true"><defs><clipPath id="${id}"><path d="M20 2 37 7v15c0 11-7 18-17 22C10 40 3 33 3 22V7z"/></clipPath></defs><g clip-path="url(#${id})"><rect width="40" height="46" fill="${c}"/>${P}</g><path d="M20 2 37 7v15c0 11-7 18-17 22C10 40 3 33 3 22V7z" fill="none" stroke="#fff" stroke-width="2"/><path d="M20 2 37 7v15c0 11-7 18-17 22C10 40 3 33 3 22V7z" fill="none" stroke="rgba(0,0,0,.35)" stroke-width=".8"/><text x="20" y="26.5" text-anchor="middle" font-family="Fira Sans Condensed,sans-serif" font-weight="800" font-size="${ini.length>2?10:12}" fill="#fff" stroke="rgba(0,0,0,.55)" stroke-width="2.2" paint-order="stroke">${ini}</text></svg>`}
@@ -41,27 +44,48 @@ const ago=ts=>{const d=(Date.now()-ts)/6e4;return d<1?'τώρα':d<60?Math.floor
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)}
 const cfg=()=>S.cfg||{};
 let DET={},STD=null,stdLoading=false;
-function cardImg(p,w,cls){if(!p.img)return `<span class="${cls} noimgs g-${grp(p.pos)}" style="display:inline-grid;place-items:center;width:${w}px;height:${Math.round(w*170/120)}px">${esc(p.pos)}</span>`;const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
+function cardImg(p,w,cls){if(!p.img)return faceImg(p,w);const k=p.img-1,s=Math.floor(k/100),i=k%100;return `<span class="${cls}" style="display:inline-block;width:${w}px;height:${Math.round(w*170/120)}px;background:url(sp/${s}.webp) ${(i%10)*100/9}% ${Math.floor(i/10)*100/9}%/1000% 1000% no-repeat"></span>`}
 const TIERS=[['star','Αστέρας',90000,1e9,'#c99a12'],['top','Κορυφαίος',40000,89999,'#2b6fd6'],['core','Βασικός',15000,39999,'#1f9d55'],['squad','Ρόστερ',5001,14999,'#7d8aa0'],['base','Βασική τιμή',0,5000,'#4b5870']];
 const tierKey=pr=>(TIERS.find(t=>pr>=t[2]&&pr<=t[3])||TIERS[4])[0];
-function faceImg(p,sz,skipMedia=false){const path=skipMedia?null:playerPortrait(p);if(path)return mediaImage(path,p.name,'eface player-media',sz,sz,faceImg(p,sz,true));const face=p.img||faceByNamePos.get(faceKey(p));if(!face){const ini=esc(p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase());return `<span class=\"eface noimg g-${grp(p.pos)}\" style=\"width:${sz}px;height:${sz}px\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><circle cx=\"32\" cy=\"24\" r=\"12\"/><path d=\"M8 62c2-14 12-22 24-22s22 8 24 22z\"/></svg><b style=\"font-size:${Math.round(sz*.26)}px\">${ini}</b></span>`}const k=face-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
+function faceImg(p,sz,skipMedia=false){const path=skipMedia?null:playerPortrait(p);if(path)return mediaImage(path,p.name,'eface player-media',sz,sz,faceImg(p,sz,true));const face=p.img;if(!face){const ini=esc(p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase());return `<span class=\"eface noimg g-${grp(p.pos)}\" style=\"width:${sz}px;height:${sz}px\"><svg viewBox=\"0 0 64 64\" aria-hidden=\"true\"><circle cx=\"32\" cy=\"24\" r=\"12\"/><path d=\"M8 62c2-14 12-22 24-22s22 8 24 22z\"/></svg><b style=\"font-size:${Math.round(sz*.26)}px\">${ini}</b></span>`}const k=face-1,s=Math.floor(k/100),i=k%100,c=i%10,r=Math.floor(i/10),f=sz/64;
   return `<span class="eface" style="width:${sz}px;height:${sz}px;background:url(sp/${s}.webp) ${-(c*120+47)*f}px ${-(r*170+15)*f}px/${1200*f}px ${1700*f}px no-repeat"></span>`}
 function efelCard(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180;
   const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
   return `<div class="ecard t-${tk}" style="--s:${sc}"><div class="ec-in">
    <div class="ec-top"><div class="ec-ovr">${p.ovr}<small>${esc(p.pos)}</small></div><div class="ec-logo">EF<b>E</b>L</div></div>
-   <div class="ec-face">${faceImg(p,Math.round(104*sc))}</div>
+   <div class="ec-face ${p.img?'original':''}">${p.img?cardImg(p,Math.round(85*sc),'original-card'):faceImg(p,Math.round(104*sc))}</div>
    <div class="ec-name">${first?`<small>${esc(first)}</small>`:''}${esc(last)}</div>
    <div class="ec-tier">${T[1]}</div>
    <div class="ec-foot"><span>${o?crest(o,Math.round(18*sc)):'Ελεύθερος'}</span><b>${Math.round(p.price/1000)}K</b></div>
   </div></div>`}
-let faceByNamePos=new Map();
-function faceKey(p){return JSON.stringify([p.name,p.pos])}
-function setCat(list){S.cat=list;S.cmap=Object.fromEntries(list.map(p=>[p.id,p]));faceByNamePos=new Map();for(const p of list){if(!p.img)continue;const key=faceKey(p),prev=faceByNamePos.get(key);if(prev===undefined)faceByNamePos.set(key,p.img);else if(prev!==p.img)faceByNamePos.set(key,0)}}
+function setCat(list){S.cat=list;S.cmap=Object.fromEntries(list.map(p=>[p.id,p]))}
 fetch('standard.json').then(r=>r.json()).then(d=>{STD=d;pickCat();render()}).catch(()=>toast('Ο κατάλογος δεν φόρτωσε'));
 fetch('details.json').then(r=>r.json()).then(d=>{DET=d||{}}).catch(()=>{});
-function openM(html){$('#mb').innerHTML=html;$('#ov').hidden=false}
-function closeM(){$('#ov').hidden=true;S.pend=null}
+let modalTrigger;
+function openM(html){
+  const overlay=$('#ov');
+  if(overlay.hidden)modalTrigger=document.activeElement;
+  $('#mb').innerHTML=html;
+  overlay.hidden=false;
+  $('#view').inert=true;
+  $('.top').inert=true;
+  overlay.querySelector('.mx').focus();
+}
+function closeM(){
+  $('#ov').hidden=true;
+  $('#view').inert=false;
+  $('.top').inert=false;
+  S.pend=null;
+  if(modalTrigger?.isConnected)modalTrigger.focus({preventScroll:true});
+  modalTrigger=null;
+}
+document.addEventListener('keydown',event=>{
+  if(event.key!=='Tab'||$('#ov').hidden)return;
+  const controls=[...$('#ov').querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),summary')].filter(el=>el.getClientRects().length);
+  const first=controls[0],last=controls.at(-1);
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus()}
+  if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus()}
+});
 function ask(o){S.pend=o.run;const p=pl(o.pid);
   openM(`<div class="box"><div class="bh">${o.title}</div>${pcardHTML(o.pid)}<p style="margin:0">${o.note||''}</p>
   <div class="flow"><div><span>${o.label||'Budget'} τώρα</span><b>${gp(o.before)}</b></div><div class="ar">→</div><div><span>Μετά</span><b class="${o.after<o.before?'neg':''}">${gp(o.after)}</b></div></div>
@@ -190,15 +214,37 @@ const fmtDT=t=>new Date(t).toLocaleString('el-GR',{weekday:'short',day:'numeric'
 const leagueName=id=>S.leagues.find(l=>l.id===id)?.name||'';
 function applyLeague(){const lg=S.lg||S.leagues.find(l=>l.kind==='human')?.id;S.lg=lg;
   S.teams=S.all.filter(t=>t.league_id===lg);S.matches=S.allMatches.filter(m=>m.league_id===lg)}
-let loading=null;
-async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;loading=(async()=>{
+let loading=null, priceCache=null;
+async function loadPrices(user,configRows){
+  const pricingConfig=configRows.filter(row=>['efel_ratio','efb_gp','min_price'].includes(row.key));
+  const key=JSON.stringify(pricingConfig);
+  if(priceCache?.user===user&&priceCache.key===key&&Date.now()-priceCache.time<120000)
+    return {data:priceCache.data,error:null};
+  const batch=1000;
+  const query=(start,count)=>sb.from('players').select('id,price',count?{count:'exact'}:undefined)
+    .gt('price',MINP).order('id').range(start,start+batch-1);
+  const first=await query(0,true);
+  if(first.error)return first;
+  const pages=await Promise.all(Array.from({length:Math.max(0,Math.ceil(first.count/batch)-1)},
+    (_,i)=>query((i+1)*batch,false)));
+  const failed=pages.find(page=>page.error);
+  if(failed)return failed;
+  const data=[...first.data,...pages.flatMap(page=>page.data)];
+  if(S.me===user)priceCache={user,key,time:Date.now(),data};
+  return {data,error:null};
+}
+async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;const user=S.me;loading=(async()=>{
   const q=t=>sb.from(t).select('*');
-  const [cf,lg,cl,cm,pf,ro,ma,of,ne,br,bi,pr,ar]=await Promise.all([q('config'),q('leagues').order('sort'),q('clubs').order('id'),
+  const config=q('config');
+  const configReady=Promise.resolve(config);
+  const [cf,lg,cl,cm,pf,ro,ma,of,ne,br,bi,pr,ar]=await Promise.all([configReady,q('leagues').order('sort'),q('clubs').order('id'),
     sb.from('club_managers').select('*'),sb.from('profiles').select('id,display_name,is_admin,avatar_url,efootball_name,platform,contact'),q('roster'),
-    q('matches').order('md'),sb.from('offers').select('*').order('created_at',{ascending:false}).limit(300),
+    configReady.then(({data,error})=>error?{error}:q('matches').eq('season_no',Number(data.find(r=>r.key==='season_no')?.value)||1).order('md')),sb.from('offers').select('*').order('created_at',{ascending:false}).limit(300),
     sb.from('news').select('*').order('ts',{ascending:false}).limit(80),sb.from('bid_rounds').select('*').order('id',{ascending:false}).limit(5),
-    q('bids'),sb.from('players').select('id,price').gt('price',5000),sb.from('season_archive').select('*')]);
-  const err=[cf,lg,cl,ma].find(x=>x.error);if(err){toast('Σφάλμα φόρτωσης: '+err.error.message);return}
+    q('bids'),configReady.then(({data,error})=>error?{error}:loadPrices(user,data)),sb.from('season_archive').select('*')]);
+  if(S.me!==user)return;
+  const err=[cf,lg,cl,ma,ro,pr].find(x=>x.error);if(err){S.loadFailed=true;render();toast('Σφάλμα φόρτωσης: '+err.error.message);return}
+  S.loadFailed=false;
   const C={};for(const r of cf.data)C[r.key]=r.value;
   const seasonNo=+C.season_no||1;
   const rd=(br.data||[])[0];const openR=rd&&rd.status==='open'?rd:null;
@@ -207,17 +253,20 @@ async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;loading=
     roundClosesAt:openR?.closes_at,deadline:openR?.closes_at?fmtDT(openR.closes_at):'',seasonStart:C.season_start,mdEvery:+C.md_every_days,
     seasonNo,activationHours:+C.activation_hours,coverMax:+C.cover_max_ovr,catalog:'standard',windowAuto:!!C.window_auto,contractSeasons:+C.contract_seasons||2,renewPct:+C.renew_pct||30,counterRounds:+C.counter_rounds||4,windowMid:+C.window_mid_after_md||9,windowDays:+C.window_days||7,efb:C.efb_gp||{},ratio:+C.efel_ratio||3,homeGate:+C.home_gate||0};
   try{S.windows=await rpc('efel_window_dates')}catch(e){S.windows=[]}
+  if(S.me!==user)return;
   S.prof={};for(const p of pf.data||[]){S.names[p.id]=p.display_name;S.prof[p.id]=p}
   S.owner=!!(pf.data||[]).find(p=>p.id===S.me)?.is_admin;
   S.leagues=(lg.data||[]).map(l=>({id:sid(l.id),name:l.name,kind:l.kind}));
   const mg={};S.mgrHist=cm.data||[];for(const m of S.mgrHist)if(!m.ended_at)mg[m.club_id]=m.user_id;
   S.audit=[];if(S.owner){try{S.audit=(await sb.from('audit').select('*').order('ts',{ascending:false}).limit(40)).data||[]}catch(e){}}
+  if(S.me!==user)return;
   const ros={};for(const r of ro.data||[])(ros[r.club_id]=ros[r.club_id]||[]).push({pid:spid(r.player_id),paid:r.paid,activation:r.activation,deadline:r.activation_deadline,via:r.via,at:Date.parse(r.acquired_at),cu:r.contract_until});
   S.all=(cl.data||[]).map(c=>({id:sid(c.id),name:c.name,abbr:c.abbr,color:c.color,budget:+c.budget,earned:+c.earned,is_auto:c.is_auto,status:c.status,
     league_id:sid(c.league_id),order:c.id,manager:mg[c.id]||null,roster:ros[c.id]||[],
     lineup:c.lineup?{f:c.lineup.f,xi:(c.lineup.xi||[]).map(x=>x?spid(x):null)}:null}));
+  rosterOwners=new Map(S.all.flatMap(t=>t.roster.map(r=>[r.pid,t])));
   S.allMatches=(ma.data||[]).filter(m=>m.season_no===seasonNo).map(m=>({id:sid(m.id),league_id:sid(m.league_id),md:m.md,home:sid(m.home),away:sid(m.away),
-    hs:m.hg,as:m.ag,status:m.status,by:sid(m.reported_by),tprop:m.time_proposed,tpropBy:sid(m.time_proposed_by),tagreed:m.time_agreed,sim:m.simulated,up:m.updated_at,proof:m.proof_url,slots:m.time_slots||(m.time_proposed?[m.time_proposed]:[])}));
+    hs:m.hg,as:m.ag,status:m.status,by:sid(m.reported_by),tprop:m.time_proposed,tpropBy:sid(m.time_proposed_by),tagreed:m.time_agreed,sim:m.simulated,up:m.updated_at,proof:httpsURL(m.proof_url),slots:m.time_slots||(m.time_proposed?[m.time_proposed]:[])}));
   S.offers=(of.data||[]).map(o=>({id:sid(o.id),from:sid(o.from_club),to:sid(o.to_club),pid:spid(o.player_id),gp:o.gp,swap:spid(o.swap_player),
     status:o.status==='accepted'?'done':o.status,note:o.note,expires:o.expires_at,ts:Date.parse(o.decided_at||o.created_at),turn:sid(o.turn??o.to_club),round:o.round||1,hist:o.history||[]}));
   {const lc=(br.data||[]).find(r=>r.status==='closed');S.lastRes=lc?(bi.data||[]).filter(b=>b.round_id===lc.id&&b.result&&sid(b.club_id)===S.all.find(t=>t.manager===S.me)?.id).map(b=>({pid:spid(b.player_id),amt:b.amount,result:b.result,reason:b.reason,round:lc.id,no:lc.no})).sort((a,b)=>({won:0,rejected:1,lost:2,invalid:3}[a.result]-{won:0,rejected:1,lost:2,invalid:3}[b.result])):[];if(lc&&lc.closed_at&&Date.now()-Date.parse(lc.closed_at)>10*864e5)S.lastRes=[]}
@@ -229,8 +278,9 @@ async function loadAll(){if(!sb||!S.me)return;if(loading)return loading;loading=
   S.news=(ne.data||[]).map(mapNews);
   const mt=myTeam();S.fin=null;
   if(mt){try{S.fin=await rpc('efel_finance',{c:+mt.id})}catch(e){}}
-  pickCat();S.loaded=true;render();setTimeout(()=>{if(!LS.get('onb_'+S.me,0)&&!myTeam()){LS.set('onb_'+S.me,1);onboarding(0)}else momentsCheck()},700)})();try{await loading}finally{loading=null}}
-function pickCat(){if(!STD)return;setCat(STD.map(x=>({id:x[0],name:x[1],pos:x[2],ovr:x[3],img:x[4],price:S.prices?.[x[0]]||MINP})))}
+  if(S.me!==user)return;
+  pickCat();S.loaded=true;render();setTimeout(()=>{if(S.me!==user)return;if(!LS.get('onb_'+S.me,0)&&!myTeam()){LS.set('onb_'+S.me,1);onboarding(0)}else momentsCheck()},700)})();try{await loading}finally{loading=null;if(S.me&&S.me!==user)loadAll()}}
+function pickCat(){if(!STD)return;setCat(STD.map(x=>({id:x[0],name:x[1],search:searchName(x[1]),pos:x[2],ovr:x[3],img:x[4],price:S.prices?.[x[0]]||MINP})))}
 
 /* ---------- βοηθητικά νέου backend ---------- */
 const isAutoLg=()=>S.leagues.find(l=>l.id===S.lg)?.kind==='auto';
@@ -248,7 +298,10 @@ function timeUI(m,mt){if(m.status==='final')return '';if(m.tagreed)return `<span
 function myPending(){const mt=myTeam();const ms=S.allMatches.filter(m=>m.status!=='final'&&(m.home===mt.id||m.away===mt.id));
   return ms.length?`<div class="ros">${ms.map(m=>{const hm=m.home===mt.id,op=hm?m.away:m.home;return `<div><span>${m.md}η · ${hm?'vs':'@'} ${tlink(op)}${m.status==='reported'?' · <b>'+m.hs+'-'+m.as+'</b>':''}${m.tagreed?' · '+fmtDT(m.tagreed):''}</span><button class="ghost" style="min-height:32px;padding:0 10px" data-act="gomd" data-id="${m.id}">Άνοιγμα</button></div>`}).join('')}</div>`:'<p class="small muted">Κανένας εκκρεμής αγώνας.</p>'}
 function avatar(uid,sz){sz=sz||28;const p=S.prof?.[uid],n=p?.display_name||S.names[uid]||'?';const ini=esc(n.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase());
-  return p?.avatar_url?`<img class="av" src="${esc(p.avatar_url)}" alt="" width="${sz}" height="${sz}" referrerpolicy="no-referrer" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'av avi',textContent:'${ini}'}))">`:`<span class="av avi" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.4)}px">${ini}</span>`}
+  const placeholder=`<span class="av avi" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.4)}px">${ini}</span>`;
+  const url=httpsURL(p?.avatar_url);
+  return url?mediaImage(url,'','av',sz,sz,placeholder):placeholder;
+}
 const PLAT={console:'Κονσόλα',mobile:'Κινητό'};
 function mgrLine(uid){if(!uid)return '';const p=S.prof?.[uid]||{};return `<button class="lnk mgrl" data-act="mgr" data-id="${esc(uid)}">${avatar(uid,22)} ${esc(S.names[uid]||'Manager')}</button>${p.platform?` <span class="tag">${PLAT[p.platform]}</span>`:''}`}
 function inWindow(k){for(const w of S.windows||[])if(k>=w.from&&k<=w.to)return w;return null}
@@ -319,7 +372,8 @@ function render(force){
   if(!force&&ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)&&ae.id!=='fq'&&$('#view').contains(ae)){S.dirty=true;return}
   S.dirty=false;
   const r=route();
-  for(const a of document.querySelectorAll('#nav a'))a.classList.toggle('on',a.getAttribute('href')==='#'+r);
+  $('#view').dataset.route=r;
+  for(const a of document.querySelectorAll('#nav a')){const current=a.hash==='#'+r;a.classList.toggle('on',current);if(current)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')}
   $('#navAdmin').hidden=!S.owner;
   const mt=myTeam(),ln='eFootball Evolution League';renderHeader();
   document.documentElement.style.setProperty('--accent',mt&&/^#[0-9a-f]{6}$/i.test(mt.color||'')?mt.color:'#f6b81c');
@@ -328,11 +382,13 @@ function render(force){
   const live=S.allMatches.filter(isLive).map(m=>`🔴 ΠΑΙΖΕΤΑΙ ΤΩΡΑ: ${team(m.home)?.name} - ${team(m.away)?.name}`),wE=(()=>{const w=inWindow(isoD(new Date()));return cfg().windowOpen&&w&&w.to===isoD(new Date())?['⏰ DEADLINE DAY: σήμερα κλείνει η μεταγραφική']:[]})();
   $('#tick').textContent=[...wE,...live,tk].filter(Boolean).join('   ●   ')||ln;
   if(!sb){$('#view').innerHTML='<div class="card empty">Λείπουν οι ρυθμίσεις σύνδεσης (config.js).</div>';return}
-  if(!S.me){$('#view').innerHTML=`<section class="card" style="max-width:560px;margin:30px auto;text-align:center"><h2>Καλώς ήρθες στην EFEL</h2><img src="logo.jpg" alt="EFEL" style="max-width:320px;width:100%;margin:10px auto;display:block"><p>Συνδέσου με τον λογαριασμό Google σου για να δεις τη λίγκα και να αναλάβεις σύλλογο.</p><button data-act="login">Σύνδεση με Google</button></section>`;return}
-  if(!S.loaded){$('#view').innerHTML='<div class="card empty">Φόρτωση λίγκας…</div>';return}
+  document.body.classList.toggle('sign-in',!S.me);
+  if(!S.me){$('#view').innerHTML=`<section class="signin"><div class="signin-content"><h2>eFootball<br>Evolution League</h2><p>Ανάλαβε σύλλογο, χτίσε το ρόστερ σου και παίξε στο πρωτάθλημα της EFEL.</p><button data-act="login">Σύνδεση με Google</button></div></section>`;return}
+  if(!S.loaded){$('#view').innerHTML=S.loadFailed?'<section class="card empty"><p>Η λίγκα δεν φόρτωσε.</p><button data-act="retryLoad">Δοκίμασε ξανά</button></section>':'<div class="card empty" role="status">Φόρτωση λίγκας…</div>';return}
+  if(r==='admin'&&!S.owner){$('#view').innerHTML='<section class="card empty">Η διαχείριση είναι διαθέσιμη στους διοργανωτές.</section>';return}
   if(!S.all.length){$('#view').innerHTML=S.owner?`<div class="card"><h2>Ας στήσουμε τον κόσμο της EFEL</h2><p class="muted">Δημιουργεί 3 λίγκες (1 ανθρώπινη, 2 αυτόματες), 24 συλλόγους, ρόστερ για τους αυτόματους και πρόγραμμα. Θέλει πρώτα να έχει φορτωθεί ο κατάλογος παικτών.</p><button data-act="setupWorld">Δημιουργία κόσμου</button></div>`:'<div class="card empty">Η λίγκα δεν έχει στηθεί ακόμα.</div>';return}
-  const V={club:vClub,paper:vPaper,more:vMore,rules:vRules,calendar:vCalendar,squad:()=>{S.clubTab='xi';return vClub()},home:vHome,table:vTable,matches:vMatches,market:vMarket,teams:vTeams,transfers:vTransfers,admin:vAdmin}[r]||vHome;
-  $('#view').innerHTML=V();
+  const pages={club:vClub,paper:vPaper,more:vMore,rules:vRules,calendar:vCalendar,squad:()=>{S.clubTab='xi';return vClub()},home:vHome,table:vTable,matches:vMatches,market:vMarket,teams:vTeams,transfers:vTransfers,admin:vAdmin};
+  $('#view').innerHTML=(Object.hasOwn(pages,r)?pages[r]:vHome)();
 }
 
 function tableHTML(full){
@@ -383,14 +439,24 @@ function vMatches(){
 
 function myBids(){const mt=myTeam();return mt?S.bids.filter(b=>b.round===cfg().round&&b.tid===mt.id):[]}
 const POSL=["GK", "CB", "LB", "RB", "DMF", "CMF", "AMF", "LMF", "RMF", "LWF", "RWF", "SS", "CF"];
+function pager(total,offset,size,action){
+  if(total<=size)return '';
+  return `<div class="pager" aria-label="Σελιδοποίηση"><button class="ghost" data-act="${action}" data-id="${offset-size}" ${offset?'':'disabled'}>Προηγούμενη</button><span aria-live="polite">${offset+1}–${Math.min(total,offset+size)} / ${total.toLocaleString('el-GR')}</span><button class="ghost" data-act="${action}" data-id="${offset+size}" ${offset+size<total?'':'disabled'}>Επόμενη</button></div>`;
+}
+function pageResults(filter,offset,selector){
+  filter.offset=Math.max(0,Number(offset)||0);
+  render(true);
+  $(selector)?.scrollIntoView({block:'center'});
+  $(selector)?.focus({preventScroll:true});
+}
 function vMarket(){
   const mt=myTeam(),draft=cfg().phase!=='season',open=draft?!!cfg().biddingOpen:!!cfg().windowOpen;
-  const f=S.mf,q=f.q.trim().toLowerCase();
-  const own={};for(const t of S.all)for(const r of t.roster||[])own[r.pid]=t;
+  const f=S.mf,q=searchName(f.q);
+
   const free=S.fin?.free??mt?.budget??Infinity,n=v=>v===''||v==null?null:+v;
   const pmin=n(f.pmin),pmax=n(f.pmax),omin=n(f.omin),omax=n(f.omax);
-  const SL=shortSet();let rows=S.cat.filter(p=>{const o=own[p.id];
-    if(q&&!p.name.toLowerCase().includes(q))return false;
+  const SL=shortSet();let rows=S.cat.filter(p=>{const o=ownerOf(p.id);
+    if(q&&!p.search.includes(q))return false;
     if(f.g&&grp(p.pos)!==f.g)return false;if(f.pos&&p.pos!==f.pos)return false;
     if(f.tier&&tierKey(p.price)!==f.tier)return false;
     if(pmin!=null&&p.price<pmin*1000)return false;if(pmax!=null&&p.price>pmax*1000)return false;
@@ -398,13 +464,14 @@ function vMarket(){
     if(f.av==='short'&&!SL.has(p.id))return false;if(f.av==='free'&&o)return false;if(f.av==='human'&&!(o&&!o.is_auto))return false;if(f.av==='auto'&&!(o&&o.is_auto))return false;if(f.av==='mine'&&!(o&&mt&&o.id===mt.id))return false;
     if(f.afford&&!o&&p.price>free)return false;return true});
   const so={ovr:(a,b)=>b.ovr-a.ovr||b.price-a.price,pdesc:(a,b)=>b.price-a.price||b.ovr-a.ovr,pasc:(a,b)=>a.price-b.price||b.ovr-a.ovr,value:(a,b)=>(b.ovr/b.price)-(a.ovr/a.price)||b.ovr-a.ovr,name:(a,b)=>a.name.localeCompare(b.name)}[f.sort]||null;
-  if(so)rows=rows.slice().sort(so);
-  const shown=rows.slice(0,f.lim||60);
+  if(so)rows=rows.sort(so);
+  const offset=Math.min(f.offset||0,Math.max(0,Math.ceil(rows.length/60)-1)*60);
+  const shown=rows.slice(offset,offset+60);
   const mb=myBids(),committed=mb.reduce((s,b)=>s+b.amt,0);
   const head=draft?`<div class="note small">${open?`<b>Γύρος ${cfg().round} ανοιχτός</b>${cfg().deadline?' · κλείνει '+esc(cfg().deadline):''}. Κάνε έως ${cfg().bidsPerRound||8} κρυφές προσφορές. Στο κλείσιμο, κάθε παίκτης πάει σε όποιον έδωσε τα περισσότερα. Σε ισοπαλία κερδίζει όποιος έχει ξοδέψει λιγότερα· αν ξόδεψαν τα ίδια, ο παίκτης απορρίπτει.`:'Δεν υπάρχει ανοιχτός γύρος προσφορών αυτή τη στιγμή.'}</div>`
    :`<div class="note small">${open?'<b>Η μεταγραφική περίοδος είναι ανοιχτή.</b> Οι ελεύθεροι αγοράζονται στη βασική τιμή. Για παίκτη άλλης ομάδας στέλνεις πρόταση στον κάτοχο.':`Η μεταγραφική είναι κλειστή (${windowText()}). Ελεύθερους αγοράζεις όταν ανοίξει, αλλά <b>προτάσεις σε άλλους συλλόγους στέλνεις όλη τη σεζόν</b>: η συμφωνία γίνεται προσυμφωνία.`}</div>`;
   const bidsBox=draft&&mt?`<div class="panel"><b>Οι προσφορές σου στον γύρο ${cfg().round} (${mb.length}/${cfg().bidsPerRound||8}) · σύνολο ${gp(committed)} από ${gp(mt.budget)}</b>${mb.length?mb.map(b=>`<div class="row" style="justify-content:space-between"><span><span class="pos ${grp(pl(b.pid).pos)}">${esc(pl(b.pid).pos)}</span> ${esc(pl(b.pid).name)} · <b>${gp(b.amt)}</b></span>${open?`<button class="ghost" data-act="unbid" data-id="${b.id}">Ακύρωση</button>`:''}</div>`).join(''):'<span class="muted small">Καμία προσφορά ακόμα.</span>'}</div>`:'';
-  const rowsH=shown.map(p=>{const o=ownerOf(p.id),mine=mt&&o&&o.id===mt.id;let a='';
+  const rowsH=f.view==='cards'?'':shown.map(p=>{const o=ownerOf(p.id),mine=mt&&o&&o.id===mt.id;let a='';
     if(mt&&open){
       if(draft&&!o){const ex=mb.find(b=>b.pid===p.id);a=`<input id="bid_${p.id}" type="number" step="1000" min="${p.price}" value="${ex?ex.amt:p.price}" style="width:120px" aria-label="Ποσό"><button data-act="bid" data-id="${p.id}">${ex?'Αλλαγή':'Προσφορά'}</button>`}
       else if(!draft&&!o)a=`<button data-act="buy" data-id="${p.id}">Αγορά</button>`;
@@ -415,6 +482,8 @@ function vMarket(){
   <div class="filters">
    <input type="search" id="fq" placeholder="Αναζήτηση παίκτη" value="${esc(f.q)}" aria-label="Αναζήτηση">
    <div class="fchips">${[['','Όλες οι κατηγορίες'],...TIERS.map(t=>[t[0],t[1]])].map(([k,l])=>`<button class="fchip ${f.tier===k?'on':''} ${k?'t-'+k:''}" data-act="ftier" data-id="${k}">${l}</button>`).join('')}</div>
+   <details class="market-filters" ${f.filters?'open':''}>
+    <summary>Φίλτρα θέσης, τιμής και OVR</summary>
    <div class="fgrid">
     <label>Ζώνη<select id="fg"><option value="">Όλες</option>${Object.keys(GNAME).map(g=>`<option value="${g}" ${f.g===g?'selected':''}>${GNAME[g]}</option>`).join('')}</select></label>
     <label>Θέση<select id="fpos"><option value="">Όλες</option>${POSL.map(x=>`<option ${f.pos===x?'selected':''}>${x}</option>`).join('')}</select></label>
@@ -422,13 +491,16 @@ function vMarket(){
     <label>έως (K)<input id="fpmax" type="number" min="0" step="5" value="${esc(f.pmax)}" placeholder="π.χ. 80"></label>
     <label>OVR από<input id="fomin" type="number" min="40" max="99" value="${esc(f.omin)}" placeholder="π.χ. 75"></label>
     <label>έως<input id="fomax" type="number" min="40" max="99" value="${esc(f.omax)}"></label>
+   </div>
+   </details>
+   <div class="fgrid market-sort">
     <label>Διαθεσιμότητα<select id="fav">${[['free','Μόνο ελεύθεροι'],['all','Όλοι'],['short','★ Λίστα παρακολούθησης'],['human','Σε managers'],['auto','Σε αυτόματους συλλόγους'],['mine','Οι δικοί μου']].map(([v,l])=>`<option value="${v}" ${f.av===v?'selected':''}>${l}</option>`).join('')}</select></label>
     <label>Ταξινόμηση<select id="fsort">${[['ovr','OVR ↓'],['pdesc','Τιμή ↓'],['pasc','Τιμή ↑'],['value','Αξία για τα λεφτά'],['name','Όνομα']].map(([v,l])=>`<option value="${v}" ${f.sort===v?'selected':''}>${l}</option>`).join('')}</select></label>
    </div>
    <div class="row" style="justify-content:space-between">${mt?`<label class="small"><input type="checkbox" id="faff" ${f.afford?'checked':''}> Μόνο όσοι χωράνε στα ελεύθερα GP μου (${gp(free)})</label>`:'<span></span>'}
     <span class="row" style="gap:6px"><button class="ghost sm ${f.view==='list'?'on':''}" data-act="fview" data-id="list">Λίστα</button><button class="ghost sm ${f.view==='cards'?'on':''}" data-act="fview" data-id="cards">Κάρτες</button><button class="ghost sm" data-act="freset">Καθαρισμός</button></span></div>
   </div>
-  ${S.cat.length?`<p class="small muted">${rows.length.toLocaleString('el-GR')} παίκτες${rows.length>shown.length?` · βλέπεις ${shown.length}`:''}. Αξία EFEL = η ελάχιστη τιμή στη λίγκα · eFootball = περίπου τι κοστίζει η standard κάρτα στο παιχνίδι.</p>${f.view==='cards'?`<div class="cgrid">${shown.map(p=>`<div class="cwrap"><button class="cbtn" data-act="pinfo" data-id="${esc(p.id)}" aria-label="${esc(p.name)}">${efelCard(p.id,150)}</button>${starBtn(p.id)}</div>`).join('')}</div>`:`<table class="mk"><thead><tr><th>Θέση</th><th>Παίκτης</th><th class="num">OVR</th><th class="num">Αξία EFEL</th><th class="num" title="Περίπου τι κοστίζει στο eFootball">eFootball</th><th>Ομάδα</th><th></th></tr></thead><tbody>${rowsH}</tbody></table>`}${rows.length>shown.length?`<div class="row" style="justify-content:center;margin-top:10px"><button class="ghost" data-act="fmore">Δείξε άλλους ${Math.min(60,rows.length-shown.length)}</button></div>`:''}`:'<p class="empty">Ο κατάλογος είναι άδειος.</p>'}</section>`;
+  ${S.cat.length?`<p class="small muted">${rows.length.toLocaleString('el-GR')} παίκτες${rows.length>shown.length?` · βλέπεις ${offset+1}–${offset+shown.length}`:''}. Αξία EFEL = η ελάχιστη τιμή στη λίγκα · eFootball = περίπου τι κοστίζει η standard κάρτα στο παιχνίδι.</p>${f.view==='cards'?`<div class="cgrid">${shown.map(p=>`<div class="cwrap"><button class="cbtn" data-act="pinfo" data-id="${esc(p.id)}" aria-label="${esc(p.name)}">${efelCard(p.id,150)}</button>${starBtn(p.id)}</div>`).join('')}</div>`:`<table class="mk"><thead><tr><th>Θέση</th><th>Παίκτης</th><th class="num">OVR</th><th class="num">Αξία EFEL</th><th class="num" title="Περίπου τι κοστίζει στο eFootball">eFootball</th><th>Ομάδα</th><th></th></tr></thead><tbody>${rowsH}</tbody></table>`}${pager(rows.length,offset,60,'fpage')}`:'<p class="empty">Ο κατάλογος είναι άδειος.</p>'}</section>`;
 }
 function offerBox(){
   const p=pl(S.offerFor),o=ownerOf(p.id),mt=myTeam();if(!o||!mt)return '';
@@ -500,10 +572,11 @@ const A={
     ask({title:'Αποδέσμευση παίκτη',pid,before:mt.budget,after:mt.budget+refund,note:`Παίρνεις πίσω το μισό από τα ${gp(r.paid)} που πλήρωσες και ο παίκτης γίνεται ελεύθερος.`,ok:'Αποδέσμευση',warn:1,
       run:()=>w(()=>rpc('efel_release',{p_player:npid(pid)}),'Αποδεσμεύτηκε')})},
   offer(pid){closeM();if(location.hash!=='#market'){S._keep=pid;location.hash='#market'}S.offerFor=pid;S.mf.av='all';render(true);$('#offerBox')?.scrollIntoView({behavior:'smooth',block:'center'})},
-  ftier(k){S.mf.tier=k||'';S.mf.lim=60;render(true)},
+  ftier(k){S.mf.tier=k||'';S.mf.offset=0;render(true)},
   fview(v){S.mf.view=v;render(true)},
-  fmore(){S.mf.lim=(S.mf.lim||60)+60;render(true)},
-  freset(){S.mf={...S.mf,q:'',g:'',pos:'',tier:'',pmin:'',pmax:'',omin:'',omax:'',av:'free',sort:'ovr',afford:false,lim:60};render(true)},
+  retryLoad(){return loadAll()},
+  fpage(i){pageResults(S.mf,i,'#fq')},
+  freset(){S.mf={...S.mf,q:'',g:'',pos:'',tier:'',pmin:'',pmax:'',omin:'',omax:'',av:'free',sort:'ovr',afford:false,offset:0};render(true)},
   closeOffer(){S.offerFor=null;render(true)},
   sendOffer(){const mt=myTeam(),pid=S.offerFor,o=ownerOf(pid),g=Math.max(0,Math.round(+$('#ogp').value||0)),swap=$('#oswap').value||null;
     if(!o)return;if(!g&&!swap)return toast('Βάλε GP ή παίκτη σε ανταλλαγή');
@@ -530,7 +603,7 @@ const A={
     <label class="small">Όνομα που βλέπουν οι άλλοι<br><input id="pf_n" maxlength="40" value="${esc(p.display_name||'')}"></label>
     <label class="small">Όνομα στο eFootball<br><input id="pf_e" maxlength="40" value="${esc(p.efootball_name||'')}"></label>
     <label class="small">Πλατφόρμα<br><select id="pf_p"><option value="">—</option><option value="console" ${p.platform==='console'?'selected':''}>Κονσόλα</option><option value="mobile" ${p.platform==='mobile'?'selected':''}>Κινητό</option></select></label>
-    <label class="small">Πώς σε βρίσκουν (Discord, Viber, Messenger)<br><input id="pf_c" maxlength="80" value="${esc(p.contact||'')}" placeholder="π.χ. Discord: billy#1234"></label>
+    <label class="small">Επικοινωνία (ορατή στα μέλη της λίγκας)<br><input id="pf_c" maxlength="80" value="${esc(p.contact||'')}" placeholder="π.χ. Discord: billy#1234"></label>
     <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="logout2" style="margin-right:auto">Έξοδος</button><button class="ghost" data-act="closeM">Άκυρο</button><button data-act="saveProfile">Αποθήκευση</button></div></div>`)},
   async saveProfile(){const v=id=>$(id)?.value||'';const a=[v('#pf_n'),v('#pf_e'),v('#pf_p'),v('#pf_c')];closeM();
     await w(()=>rpc('efel_update_profile',{p_name:a[0],p_efname:a[1],p_platform:a[2],p_contact:a[3],p_avatar:null}),'Το προφίλ αποθηκεύτηκε')},
@@ -602,24 +675,25 @@ const A={
   async tick(){await w(async()=>{const r=await rpc('efel_admin_tick');toast(`Προσομοιώθηκαν ${r.simulated} αγώνες · ${r.market} κινήσεις αγοράς · ${r.expired} έληξαν · ${r.locked} κλειδώθηκαν`)})},
   async endSeason(){await w(()=>rpc('efel_end_season'),'Η σεζόν έκλεισε: αρχείο και έπαθλα')},
   async newSeason(){await w(()=>rpc('efel_new_season_fixtures'),'Βγήκε το πρόγραμμα της νέας σεζόν')},
-  async reprice(){await w(()=>rpc('efel_reprice_admin'),'Οι τιμές ενημερώθηκαν')},
+  async reprice(){await w(async()=>{await rpc('efel_reprice_admin');priceCache=null},'Οι τιμές ενημερώθηκαν')},
   async saveTeam(id){await w(()=>rpc('efel_admin_club',{p_club:+id,p_name:$('#tn_'+id).value.trim(),p_abbr:$('#ta_'+id).value.trim(),p_color:$('#tc_'+id).value}),'Αποθηκεύτηκε')},
   async freeTeam(id){await w(()=>rpc('efel_end_manager',{p_club:+id,p_reason:'Απόφαση διοργάνωσης'}),'Ο σύλλογος ψάχνει manager')},
-  async saveVals(){const t={};for(const i of document.querySelectorAll('[data-efb]'))t[i.dataset.efb]=Math.max(0,Math.round(+i.value||0));await w(async()=>{await rpc('efel_set_config',{p_key:'efb_gp',p_value:t});await rpc('efel_set_config',{p_key:'efel_ratio',p_value:+$('#a_ratio').value||3});await rpc('efel_set_config',{p_key:'home_gate',p_value:+$('#a_hg').value||0});await rpc('efel_reprice_admin')},'Οι αξίες ενημερώθηκαν')},
+  async saveVals(){const t={};for(const i of document.querySelectorAll('[data-efb]'))t[i.dataset.efb]=Math.max(0,Math.round(+i.value||0));await w(async()=>{await rpc('efel_set_config',{p_key:'efb_gp',p_value:t});await rpc('efel_set_config',{p_key:'efel_ratio',p_value:+$('#a_ratio').value||3});await rpc('efel_set_config',{p_key:'home_gate',p_value:+$('#a_hg').value||0});await rpc('efel_reprice_admin');priceCache=null},'Οι αξίες ενημερώθηκαν')},
   async note(){const t=$('#a_note').value.trim();if(!t)return;await w(()=>rpc('efel_admin_note',{p_text:t}),'Δημοσιεύτηκε')}
 };
 
 document.addEventListener('click',async e=>{if(e.target.id==='ov'){closeM();return}
   const el=e.target.closest('[data-act]');if(!el||el.disabled)return;
   if(el.dataset.confirm&&!el.dataset.armed){el.dataset.armed='1';const t=el.textContent;el.textContent='Πάτα ξανά για επιβεβαίωση';setTimeout(()=>{if(el.isConnected){el.textContent=t;delete el.dataset.armed}},3500);return}
-  const f=A[el.dataset.act];if(!f)return;el.disabled=true;try{await f(el.dataset.id,el)}finally{el.disabled=false}
+  if(!Object.hasOwn(A,el.dataset.act))return;const f=A[el.dataset.act];el.disabled=true;try{await f(el.dataset.id,el)}finally{el.disabled=false}
 });
-document.addEventListener('input',e=>{if(e.target.id==='rq'){const q=e.target.value.trim().toLowerCase();for(const c of document.querySelectorAll('.rules section.card')){const hit=!q||c.textContent.toLowerCase().includes(q);c.hidden=!hit;for(const li of c.querySelectorAll('li'))li.classList.toggle('hit',!!q&&li.textContent.toLowerCase().includes(q))}return}if(e.target.id==='fq'){S.mf.q=e.target.value;clearTimeout(S._q);S._q=setTimeout(()=>{render();const i=$('#fq');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
+document.addEventListener('input',e=>{if(e.target.id==='rq'){const q=e.target.value.trim().toLowerCase();for(const c of document.querySelectorAll('.rules section.card')){const hit=!q||c.textContent.toLowerCase().includes(q);c.hidden=!hit;for(const li of c.querySelectorAll('li'))li.classList.toggle('hit',!!q&&li.textContent.toLowerCase().includes(q))}return}if(e.target.id==='fq'){S.mf.q=e.target.value;S.mf.offset=0;clearTimeout(S._q);S._q=setTimeout(()=>{render();const i=$('#fq');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
 document.addEventListener('change',e=>{if(e.target.id==='simHuman')S.simHuman=e.target.checked;if(e.target.id==='avf'){const f=e.target.files[0];if(!f)return;if(f.size>2e6)return toast('Η φωτογραφία πρέπει να είναι έως 2MB');const P=S.prof?.[S.me]||{},path=`${S.me}/avatar-${Date.now()}.${f.type.split('/')[1]||'jpg'}`;toast('Ανέβασμα…');
     sb.storage.from('avatars').upload(path,f,{upsert:true,contentType:f.type}).then(({error})=>{if(error)return toast('Δεν ανέβηκε: '+error.message);const url=sb.storage.from('avatars').getPublicUrl(path).data.publicUrl;closeM();
-      w(()=>rpc('efel_update_profile',{p_name:'',p_efname:P.efootball_name||'',p_platform:P.platform||'',p_contact:P.contact||'',p_avatar:url}),'Η φωτογραφία σου ανέβηκε')})}if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}{const M={fg:'g',fpos:'pos',fpmin:'pmin',fpmax:'pmax',fomin:'omin',fomax:'omax',fsort:'sort',fav:'av'};if(M[e.target.id]){S.mf[M[e.target.id]]=e.target.value;S.mf.lim=60;render(true)}if(e.target.id==='faff'){S.mf.afford=e.target.checked;render(true)}}});
+      w(()=>rpc('efel_update_profile',{p_name:'',p_efname:P.efootball_name||'',p_platform:P.platform||'',p_contact:P.contact||'',p_avatar:url}),'Η φωτογραφία σου ανέβηκε')})}if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}{const M={fg:'g',fpos:'pos',fpmin:'pmin',fpmax:'pmax',fomin:'omin',fomax:'omax',fsort:'sort',fav:'av'};if(M[e.target.id]){S.mf[M[e.target.id]]=e.target.value;S.mf.offset=0;render(true)}if(e.target.id==='faff'){S.mf.afford=e.target.checked;render(true)}}});
+document.addEventListener('toggle',event=>{if(event.target.matches('.market-filters'))S.mf.filters=event.target.open},true);
 document.addEventListener('focusout',()=>setTimeout(()=>{if(S.dirty)render()},0));
-addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#ov').hidden)closeM()});
 addEventListener('hashchange',()=>{S.lu=null;S.sel=null;closeM();S.offerFor=S._keep||null;S._keep=null;render(true);scrollTo(0,0)});
 /* ================= ΕΜΠΕΙΡΙΑ: εφημερίδα, στιγμές, shortlist, ιστορία ================= */
 const LS={get(k,d){try{const v=localStorage.getItem('efel_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('efel_'+k,JSON.stringify(v))}catch(e){}}};
@@ -849,14 +923,31 @@ function mgrCard(uid){const p=S.prof?.[uid]||{},st=mgrStats(uid),mt=S.all.find(t
    ${uid===S.me?'<div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="profile">Επεξεργασία προφίλ</button></div>':''}</div>`}
 
 /* ---------- boot ---------- */
-let rt=null;const reload=()=>{clearTimeout(rt);rt=setTimeout(loadAll,400)};
-async function boot(){if(!sb){render();return}
-  const {data:{session}}=await sb.auth.getSession();S.me=session?.user?.id||null;render();
-  sb.auth.onAuthStateChange((ev,s)=>{const id=s?.user?.id||null;if(id!==S.me){S.me=id;S.loaded=false;render();loadAll()}});
-  if(!S.me)return;await loadAll();
-  sb.channel('efel').on('postgres_changes',{event:'*',schema:'public'},reload).subscribe();
-  setInterval(()=>{if(!document.hidden)loadAll()},90000);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadAll()})}
+let rt=null;const reload=event=>{if(event?.table==='players')priceCache=null;clearTimeout(rt);rt=setTimeout(loadAll,400)};
+async function boot(){
+  if(!sb){render();return}
+  let channel=null;
+  function sessionChanged(session){
+    const id=session?.user?.id||null;
+    if(id===S.me&&id)return;
+    if(channel){sb.removeChannel(channel);channel=null}
+    S.me=id;
+    priceCache=null;
+    S.owner=false;
+    S.loaded=false;
+    S.loadFailed=false;
+    render();
+    if(id){
+      loadAll();
+      channel=sb.channel('efel').on('postgres_changes',{event:'*',schema:'public'},reload).subscribe();
+    }
+  }
+  const {data:{session}}=await sb.auth.getSession();
+  sessionChanged(session);
+  sb.auth.onAuthStateChange((event,current)=>setTimeout(()=>sessionChanged(current),0));
+  setInterval(()=>{if(!document.hidden&&S.me)loadAll()},90000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.me)loadAll()});
+}
 /* ================= v4 UI (mockups Billy 26/11): header, Γραφείο, Μεταγραφές, Η ομάδα μου ================= */
 const IC={
   bell:'<svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.4-2h-4.8a2.5 2.5 0 0 0 2.4 2zm7-6V11a7 7 0 0 0-5.5-6.8V3a1.5 1.5 0 0 0-3 0v1.2A7 7 0 0 0 5 11v5l-2 2v1h18v-1z"/></svg>',
@@ -980,15 +1071,15 @@ function vHome(){
    <div class="org"><img src="shield2.jpg" alt="" style="border-radius:6px"><img src="billy.jpg" alt="">eFootball Evolution League · Διοργάνωση: Billy the Professor</div></div>`}
 
 /* ---- Μεταγραφές ---- */
-if(!S.sf)S.sf={q:'',av:'free',sort:'ovr',pos:'',g:'',omin:'',omax:'',pmax:'',afford:false,adv:false,lim:30};
-function scoutRows(f){const mt=myTeam(),q=f.q.trim().toLowerCase(),SL=shortSet(),own={};for(const t of S.all)for(const r of t.roster||[])own[r.pid]=t;
+if(!S.sf)S.sf={q:'',av:'free',sort:'ovr',pos:'',g:'',omin:'',omax:'',pmax:'',afford:false,adv:false,offset:0};
+function scoutRows(f){const mt=myTeam(),q=searchName(f.q),SL=shortSet();
   const free=S.fin?.free??mt?.budget??Infinity,n=v=>v===''||v==null?null:+v,omin=n(f.omin),omax=n(f.omax),pmax=n(f.pmax);
-  let rows=S.cat.filter(p=>{const o=own[p.id];if(q&&!p.name.toLowerCase().includes(q))return false;if(f.pos&&p.pos!==f.pos)return false;if(f.g&&grp(p.pos)!==f.g)return false;
+  let rows=S.cat.filter(p=>{const o=ownerOf(p.id);if(q&&!p.search.includes(q))return false;if(f.pos&&p.pos!==f.pos)return false;if(f.g&&grp(p.pos)!==f.g)return false;
     if(omin!=null&&p.ovr<omin)return false;if(omax!=null&&p.ovr>omax)return false;if(pmax!=null&&p.price>pmax*1000)return false;
     if(f.av==='short'&&!SL.has(p.id))return false;if(f.av==='free'&&o)return false;if(f.av==='human'&&!(o&&!o.is_auto))return false;if(f.av==='auto'&&!(o&&o.is_auto))return false;if(f.av==='mine'&&!(o&&mt&&o.id===mt.id))return false;
     if(f.afford&&!o&&p.price>free)return false;return true});
   const so={ovr:(a,b)=>b.ovr-a.ovr||b.price-a.price,pdesc:(a,b)=>b.price-a.price||b.ovr-a.ovr,pasc:(a,b)=>a.price-b.price||b.ovr-a.ovr,value:(a,b)=>(b.ovr/b.price)-(a.ovr/a.price)||b.ovr-a.ovr,name:(a,b)=>a.name.localeCompare(b.name)}[f.sort];
-  return so?rows.slice().sort(so):rows}
+  return so?rows.sort(so):rows}
 function scoutAct(p){const mt=myTeam(),o=ownerOf(p.id),c=cfg(),draft=c.phase!=='season';
   if(!mt)return `<button class="pbtn sm" data-act="pinfo" data-id="${esc(p.id)}">Κάρτα ${ico('chev')}</button>`;
   if(o&&o.id===mt.id)return '<span class="tag">Δικός σου</span>';
@@ -1018,7 +1109,7 @@ function vTransfers(){
   let body;
   if(tab==='world')body=`<div class="fchips" style="margin:0 0 10px">${[['all','Όλες'],['human','Managers'],['auto','Αυτόματοι']].map(([k,l])=>`<button class="fchip ${wf===k?'on':''}" data-act="trWorld" data-id="${k}">${l}</button>`).join('')}</div>${Wv.length?`<div class="ttiles">${Wv.map(tTile).join('')}</div>`:'<p class="empty">Καμία κίνηση ακόμα.</p>'}`;
   else{const arr=L[tab]||[];body=arr.length?`<div class="deals">${arr.map(o=>dealCard(o,actsFor(o))).join('')}</div>`:`<p class="tempty">${empty[tab]}</p>`}
-  const rows=scoutRows(f),shown=rows.slice(0,f.lim||30),tt=topTarget(rows),advOn=!!(f.g||f.omin||f.omax||f.pmax||f.afford),isTop=tt&&shortSet().has(tt.id);
+  const rows=scoutRows(f),offset=Math.min(f.offset||0,Math.max(0,Math.ceil(rows.length/30)-1)*30),shown=rows.slice(offset,offset+30),tt=offset?null:topTarget(rows),advOn=!!(f.g||f.omin||f.omax||f.pmax||f.afford),isTop=tt&&shortSet().has(tt.id);
   const top=tt?`<section class="toptg"><div class="tt-face" style="--tc:${esc(ownerOf(tt.id)?.color||'#1b3a6b')}">${faceImg(tt,96)}</div><div class="tt-b"><span class="ribbon">${ico('star')} ${isTop?'Κορυφαίος στόχος':'Κορυφαίος στη λίστα'}</span><button class="lnk tt-n" data-act="pinfo" data-id="${esc(tt.id)}">${esc(tt.name)}</button><div class="s-m"><span class="posb ${grp(tt.pos)}">${esc(tt.pos)}</span><span class="ovrb"><small>OVR</small><b>${tt.ovr}</b></span>${ownTag(tt)}</div></div>
      <div class="tt-v"><div><small>EFEL</small><b>${gp(tt.price)}</b></div><div><small>eFootball (περίπου)</small><b>${Number(efbVal(tt.ovr)).toLocaleString('el-GR')} GP</b></div></div><div class="tt-a">${scoutAct(tt)}</div></section>`:'';
   const chip=(k,l)=>`<button class="sch ${f.av===k?'on':''}" data-act="sav" data-id="${k}">${l}</button>`;
@@ -1036,7 +1127,7 @@ function vTransfers(){
     <div class="ssel"><label>Διαθεσιμότητα${sel('sav',[['free','Μόνο ελεύθεροι'],['all','Όλοι'],['human','Σε managers'],['auto','Σε αυτόματους'],['mine','Οι δικοί μου'],['short','★ Στόχοι μου']],f.av)}</label><label>Ταξινόμηση${sel('ssort',[['ovr','OVR ↓'],['pdesc','Αξία ↓'],['pasc','Αξία ↑'],['value','Αξία για τα λεφτά'],['name','Όνομα']],f.sort)}</label><label>Θέση${sel('spos',[['','Όλες οι θέσεις'],...POSL.map(x=>[x,x])],f.pos)}</label></div></section>
    ${top}
    <div class="slist">${shown.length?shown.filter(p=>!tt||p.id!==tt.id).map(scoutRow).join(''):`<p class="tempty">${f.av==='short'?'Η λίστα στόχων σου είναι άδεια. Πάτα το ☆ σε έναν παίκτη για να τον προσθέσεις.':'Κανένας παίκτης με αυτά τα φίλτρα.'}</p>`}</div>
-   ${rows.length>shown.length?`<div class="row" style="justify-content:center"><button class="sbtn" data-act="smore">Δείξε άλλους ${Math.min(30,rows.length-shown.length)} · ${rows.length.toLocaleString('el-GR')} συνολικά</button></div>`:''}
+   ${pager(rows.length,offset,30,'spage')}
    <p class="small muted">EFEL = η αξία του παίκτη στη λίγκα · eFootball = περίπου τι κοστίζει η standard κάρτα στο παιχνίδι. Κάθε πρόταση έχει έως ${maxR} γύρους αντιπροτάσεων. <button class="lnk" data-act="help" data-id="offers">Πώς λειτουργεί;</button> · <a href="#market">Πλήρης αγορά ›</a></p></div>`}
 
 /* ---- Η ομάδα μου ---- */
@@ -1075,14 +1166,14 @@ Object.assign(A,{
   gomkt(pid){S.mf.q=pl(pid).name;S.mf.av='free';location.hash='#market'},
   scout(){const s=$('#scout');if(s){s.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('#sq')?.focus({preventScroll:true}),350)}},
   sadv(){S.sf.adv=!S.sf.adv;render(true)},
-  sav(k){S.sf.av=k;S.sf.lim=30;render(true)},
-  sreset(){S.sf={...S.sf,q:'',g:'',omin:'',omax:'',pmax:'',afford:false,pos:'',lim:30};render(true)},
-  smore(){S.sf.lim=(S.sf.lim||30)+30;render(true)},
+  sav(k){S.sf.av=k;S.sf.offset=0;render(true)},
+  sreset(){S.sf={...S.sf,q:'',g:'',omin:'',omax:'',pmax:'',afford:false,pos:'',offset:0};render(true)},
+  spage(i){pageResults(S.sf,i,'#sq')},
   logout2(){closeM();A.logout()}
 });
 {const co=A.closeOffer;A.closeOffer=function(){if(!$('#ov').hidden&&$('#mb #offerBox'))closeM();return co.apply(this,arguments)}}
-document.addEventListener('input',e=>{if(e.target.id==='sq'){S.sf.q=e.target.value;S.sf.lim=30;clearTimeout(S._sq);S._sq=setTimeout(()=>{render(true);const i=$('#sq');if(i){i.focus({preventScroll:true});i.setSelectionRange(i.value.length,i.value.length)}},250)}});
-document.addEventListener('change',e=>{const M={sav:'av',ssort:'sort',spos:'pos',sg:'g',somin:'omin',somax:'omax',spmax:'pmax'};if(M[e.target.id]){S.sf[M[e.target.id]]=e.target.value;S.sf.lim=30;render(true)}if(e.target.id==='saff'){S.sf.afford=e.target.checked;render(true)}});
+document.addEventListener('input',e=>{if(e.target.id==='sq'){S.sf.q=e.target.value;S.sf.offset=0;clearTimeout(S._sq);S._sq=setTimeout(()=>{render(true);const i=$('#sq');if(i){i.focus({preventScroll:true});i.setSelectionRange(i.value.length,i.value.length)}},250)}});
+document.addEventListener('change',e=>{const M={sav:'av',ssort:'sort',spos:'pos',sg:'g',somin:'omin',somax:'omax',spmax:'pmax'};if(M[e.target.id]){S.sf[M[e.target.id]]=e.target.value;S.sf.offset=0;render(true)}if(e.target.id==='saff'){S.sf.afford=e.target.checked;render(true)}});
 document.addEventListener('scroll',e=>{const c=e.target;if(c.id!=='ncar')return;const i=Math.round(c.scrollLeft/Math.max(1,c.clientWidth));c.parentElement.querySelectorAll('.ndots button').forEach((b,k)=>b.classList.toggle('on',k===i))},true);
 
 boot();
