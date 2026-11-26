@@ -1,6 +1,6 @@
 # EFEL production upgrade
 
-The upgrade starts from main at 722f1d2, served as efel-ui06. The frontend remains static GitHub Pages with Supabase Auth, PostgREST, Realtime and RPCs. Competition rules and the data model remain in the existing SQL. The frontend release uses cache version efel-prod01.
+The upgrade starts from main at 722f1d2, served as efel-ui06. The frontend remains static GitHub Pages with Supabase Auth, PostgREST, Realtime and RPCs. Competition rules and the data model remain in the existing SQL. The frontend release uses cache version efel-prod02.
 
 ## Player media
 

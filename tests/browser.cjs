@@ -51,7 +51,9 @@ const client = (data, role) => {
 async function setup(browser, role, width) {
   const page = await browser.newPage({viewport:{width,height:900}});
   const errors = [];
+  const requests = [];
   page.on('pageerror', error=>errors.push(error.message));
+  page.on('request', request=>requests.push(request.url()));
   await page.addInitScript(({fn, fixture, role}) => {
     const data = structuredClone(fixture);
     data.profiles[0].is_admin = role==='admin';
@@ -70,7 +72,7 @@ async function setup(browser, role, width) {
   });
   await page.route('https://fonts.googleapis.com/**', route=>route.fulfill({body:'',contentType:'text/css'}));
   await page.goto(base,{waitUntil:'domcontentloaded'});
-  return {page,errors};
+  return {page,errors,requests};
 }
 
 async function test() {
@@ -86,11 +88,12 @@ async function test() {
       }
       return;
     }
-    const {page:guest,errors:guestErrors} = await setup(browser,'guest',390);
+    const {page:guest,errors:guestErrors,requests:guestRequests} = await setup(browser,'guest',390);
     await guest.getByRole('button',{name:'Σύνδεση με Google'}).click();
     assert.equal(await guest.evaluate(()=>window.loginRequest.provider),'google');
     if (screenshots) await guest.screenshot({path:screenshots+'/signin-390.png'});
     assert.deepEqual(guestErrors,[]);
+    assert.equal(guestRequests.some(url=>/\/(standard|details|media)\.json/.test(url)),false);
     await guest.close();
     const routes=['home','club','squad','table','matches','calendar','market','teams','transfers','paper','rules','more'];
     for (const width of [360,390,430,768,1024,1440,1920]) {
