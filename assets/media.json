@@ -29,5 +29,150 @@
       "source": "https://commons.wikimedia.org/wiki/File:Tyler_Adams_09052026_(4).jpg"
     }
   },
-  "clubs": {}
+  "clubs": {
+    "1": {
+      "name": "Real Madrid",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Spain%20-%20LaLiga/Real%20Madrid.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "2": {
+      "name": "Barcelona",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Spain%20-%20LaLiga/FC%20Barcelona.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "3": {
+      "name": "Manchester City",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Manchester%20City.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "4": {
+      "name": "Bayern München",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Germany%20-%20Bundesliga/Bayern%20Munich.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "5": {
+      "name": "Liverpool",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Liverpool%20FC.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "6": {
+      "name": "Arsenal",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Arsenal%20FC.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "7": {
+      "name": "Paris Saint-Germain",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/France%20-%20Ligue%201/Paris%20Saint-Germain.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "8": {
+      "name": "Inter",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/Inter%20Milan.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "9": {
+      "name": "Juventus",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/Juventus%20FC.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "10": {
+      "name": "Chelsea",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Chelsea%20FC.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "11": {
+      "name": "AC Milan",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/AC%20Milan.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "12": {
+      "name": "Atlético Madrid",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Spain%20-%20LaLiga/Atl%C3%A9tico%20de%20Madrid.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "13": {
+      "name": "Borussia Dortmund",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Germany%20-%20Bundesliga/Borussia%20Dortmund.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "14": {
+      "name": "Napoli",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Italy%20-%20Serie%20A/SSC%20Napoli.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "15": {
+      "name": "Manchester United",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Manchester%20United.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "16": {
+      "name": "Tottenham",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/England%20-%20Premier%20League/Tottenham%20Hotspur.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "17": {
+      "name": "Benfica",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Portugal%20-%20Liga%20Portugal/SL%20Benfica.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "18": {
+      "name": "FC Porto",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Portugal%20-%20Liga%20Portugal/FC%20Porto.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "19": {
+      "name": "Ajax",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Netherlands%20-%20Eredivisie/Ajax%20Amsterdam.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "20": {
+      "name": "Olympiacos",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/Olympiacos%20Piraeus.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "21": {
+      "name": "Panathinaikos",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/Panathinaikos.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "22": {
+      "name": "PAOK",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/PAOK%20Thessaloniki.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "23": {
+      "name": "AEK Athens",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Greece%20-%20Super%20League%201/AEK%20Athens.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    },
+    "24": {
+      "name": "Celtic",
+      "crestUrl": "https://raw.githubusercontent.com/luukhopman/football-logos/master/logos/Scotland%20-%20Scottish%20Premiership/Celtic%20FC.png",
+      "source": "https://github.com/luukhopman/football-logos",
+      "rights": "Club trademarks; identification only; no affiliation implied. Reuse rights not independently established."
+    }
+  }
 }
