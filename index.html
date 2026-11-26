@@ -586,6 +586,17 @@ body{background:radial-gradient(900px 420px at 80% -8%,rgba(246,184,28,.14),tran
 @media(max-width:350px){.moregrid .morebtn{grid-template-columns:24px minmax(0,1fr);column-gap:6px;padding:9px}}
 
 .efel-nav-icon{fill:none!important;stroke:currentColor;flex-shrink:0}.moregrid .morebtn{color:#e9eef7}.moregrid .morebtn .efel-nav-icon{width:28px;height:28px;fill:none!important}.moregrid .morebtn:focus-visible{outline:2px solid #f6b81c;outline-offset:2px}.moregrid .morebtn small:empty{display:none}
+
+/* Original EFEL panel artwork — shared menu and preview */
+.moregrid .morebtn{isolation:isolate;min-height:92px;background:linear-gradient(90deg,#101e35 0%,#101e35e8 55%,#101e3570 100%)}
+.moregrid .morebtn::before{content:"";position:absolute;z-index:-1;inset:0;background-position:right center;background-repeat:no-repeat;background-size:auto 130%;opacity:.46;pointer-events:none}
+.moregrid .morebtn[href="#home"]::before,.moregrid .morebtn[data-preview="home"]::before{background-image:url("assets/ui/home.svg")}
+.moregrid .morebtn[href="#club"]::before,.moregrid .morebtn[data-preview="club"]::before{background-image:url("assets/ui/club.svg")}
+.moregrid .morebtn[href="#market"]::before,.moregrid .morebtn[data-preview="market"]::before{background-image:url("assets/ui/market.svg")}
+.moregrid .morebtn[href="#transfers"]::before,.moregrid .morebtn[data-preview="transfers"]::before{background-image:url("assets/ui/transfers.svg")}
+.moregrid .morebtn[href="#matches"]::before,.moregrid .morebtn[data-preview="matches"]::before{background-image:url("assets/ui/matches.svg")}
+.moregrid .morebtn[href="#paper"]::before,.moregrid .morebtn[data-preview="paper"]::before{background-image:url("assets/ui/paper.svg")}
+.moregrid .morebtn:hover{background-color:#1a314e}.moregrid .morebtn>small{color:#c0d0e4}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
