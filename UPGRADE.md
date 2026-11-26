@@ -1,6 +1,6 @@
 # EFEL production upgrade
 
-The upgrade starts from main at 722f1d2, served as efel-ui06. The frontend remains static GitHub Pages with Supabase Auth, PostgREST, Realtime and RPCs. Competition rules and the data model remain in the existing SQL. The frontend release uses cache version efel-prod02.
+The upgrade starts from main at 722f1d2, served as efel-ui06. The frontend remains static GitHub Pages with Supabase Auth, PostgREST, Realtime and RPCs. Competition rules and the data model remain in the existing SQL. The frontend release uses cache version efel-prod03.
 
 ## Player media
 
@@ -31,3 +31,9 @@ Optional variables include CHROMIUM_PATH and EFEL_SCREENSHOTS. The harness suppl
 ## Security
 
 The deployment changes user-facing URL handling and fallback rendering, sign-in state transitions and admin navigation. These controls complement the existing RLS and RPC authorization. The production audit inspected all 41 signed-in SECURITY DEFINER findings, current table policies and RPC grants with read-only queries. No production user, roster, budget, fixture or match data was written for this release.
+
+The manager-removal function now requires a positive authorization result. Five caller contexts were exercised in isolated PostgreSQL. Production verification checked the installed function and its grants without executing a manager removal.
+
+Cards without their own artwork can display a face crop from another version with the same numeric base ID and exact catalogue name. The coverage report counts these crops separately from licensed portraits and directly assigned artwork.
+
+For roster research, run tools/review-identities.py with --rosters, --group and --review-log. It checks the exact in-game name and position from a PESDB record keyed by the game's player ID, then compares the biography, age, height and country. Failed checks require separate review before ingestion.

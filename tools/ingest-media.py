@@ -5,27 +5,17 @@ import html
 import io
 import json
 import re
-from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.parse import quote, unquote, urlencode, urlparse
-from urllib.request import Request, urlopen
+from media_http import read_url
 
 from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / 'assets/media.json'
-USER_AGENT = 'Mozilla/5.0 EFEL media maintenance (https://github.com/vktenidis/efel)'
 VARIANT_BLOCK = 1 << 24
 LICENSE = re.compile(r'https://creativecommons\.org/(?:licenses/by(?:-sa)?/[1234]\.[05]|publicdomain/zero/1\.0)/?')
-
-
-def read_url(url, limit=25_000_000):
-    with urlopen(Request(url, headers={'User-Agent': USER_AGENT}), timeout=18) as response:
-        data = response.read(limit + 1)
-    if len(data) > limit:
-        raise ValueError('remote file exceeds size limit')
-    return data
 
 
 def metadata(filename):
@@ -85,6 +75,8 @@ def report(cards, media, previous, rosters, failures):
     portrait = set(media['players'])
     artwork = {row[0] for row in cards if len(row) > 4 and row[4]}
     key = lambda value: int(value[1:]) % VARIANT_BLOCK
+    artwork_keys = {(key(row[0]), row[1]) for row in cards if row[0] in artwork}
+    variant_faces = {row[0] for row in cards if row[0] not in artwork and (key(row[0]), row[1]) in artwork_keys}
     identities = {key(value) for value in ids}
     names = {}
     for row in cards:
@@ -93,6 +85,8 @@ def report(cards, media, previous, rosters, failures):
     return {'groups': {label: {'cards': len(values), 'artwork': len(artwork & values),
                                'portraits_before_mapped': len(previous & values), 'portraits_after': len(portrait & values),
                                'artwork_or_portrait': len((portrait | artwork) & values),
+                               'variant_artwork_crops': len(values & variant_faces),
+                               'any_identified_image': len(values & (portrait | artwork | variant_faces)),
                                'missing_portrait': len(values - portrait)}
                        for label, values in groups.items()},
             'estimated_unique_by_base_id': len(identities),

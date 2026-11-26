@@ -578,5 +578,194 @@
   "s59458": {
     "name": "Jorginho",
     "article": "Jorginho (footballer, born December 1991)"
+  },
+  "s132157": {
+    "name": "Brian Brobbey",
+    "article": "Brian Brobbey",
+    "gameRecord": "https://pesdb.net/efootball/?id=132157",
+    "position": "CF",
+    "nationality": "Netherlands",
+    "birthDate": "2002-02-01",
+    "heightCm": 181
+  },
+  "s139957": {
+    "name": "Jayden Oosterwolde",
+    "article": "Jayden Oosterwolde",
+    "gameRecord": "https://pesdb.net/efootball/?id=139957",
+    "position": "CB",
+    "nationality": "Netherlands",
+    "birthDate": "2001-04-26",
+    "heightCm": 189
+  },
+  "s113503": {
+    "name": "Ludovic Ajorque",
+    "article": "Ludovic Ajorque",
+    "gameRecord": "https://pesdb.net/efootball/?id=113503",
+    "position": "CF",
+    "nationality": "France",
+    "birthDate": "1994-02-25",
+    "heightCm": 196
+  },
+  "s118353": {
+    "name": "Nicolás de la Cruz",
+    "article": "Nicolás de la Cruz",
+    "gameRecord": "https://pesdb.net/efootball/?id=118353",
+    "position": "CMF",
+    "nationality": "Uruguay",
+    "birthDate": "1997-06-01",
+    "heightCm": 167
+  },
+  "s138699": {
+    "name": "Raphael Onyedika",
+    "article": "Raphael Onyedika",
+    "gameRecord": "https://pesdb.net/efootball/?id=138699",
+    "position": "DMF",
+    "nationality": "Nigeria",
+    "birthDate": "2001-04-19",
+    "heightCm": 184
+  },
+  "s116138": {
+    "name": "Marcus Ingvartsen",
+    "article": "Marcus Ingvartsen",
+    "gameRecord": "https://pesdb.net/efootball/?id=116138",
+    "position": "CF",
+    "nationality": "Denmark",
+    "birthDate": "1996-01-04",
+    "heightCm": 186
+  },
+  "s173008": {
+    "name": "Orlando Gill",
+    "article": "Orlando Gill",
+    "gameRecord": "https://pesdb.net/efootball/?id=173008",
+    "position": "GK",
+    "nationality": "Paraguay",
+    "birthDate": "2000-06-11",
+    "heightCm": 198
+  },
+  "s154109": {
+    "name": "Mohanad Lasheen",
+    "article": "Mohanad Lasheen",
+    "gameRecord": "https://pesdb.net/efootball/?id=154109",
+    "position": "DMF",
+    "nationality": "Egypt",
+    "birthDate": "1996-05-29",
+    "heightCm": 179
+  },
+  "s127802": {
+    "name": "Mohamed Ihattaren",
+    "article": "Mohamed Ihattaren",
+    "gameRecord": "https://pesdb.net/efootball/?id=127802",
+    "position": "AMF",
+    "nationality": "Netherlands",
+    "birthDate": "2002-02-12",
+    "heightCm": 183
+  },
+  "s100414": {
+    "name": "Patrick Ciurria",
+    "article": "Patrick Ciurria",
+    "gameRecord": "https://pesdb.net/efootball/?id=100414",
+    "position": "RMF",
+    "nationality": "Italy",
+    "birthDate": "1995-02-09",
+    "heightCm": 178
+  },
+  "s137600": {
+    "name": "Amine El Ouazzani",
+    "article": "Amine El Ouazzani",
+    "gameRecord": "https://pesdb.net/efootball/?id=137600",
+    "position": "CF",
+    "nationality": "Morocco",
+    "birthDate": "2001-07-15",
+    "heightCm": 188
+  },
+  "s152242": {
+    "name": "Jacopo Fazzini",
+    "article": "Jacopo Fazzini",
+    "gameRecord": "https://pesdb.net/efootball/?id=152242",
+    "position": "CMF",
+    "nationality": "Italy",
+    "birthDate": "2003-03-16",
+    "heightCm": 178
+  },
+  "s142065": {
+    "name": "Marc-Oliver Kempf",
+    "article": "Marc-Oliver Kempf",
+    "gameRecord": "https://pesdb.net/efootball/?id=142065",
+    "position": "CB",
+    "nationality": "Germany",
+    "birthDate": "1995-01-28",
+    "heightCm": 186
+  },
+  "s107957": {
+    "name": "Matthieu Udol",
+    "article": "Matthieu Udol",
+    "gameRecord": "https://pesdb.net/efootball/?id=107957",
+    "position": "LB",
+    "nationality": "France",
+    "birthDate": "1996-03-20",
+    "heightCm": 178
+  },
+  "s118555": {
+    "name": "Michael Olunga",
+    "article": "Michael Olunga",
+    "gameRecord": "https://pesdb.net/efootball/?id=118555",
+    "position": "CF",
+    "nationality": "Kenya",
+    "birthDate": "1994-03-26",
+    "heightCm": 193
+  },
+  "s118895": {
+    "name": "Roberto Alvarado",
+    "article": "Roberto Alvarado",
+    "gameRecord": "https://pesdb.net/efootball/?id=118895",
+    "position": "RWF",
+    "nationality": "Mexico",
+    "birthDate": "1998-09-07",
+    "heightCm": 176
+  },
+  "s124236": {
+    "name": "Andrea Colpani",
+    "article": "Andrea Colpani",
+    "gameRecord": "https://pesdb.net/efootball/?id=124236",
+    "position": "AMF",
+    "nationality": "Italy",
+    "birthDate": "1999-05-11",
+    "heightCm": 184
+  },
+  "s132684": {
+    "name": "Daniel Maldini",
+    "article": "Daniel Maldini",
+    "gameRecord": "https://pesdb.net/efootball/?id=132684",
+    "position": "AMF",
+    "nationality": "Italy",
+    "birthDate": "2001-10-11",
+    "heightCm": 188
+  },
+  "s137267": {
+    "name": "Francisco Moura",
+    "article": "Francisco Moura",
+    "gameRecord": "https://pesdb.net/efootball/?id=137267",
+    "position": "LB",
+    "nationality": "Portugal",
+    "birthDate": "1999-08-16",
+    "heightCm": 182
+  },
+  "s140333": {
+    "name": "Gabri Veiga",
+    "article": "Gabri Veiga",
+    "gameRecord": "https://pesdb.net/efootball/?id=140333",
+    "position": "AMF",
+    "nationality": "Spain",
+    "birthDate": "2002-05-27",
+    "heightCm": 184
+  },
+  "s38635": {
+    "name": "Jasper Cillessen",
+    "article": "Jasper Cillessen",
+    "gameRecord": "https://pesdb.net/efootball/?id=38635",
+    "position": "GK",
+    "nationality": "Netherlands",
+    "birthDate": "1989-04-22",
+    "heightCm": 185
   }
 }
