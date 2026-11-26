@@ -23,10 +23,10 @@ const tname=id=>esc(team(id)?.name||'—');
 
 // Optional curated image catalog. Only local, explicitly approved assets are accepted.
 let MEDIA={players:{},clubs:{}};
-function mediaPath(entry){const p=entry?.path;return typeof p==='string'&&/^assets\/(players|clubs)\/[a-zA-Z0-9_-]+\.(webp|png|jpg|svg)$/.test(p)?p:null}
+function mediaPath(entry){const p=entry?.path;if(typeof entry?.commonsFile==='string'&&entry.author&&entry.license&&/^[^/\\<>]+\.(jpg|jpeg|png|webp)$/i.test(entry.commonsFile))return 'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(entry.commonsFile.replaceAll(' ','_'))+'?width=240';return typeof p==='string'&&/^assets\/(players|clubs)\/[a-zA-Z0-9_-]+\.(webp|png|jpg|svg)$/.test(p)?p:null}
 function playerPortrait(p){const entry=MEDIA.players?.[p.id];return entry?.name===p.name?mediaPath(entry):null}
 function clubPortrait(t){const entry=MEDIA.clubs?.[t.id];return entry?.name===t.name?mediaPath(entry):null}
-function mediaImage(path,alt,cls,w,h,fallback){return `<span class="media-wrap" style="width:${w}px;height:${h}px">${fallback}<img class="${cls}" src="${esc(path)}" alt="${esc(alt)}" width="${w}" height="${h}" loading="lazy" decoding="async" onerror="this.remove()"></span>`}
+function mediaImage(path,alt,cls,w,h,fallback){return `<span class="media-wrap" style="width:${w}px;height:${h}px">${fallback}<img class="${cls}" src="${esc(path)}" alt="${esc(alt)}" width="${w}" height="${h}" referrerpolicy="no-referrer" loading="lazy" decoding="async" onerror="this.remove()"></span>`}
 fetch('assets/media.json').then(r=>r.ok?r.json():null).then(d=>{if(d&&typeof d==='object'){MEDIA=d;if(S.loaded)render()}}).catch(()=>{});
 
 function crest(t,s=40){if(!t)return '';const path=clubPortrait(t);if(path)return mediaImage(path,t.name,'club-media',s,Math.round(s*1.15),crest({...t,id:null},s));const c=/^#[0-9a-f]{6}$/i.test(t.color||'')?t.color:'#888',k=(t.order||0)%5,id='cp'+esc(t.id);
