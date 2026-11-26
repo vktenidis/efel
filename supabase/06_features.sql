@@ -206,9 +206,8 @@ begin
     return;
   end if;
   if coalesce(o.turn, o.to_club) <> c then raise exception 'Περιμένεις απάντηση από τον άλλο σύλλογο.'; end if;
-  if not (cfg('window_open') #>> '{}')::boolean then raise exception 'Η μεταγραφική περίοδος είναι κλειστή: η πρόταση μένει ανοιχτή ως τη λήξη της.'; end if;
   if not p_terms then raise exception 'Αποδέξου τους όρους: η μεταγραφή είναι οριστική.'; end if;
-  perform efel_execute_offer(o);
+  perform efel_close_deal(o);
   perform efel_log('offer_accepted', jsonb_build_object('offer', p_offer, 'rule', cfg('rule_version')));
 end $$;
 
@@ -234,7 +233,7 @@ begin
       ask := (ceil(greatest(r.paid, r.price) * 1.15 / 1000) * 1000)::int;
       offered := o.gp + coalesce((select price from players where id = o.swap_player), 0);
       if offered >= ask then
-        begin perform efel_execute_offer(o); k := k + 1;
+        begin perform efel_close_deal(o); k := k + 1;
         exception when others then
           update offers set status='rejected', decided_at=now(), note = format('Η %s δεν μπορεί να ολοκληρώσει: %s', nm, sqlerrm) where id=o.id;
         end;
@@ -253,7 +252,7 @@ begin
       perform efel_auto_make_room(o.from_club, o.player_id, o.swap_player);
       e := efel_check_add(o.from_club, o.player_id, o.gp, o.swap_player);
       if o.gp <= maxpay and e = '' then
-        begin perform efel_execute_offer(o); k := k + 1;
+        begin perform efel_close_deal(o); k := k + 1;
         exception when others then
           update offers set status='rejected', decided_at=now(), note = format('Η %s δεν μπορεί να ολοκληρώσει: %s', nm, sqlerrm) where id=o.id;
         end;
@@ -304,7 +303,6 @@ create or replace function efel_auto_market() returns int
 language plpgsql security definer set search_path=public as $$
 declare o offers; a record; r record; sw bigint; need text; have int; tgt int; g int; k int := 0; reason text;
 begin
-  if not (cfg('window_open') #>> '{}')::boolean then return 0; end if;
   -- 1. απαντήσεις και αντιπροτάσεις των αυτόματων (efel_npc_negotiate)
   k := k + efel_npc_negotiate();
   -- 2. ενδιαφέρον: κάθε αυτόματος σύλλογος με κενό σε θέση κάνει το πολύ 1 πρόταση/μέρα
@@ -372,6 +370,7 @@ language plpgsql security definer set search_path=public as $$
 declare m record; hs numeric; as_ numeric; n_sim int := 0; n_exp int; n_lock int; n_round int := 0; n_mkt int; n_win int;
 begin
   n_win := efel_window_sync();
+  if (cfg('window_open') #>> '{}')::boolean then perform efel_execute_agreed(); end if;
   for m in select mt.* from matches mt join leagues l on l.id = mt.league_id
             where l.kind = 'auto' and mt.status = 'open' and mt.season_no = cfg_int('season_no')
               and efel_md_date(mt.md) <= current_date and (cfg('phase') #>> '{}') = 'season'
@@ -399,3 +398,23 @@ revoke execute on function efel_expire_contracts(int), efel_counter_internal(off
 grant execute on function efel_update_profile(text,text,text,text,text), efel_renew(bigint,int),
   efel_counter_offer(int,int,bigint,text), efel_propose_slots(int,timestamptz[]), efel_pick_slot(int,timestamptz),
   efel_window_dates() to authenticated;
+
+-- ---------- Screenshot απόδειξης σκορ ----------
+alter table matches add column if not exists proof_url text;
+create or replace function efel_attach_proof(p_match int, p_url text) returns void
+language plpgsql security definer set search_path=public as $$
+declare c int := efel_require_club(); m matches;
+begin
+  select * into m from matches where id = p_match for update;
+  if c not in (m.home, m.away) then raise exception 'Δεν είναι δικός σου αγώνας.'; end if;
+  if p_url !~ '^https://[a-z0-9]+\.supabase\.co/storage/v1/object/public/proofs/' then raise exception 'Μη έγκυρη εικόνα.'; end if;
+  update matches set proof_url = p_url, updated_at = now() where id = p_match;
+end $$;
+revoke execute on function efel_attach_proof(int,text) from public, anon;
+grant execute on function efel_attach_proof(int,text) to authenticated;
+insert into storage.buckets(id, name, public, file_size_limit, allowed_mime_types) values ('proofs','proofs', true, 4194304, array['image/jpeg','image/png','image/webp']) on conflict (id) do nothing;
+drop policy if exists efel_proof_write on storage.objects;
+create policy efel_proof_write on storage.objects for insert to authenticated
+  with check (bucket_id = 'proofs' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists efel_proof_read on storage.objects;
+create policy efel_proof_read on storage.objects for select to authenticated using (bucket_id = 'proofs' and (storage.foldername(name))[1] = auth.uid()::text);
