@@ -1100,6 +1100,17 @@
       "identity": "Andrew Robertson",
       "restrictions": "personality"
     },
+    "s104680": {
+      "name": "Dominic Solanke",
+      "path": "assets/players/s104680.webp",
+      "commonsFile": "Dominic_Solanke_at_Avatar_fire_and_ash_premiere_London_2025.jpg",
+      "author": "Amy Martin Photography",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Dominic_Solanke_at_Avatar_fire_and_ash_premiere_London_2025.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Dominic Solanke",
+      "restrictions": ""
+    },
     "s114235": {
       "name": "Federico Chiesa",
       "path": "assets/players/s114235.webp",
@@ -1133,6 +1144,17 @@
       "identity": "Harry Maguire",
       "restrictions": ""
     },
+    "s101115": {
+      "name": "Jack Grealish",
+      "path": "assets/players/s101115.webp",
+      "commonsFile": "ManCity20240722-017_(cropped).jpg",
+      "author": "Hameltion",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:ManCity20240722-017_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jack Grealish",
+      "restrictions": ""
+    },
     "s114036": {
       "name": "James Maddison",
       "path": "assets/players/s114036.webp",
@@ -1144,6 +1166,39 @@
       "identity": "James Maddison",
       "restrictions": ""
     },
+    "s47787": {
+      "name": "João Cancelo",
+      "path": "assets/players/s47787.webp",
+      "commonsFile": "Joao_Cancelo_Croatia_v_Portugal_2_July_2026-002.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Joao_Cancelo_Croatia_v_Portugal_2_July_2026-002.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "João Cancelo",
+      "restrictions": "personality"
+    },
+    "s40352": {
+      "name": "Neymar Jr",
+      "path": "assets/players/s40352.webp",
+      "commonsFile": "Neymar_Junior_Brazil_V_Morocco_13_June_2026-40.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Neymar_Junior_Brazil_V_Morocco_13_June_2026-40.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Neymar",
+      "restrictions": "personality"
+    },
+    "s111484": {
+      "name": "Riccardo Orsolini",
+      "path": "assets/players/s111484.webp",
+      "commonsFile": "Riccardo_Orsolini.jpg",
+      "author": "Pietro Luca Cassarino",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Riccardo_Orsolini.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Riccardo Orsolini",
+      "restrictions": ""
+    },
     "s59458": {
       "name": "Jorginho",
       "path": "assets/players/s59458.webp",
@@ -1153,6 +1208,17 @@
       "source": "https://commons.wikimedia.org/wiki/File:Jorginho,_2021_(cropped).jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Jorginho (footballer, born December 1991)",
+      "restrictions": ""
+    },
+    "s127386": {
+      "name": "Khéphren Thuram",
+      "path": "assets/players/s127386.webp",
+      "commonsFile": "RC_Lens_-_OGC_Nice_(10-04-2022)_6_(cropped).jpg",
+      "author": "Supporterhéninois",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:RC_Lens_-_OGC_Nice_(10-04-2022)_6_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Khéphren Thuram",
       "restrictions": ""
     },
     "s113066": {
@@ -1209,6 +1275,17 @@
       "identity": "Aaron Ramsdale",
       "restrictions": ""
     },
+    "s132157": {
+      "name": "Brian Brobbey",
+      "path": "assets/players/s132157.webp",
+      "commonsFile": "Brian_Brobbey.jpg",
+      "author": "Timmy96",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Brian_Brobbey.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Brian Brobbey",
+      "restrictions": ""
+    },
     "s108200": {
       "name": "Gabriel Jesus",
       "path": "assets/players/s108200.webp",
@@ -1231,6 +1308,28 @@
       "identity": "Iago Aspas",
       "restrictions": ""
     },
+    "s139957": {
+      "name": "Jayden Oosterwolde",
+      "path": "assets/players/s139957.webp",
+      "commonsFile": "Jayden_Oosterwolde_24_Fenerbahçe_20260805_(2)_(cropped).JPG",
+      "author": "User:Zafer",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Jayden_Oosterwolde_24_Fenerbah%C3%A7e_20260805_(2)_(cropped).JPG",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jayden Oosterwolde",
+      "restrictions": "personality"
+    },
+    "s113503": {
+      "name": "Ludovic Ajorque",
+      "path": "assets/players/s113503.webp",
+      "commonsFile": "Ajorque_asse_sb_2425.png",
+      "author": "Paté kroute",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Ajorque_asse_sb_2425.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Ludovic Ajorque",
+      "restrictions": ""
+    },
     "s142065": {
       "name": "Marc-Oliver Kempf",
       "path": "assets/players/s142065.webp",
@@ -1240,6 +1339,28 @@
       "source": "https://commons.wikimedia.org/wiki/File:Marc-Oliver_Kempf.jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Marc-Oliver Kempf",
+      "restrictions": ""
+    },
+    "s107957": {
+      "name": "Matthieu Udol",
+      "path": "assets/players/s107957.webp",
+      "commonsFile": "RC_Lens_-_FC_Metz_(14-03-2021)_51.jpg",
+      "author": "Supporterhéninois",
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:RC_Lens_-_FC_Metz_(14-03-2021)_51.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Matthieu Udol",
+      "restrictions": ""
+    },
+    "s118353": {
+      "name": "Nicolás de la Cruz",
+      "path": "assets/players/s118353.webp",
+      "commonsFile": "Nicolás_de_la_Cruz.jpg",
+      "author": "Agencia de Noticias ANDES",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Nicol%C3%A1s_de_la_Cruz.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Nicolás de la Cruz",
       "restrictions": ""
     },
     "s118895": {
@@ -1253,6 +1374,28 @@
       "identity": "Roberto Alvarado",
       "restrictions": ""
     },
+    "s124236": {
+      "name": "Andrea Colpani",
+      "path": "assets/players/s124236.webp",
+      "commonsFile": "AC_Monza_2022_Serie_A_celebration_24_(Colpani).jpg",
+      "author": "Nehme1499",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:AC_Monza_2022_Serie_A_celebration_24_(Colpani).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Andrea Colpani",
+      "restrictions": ""
+    },
+    "s137267": {
+      "name": "Francisco Moura",
+      "path": "assets/players/s137267.webp",
+      "commonsFile": "FC_Salzburg_gegen_FC_Porto_(2025-09-25_UEFA_Euro_League_)_100_(Francisco_Moura).jpg",
+      "author": "Werner100359",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:FC_Salzburg_gegen_FC_Porto_(2025-09-25_UEFA_Euro_League_)_100_(Francisco_Moura).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Francisco Moura",
+      "restrictions": ""
+    },
     "s100299": {
       "name": "Kieran Trippier",
       "path": "assets/players/s100299.webp",
@@ -1263,6 +1406,17 @@
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Kieran Trippier",
       "restrictions": ""
+    },
+    "s116138": {
+      "name": "Marcus Ingvartsen",
+      "path": "assets/players/s116138.webp",
+      "commonsFile": "Marcus_Ingvartsen_Red_Bulls_v_San_Diego_10_October_2026-063.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Marcus_Ingvartsen_Red_Bulls_v_San_Diego_10_October_2026-063.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Marcus Ingvartsen",
+      "restrictions": "personality"
     }
   },
   "clubs": {

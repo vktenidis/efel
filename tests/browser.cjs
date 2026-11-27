@@ -10,7 +10,7 @@ const baseline = process.env.EFEL_BASELINE === '1';
 const fixture = {
   profiles: [{id: 'qa-user', display_name: 'EFEL QA Manager', is_admin: false}],
   config: Object.entries({phase:'draft',season_no:1,window_open:false,bids_per_round:8,
-    budget:600000,win_bonus:10000,draw_bonus:3000,prizes:[],activation_hours:72})
+    efel_ratio:3,efb_gp:{"65":7000,"85":450000},budget:600000,win_bonus:10000,draw_bonus:3000,prizes:[],activation_hours:72})
     .map(([key,value])=>({key,value})),
   leagues: [{id:1,name:'EFEL Premier',kind:'human'}],
   players: [...Array.from({length:1000},(_,i)=>({id:i+1,price:6000})),{id:110718,price:65000}],
@@ -63,6 +63,9 @@ async function setup(browser, role, width) {
   await page.addInitScript(({fn, fixture, role}) => {
     const data = structuredClone(fixture);
     data.profiles[0].is_admin = role==='admin';
+    for(const [index,name] of ['Arsenal','Chelsea','Inter','Liverpool','Manchester City','Napoli'].entries()){
+      data.clubs.push({id:index+3,league_id:1,name,abbr:name.slice(0,3).toUpperCase(),budget:600000,status:'active'});
+    }
     (0,eval)(fn)(data,role);
     localStorage.setItem('onb_qa-user','1');
   },{fn:client.toString(),fixture,role});
@@ -109,6 +112,15 @@ async function test() {
         await page.evaluate(route=>{location.hash=route},route);
         await page.waitForSelector('#view[data-route="'+route+'"]');
         await page.waitForFunction(()=>!document.querySelector('.signin')&&document.querySelector('main').innerText.length>60);
+        if(route==='home'){
+          const rank=page.locator('.skp>b');
+          assert.equal(await rank.textContent(),'8η');
+          const gap=await rank.evaluate(el=>{
+            const digit=new Range();digit.selectNodeContents(el.firstChild);
+            return el.querySelector('sup').getBoundingClientRect().left-digit.getBoundingClientRect().right;
+          });
+          assert.ok(gap>0,'rank suffix overlaps the numeral at '+width);
+        }
         const overflowing=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
         assert.equal(overflowing,false,route+' overflows at '+width);
         if (screenshots&&[390,1440].includes(width)&&['home','market','transfers'].includes(route)) {
@@ -134,6 +146,9 @@ async function test() {
         const dialog=page.getByRole('dialog');
         await dialog.waitFor();
         await dialog.getByText('65.000 GP',{exact:true}).first().waitFor();
+        await dialog.getByText('39 εκατ. €',{exact:true}).first().waitFor();
+        await dialog.locator('.e5-face.is-photo img').evaluate(img=>img.decode());
+        if(screenshots)await page.screenshot({path:screenshots+'/player-390.png'});
         assert.equal(await page.locator('#view').evaluate(el=>el.inert),true);
         await page.keyboard.press('Escape');
         assert.equal(await page.getByRole('dialog').count(),0);
@@ -195,9 +210,10 @@ async function test() {
     await transfer.locator('#sq').fill('Harry Kane');
     await transfer.locator('[data-act=offerM][data-id=s47287]').first().click();
     await transfer.locator('#ogp').fill('60000');
+    assert.equal(await transfer.locator('output[for=ogp]').innerText(),'36 εκατ. €');
     await transfer.locator('[data-act=sendOffer]').click();
     await transfer.locator('[data-act=go]').click();
-    await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_make_offer'&&args.p_player===47287));
+    await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_make_offer'&&args.p_player===47287&&args.p_gp===60000));
     assert.deepEqual(transferErrors,[]);
     await transfer.close();
     const {page:admin,errors}=await setup(browser,'admin',1440);

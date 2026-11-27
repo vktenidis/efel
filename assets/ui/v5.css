@@ -188,3 +188,49 @@ textarea{width:100%;box-sizing:border-box}
 .cal-booked {color:var(--gold);font-size:.7rem}
 .cal-availability {color:#74d9c7;font-size:.7rem}
 @media(max-width:600px){.cal-availability span{display:none}}
+
+/* Club office and the transfer-value display */
+.sum .stad {background:#0a1621 url(tunnel.webp) 57% 53% / cover}
+.sum .stad::after {background:linear-gradient(90deg,#07122221 45%,#0a182ed9),linear-gradient(0deg,#04121e75,transparent 52%)}
+.sum-k .skp b {display:inline-flex;align-items:flex-start;gap:.09em;white-space:nowrap;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:0}
+.sum-k .skp sup {position:static;align-self:flex-start;margin:.15em 0 0;font:700 .44em/1 "Fira Sans",sans-serif;vertical-align:baseline;transform:none}
+.sum-k>div {min-width:0}
+.sum-r .lbl {color:#e4ecf3;line-height:1.2;overflow-wrap:anywhere}
+.league-money {display:inline-flex;flex-direction:column;align-items:inherit;gap:.12em;vertical-align:middle;line-height:1.18;font-variant-numeric:tabular-nums;max-width:100%}
+.league-money strong {color:inherit;font-size:1em;line-height:1.15}
+.league-money small,.s-v .league-money small,.tt-v .league-money small {color:#b3c4d7;font:500 .79em/1.2 "Fira Sans",sans-serif;text-transform:none;letter-spacing:0}
+.mk .league-money {align-items:flex-end}
+.gp-preview {display:block;color:#a9dbc9;font-variant-numeric:tabular-nums;margin-top:.3rem}
+.exchange-note {font-size:.84rem;color:#bfd1df;line-height:1.5}
+.original-art {padding:.5rem 0;font-size:.85rem}
+.original-art summary {cursor:pointer}
+.original-art .original-card {margin-top:.5rem}
+.pcard:has(.ecard) {background:linear-gradient(100deg,#152537dd,#081421f5),url(club.webp) center / cover;column-gap:clamp(10px,3vw,24px)}
+.pcard:has(.ecard) h3 {margin:0;text-wrap:balance;overflow-wrap:anywhere}
+.pcard:has(.ecard) .s {line-height:1.35}
+.pcard:has(.ecard) .league-money {margin-left:.2em}
+
+/* One picture field for a photographic portrait, an artwork crop or the fallback. */
+.ecard.e5 {--trim:#9aaec3;--ink:#f1f4f6;color:var(--ink);background:var(--trim);border-radius:calc(10px*var(--s));padding:calc(2px*var(--s));box-shadow:0 5px 14px #0007}
+.ecard.e5.t-star {--trim:#e7bb60}.ecard.e5.t-top {--trim:#d1ad74}
+.ecard.e5.t-core {--trim:#96b6c4}.ecard.e5.t-squad {--trim:#c89372}.ecard.e5.t-base {--trim:#8ba1b3}
+.ecard.e5.t-star,.ecard.e5.t-top,.ecard.e5.t-core,.ecard.e5.t-squad,.ecard.e5.t-base {--ink:#f0f4f8}
+.ecard.e5 .e5-in {isolation:isolate;border-radius:calc(8px*var(--s));background:linear-gradient(0deg,#101f2a 30%,#15293b9c 67%,#10203299),url(matches.webp) 57% 38% / cover}
+.e5-in::after {content:"";position:absolute;z-index:1;pointer-events:none;inset:0;background:linear-gradient(0deg,#0c1722 12%,#101e2c 34%,transparent 54%),linear-gradient(90deg,#08121bd9 0%,#0b17207a 20%,transparent 44%)}
+.ecard.e5 .e5-glow,.ecard.e5 .e5-foil,.ecard.e5 .e5-shine {display:none}
+.ecard.e5 .e5-face {inset:0 0 auto auto;top:3%;width:79%;height:63%;line-height:0;display:grid;place-items:center;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 15%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 15%)}
+.ecard.e5 .e5-face.is-photo {inset:0 0 auto auto;top:0;width:86%;height:69%;background:transparent}
+.e5-face.is-photo .media-wrap {width:100%!important;height:100%!important;border-radius:0;overflow:hidden}
+.e5-face.is-photo img.player-media {width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+.e5-face.is-art {mask-image:radial-gradient(ellipse at 55% 43%,black 42%,transparent 78%)!important;-webkit-mask-image:radial-gradient(ellipse at 55% 43%,black 42%,transparent 78%)!important}
+.e5-face.is-fallback {opacity:.82}
+.e5-l .e5-ovr,.e5-l .e5-pos {color:white;text-shadow:0 2px 6px #07121c}
+.e5-l small {color:var(--trim);font:bold calc(9px*var(--s))/1 "Fira Sans",sans-serif;letter-spacing:.07em}
+.ecard.e5 .e5-mark {z-index:2;color:#fff;text-shadow:0 1px 5px #000}
+.ecard.e5 .e5-name {top:60%;min-width:0}
+.ecard.e5 .e5-tier {color:var(--trim)}
+.e5-foot:has(.card-fee){grid-template-columns:1.6fr 1fr}
+.e5-foot .card-fee b {font-size:calc(13px*var(--s));font-variant-numeric:tabular-nums}
+
+.box :is(.original-art,.media-credit)>summary {color:#c3d9e9;opacity:1;cursor:pointer;min-height:36px;align-content:center}
+@media(max-width:600px){.home4 .pbtn[data-act="mcard"] {max-width:100%;white-space:normal;min-height:44px;line-height:1.15}}
