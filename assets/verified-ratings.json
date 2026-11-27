@@ -1,0 +1,52 @@
+{
+  "s101520": {
+    "base": 83,
+    "max": 93,
+    "source": "https://pesdb.net/efootball/players/david-raya-101520"
+  },
+  "s110718": {
+    "base": 85,
+    "max": 95,
+    "source": "https://pesdb.net/efootball/players/kylian-mbappe-110718"
+  },
+  "s117047": {
+    "base": 84,
+    "max": 95,
+    "source": "https://pesdb.net/efootball/players/vinicius-junior-117047"
+  },
+  "s133543": {
+    "base": 84,
+    "max": 95,
+    "source": "https://pesdb.net/efootball/players/erling-haaland-133543"
+  },
+  "s135067": {
+    "base": 84,
+    "max": 95,
+    "source": "https://pesdb.net/efootball/players/vitinha-135067"
+  },
+  "s43063": {
+    "base": 78,
+    "max": 89,
+    "source": "https://pesdb.net/efootball/players/son-heung-min-43063"
+  },
+  "s47287": {
+    "base": 84,
+    "max": 94,
+    "source": "https://pesdb.net/efootball/players/harry-kane-47287"
+  },
+  "s50374711": {
+    "base": 83,
+    "max": 83,
+    "source": "https://pesdb.net/efootball/players/son-heung-min-50374711"
+  },
+  "s57123": {
+    "base": 80,
+    "max": 92,
+    "source": "https://pesdb.net/efootball/players/mohamed-salah-57123"
+  },
+  "s83943203": {
+    "base": 83,
+    "max": 93,
+    "source": "https://pesdb.net/efootball/players/mohamed-salah-83943203"
+  }
+}

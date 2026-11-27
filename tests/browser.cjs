@@ -16,7 +16,7 @@ const fixture = {
   players: [...Array.from({length:1000},(_,i)=>({id:i+1,price:6000})),{id:110718,price:65000}],
   clubs: [{id:1,league_id:1,name:'Real Madrid',abbr:'RMA',color:'#d6a72a',budget:600000,status:'active'},
     {id:2,league_id:1,name:'Barcelona',abbr:'BAR',color:'#a50044',budget:600000,status:'active'}],
-  club_managers: [{id:1,club_id:1,user_id:'qa-user',started_at:'2026-11-20',ended_at:null}],
+  club_managers: [{id:1,club_id:1,user_id:'qa-user',started_at:'2026-11-20',ended_at:null},{id:2,club_id:2,user_id:'10000000-0000-4000-8000-000000000002',ended_at:null}],
   roster: [{player_id:110718,club_id:1,paid:65000,activation:'active',contract_until:2}],
   matches: [{id:1,league_id:1,season_no:1,md:1,home:1,away:2,status:'open'}],
   bid_rounds: [{id:1,no:1,status:'open'}],
@@ -32,9 +32,15 @@ const client = (data, role) => {
       },
       from(table) {
         let rows=data[table]||[];
+        const plannerTable=['manager_messages','manager_availability'].includes(table);
         const count=rows.length;
-        return {select(){return this},order(){return this},limit(){return this},gt(){return this},
-          eq(){return this},range(start,end){rows=rows.slice(start,end+1);return this},
+        return {select(){return this},insert(row){
+          if(!plannerTable)throw Error('Unexpected write in UI fixture');
+          data[table]||=[];
+          data[table].push({id:data[table].length+1,manager_id:'qa-user',sender:'qa-user',created_at:new Date().toISOString(),...row});
+          return Promise.resolve({error:null});
+        },order(){return this},limit(){return this},gt(){return this},
+          neq(){return this},lt(){return this},or(){return this},in(){return this},eq(){return this},range(start,end){rows=rows.slice(start,end+1);return this},
           then(resolve){return Promise.resolve({data:rows,count,error:null}).then(resolve)}};
       },
       rpc: async (name,args) => {
@@ -110,6 +116,13 @@ async function test() {
           await page.screenshot({path:screenshots+'/'+route+'-'+width+'.png'});
         }
       }
+      if (process.env.EFEL_CALENDAR_SCREENSHOTS&&[390,1440].includes(width)){
+        await page.evaluate(()=>{location.hash='calendar'});
+        await page.locator('.calg').waitFor();
+        const dir=process.env.EFEL_CALENDAR_SCREENSHOTS;
+        fs.mkdirSync(dir,{recursive:true});
+        await page.screenshot({path:dir+'/calendar-'+width+'.png'});
+      }
       if (width===390) {
         await page.evaluate(()=>{location.hash='market'});
         await page.locator('#fq').waitFor();
@@ -124,14 +137,43 @@ async function test() {
         assert.equal(await page.locator('#view').evaluate(el=>el.inert),true);
         await page.keyboard.press('Escape');
         assert.equal(await page.getByRole('dialog').count(),0);
+        await page.locator('#fq').fill('Son Heung-Min');
+        await page.locator('[data-act=pinfo][data-id=s43063]').first().click();
+        await dialog.getByText('MAX OVR 89',{exact:true}).waitFor();
+        await page.keyboard.press('Escape');
+        assert.equal(await page.locator('[data-act=pinfo][data-id=s50374711]').count(),0);
         await page.locator('#fq').fill('Samu Costa');
         await page.locator('button[data-act=pinfo][data-id=s16912601]').first().click();
-        await dialog.locator('.ec-face .eface[style*="sp/"]').waitFor();
+        await dialog.locator('.e5-face .eface[style*="sp/"]').waitFor();
         await page.keyboard.press('Escape');
         await page.locator('#fq').fill('Harry Kane');
         await page.locator('[data-act=bid]').first().click();
         await page.locator('[data-act=go]').click();
         await page.waitForFunction(()=>window.qaRequests?.some(([name])=>name==='efel_place_bid'));
+        await page.evaluate(()=>{location.hash='matches'});
+        await page.locator('[data-act=mcard][data-id="1"]').first().click();
+        await dialog.locator('[data-act=slotEdit]').click();
+        await dialog.locator('#league-time').fill('2030-03-15T20:00');
+        await dialog.locator('#league-note').fill('Calendar QA');
+        await dialog.locator('[data-act=sendSlots]').click();
+        await page.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_calendar_propose'&&args.p_note==='Calendar QA'));
+        await page.evaluate(()=>{location.hash='calendar'});
+        await page.locator('[data-act=calNav][data-id="1"]').click();
+        await page.locator('.cday:not(.out)').last().click();
+        await dialog.locator('[data-act=addAvailability]').click();
+        await dialog.locator('[data-act=removeAvailability]').waitFor();
+        await dialog.locator('[data-act=calendarFriendly]').click();
+        assert.equal(await dialog.locator('input[type=datetime-local]').count(),1);
+        await dialog.locator('#fr_t0').fill('2030-03-15T21:30');
+        await dialog.locator('#fr_note').fill('Friendly QA');
+        await dialog.locator('[data-act=frSend]').click();
+        await page.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_calendar_friendly'&&args.p_opp===2&&args.p_note==='Friendly QA'));
+        await page.locator('[data-act=inbox]').click();
+        await dialog.locator('[data-act=thread]').first().click();
+        await dialog.locator('#message-body').fill('Private calendar message');
+        await dialog.locator('[data-act=sendMessage]').click();
+        await dialog.locator('#conversation').getByText('Private calendar message').waitFor();
+        await page.keyboard.press('Escape');
         await page.evaluate(()=>{location.hash='matches'});
         await page.locator('#hs_1').fill('2');
         await page.locator('#as_1').fill('1');
@@ -162,6 +204,10 @@ async function test() {
     await admin.evaluate(()=>{location.hash='admin'});
     await admin.locator('#view[data-route=admin] .card').first().waitFor();
     assert.equal(await admin.locator('#navAdmin').getAttribute('hidden'),null);
+    await admin.locator('[data-act=economyLab]').click();
+    await admin.locator('#model-weeks').fill('6');
+    await admin.locator('[data-act=modelForecast]').click();
+    assert.equal(await admin.locator('#model-output p').filter({hasText:'Τέλος 2ης σεζόν'}).filter({hasText:'Καλύπτεις'}).count(),1);
     assert.deepEqual(errors,[]);
     await admin.close();
     console.log('Passed sign-in wiring, search, pagination, player dialog, isolated bid, transfer and score submissions, and admin gating.');
