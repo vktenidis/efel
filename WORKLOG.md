@@ -42,3 +42,23 @@ Mid-season and final fan awards, archived winners, read receipts, push messaging
 Release implementation commit 087beb73451f66d11975f7e6e7504b7f0c65b0df. [PR #5 and its integration status](https://github.com/vktenidis/efel/pull/5). [GitHub Pages deployment history](https://github.com/vktenidis/efel/deployments/github-pages). [Production website](https://vktenidis.github.io/efel/).
 
 Applied the calendar_club_activity migration to the connected EFEL Supabase project. Read-only verification found both new tables enforcing RLS, five policies, both new RPCs executing with caller privileges, and anonymous roles excluded from private messages and invitations. Live payment settings were confirmed as 8/3, participation 1,500 GP and win bonus 500 GP. No production match, invitation, message, roster, balance or payout was created for testing. The post-migration security advisor returned no finding naming a new calendar object. For frontend deployment verification compare the published app.js and index.html to this release; the cache marker is efel-prod07.
+
+## Euro equivalents and player presentation · 27 November 2026
+
+Starting from f4c2f1c. Add display equivalents using the requested eFootball GP anchor, audit the price inputs actually present, correct the office league-position suffix, integrate player photography into cards and check the published UI at mobile and desktop sizes. Keep all financial actions in the current EFEL unit and distinguish verified reference values from estimates.
+
+### Release efel-prod08
+
+The display anchor is €200 per eFootball GP. With the active conversion setting of three eFootball GP per EFEL GP, an offer of 65,000 EFEL GP displays as €39 million. The club office, budget, catalogue, cards and transfer screens show the equivalent. Offer fields still accept EFEL GP, update their euro preview as the manager types and submit the original GP amount. No SQL or financial rule changed in this release.
+
+The club office has a locally optimized original tunnel photograph and more spacing between the league rank and ordinal suffix. The player card combines a portrait, rating, position, value and ownership crest on one surface. Original art and photo credits are available in player details. Fourteen credited Commons photographs were added, including Neymar Jr, Jack Grealish, João Cancelo and Dominic Solanke. Portrait coverage increased from 115 to 129 card IDs (100 to 114 footballer IDs). Across the 19,254-card catalogue, 776 cards have direct artwork and 819 have at least one identified image, up from 811. Manager-league rosters have 87 of 199 cards with an identified image. The dated roster snapshot and methodology are reflected in media-coverage.json.
+
+The catalogue and seed agree on all 19,254 IDs, names, positions, base ratings and artwork indexes. All seed prices are 5,000 GP. A read-only check of the live player table found 16 different EFEL prices and no column for a sourced in-game GP acquisition price. Current eFootball estimates come from base OVR brackets. No complete official GP list was verified or imported.
+
+There are now 337 verified MAX ratings, previously ten. New records use the original artwork index and the matching printed base value. Cards without a legible matching value retain base OVR unless an independent card-specific source verifies MAX. A total of 18,917 still need a MAX source. Of 1,094 candidate multi-version groups sharing a base identity and name, three have complete MAX evidence. The market can hide three secondary variants, with exceptions for ownership, bids and shortlists. Existing card IDs remain intact.
+
+[Download the card-ID handoff CSV (gzip)](docs/catalogue/standard-review.csv.gz). It includes all cards, current MAX evidence and empty columns for verified in-game GP and its source. Use the exact card_id for matching, and keep version-specific evidence. Regenerate with `python tools/audit-standard.py --export standard-review.csv`. Author, licence and modification details for the new photographs are in assets/media.json.
+
+Playwright passed 12 manager routes at 360, 390, 430, 768, 1024, 1440 and 1920 px. The browser measured a positive gap between the numeral and suffix at each width. It decoded an added local photograph, displayed 65,000 GP as €39m, updated the preview to €36m for 60,000 GP and asserted that the transfer requested 60,000 GP. Other isolated flows include bids, scores, scheduling, private messages and admin gating. JavaScript syntax, economy scenarios, catalogue reconciliation and image decoding also passed. Screenshots use test clubs and budgets.
+
+[Mobile office](docs/matchday/home-390.webp) · [Desktop office](docs/matchday/home-1440.webp) · [Mobile player details](docs/matchday/player-390.webp)

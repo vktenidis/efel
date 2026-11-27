@@ -15,6 +15,18 @@ const S={all:[],allMatches:[],leagues:[],lg:null,prices:{},archive:[],fin:null,c
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function httpsURL(value){try{const url=new URL(value);return url.protocol==='https:'&&!url.username&&!url.password?url.href:null}catch{return null}}
+const euroNumber=new Intl.NumberFormat('el-GR',{maximumFractionDigits:2});
+const euroRate=()=>200*Math.max(1,Number(cfg().ratio)||3);
+function euroLabel(amount){
+  const value=Number(amount)*euroRate(), magnitude=Math.abs(value);
+  if(!Number.isFinite(value))return '—';
+  if(magnitude>=1e9)return euroNumber.format(value/1e9)+' δισ. €';
+  if(magnitude>=1e6)return euroNumber.format(value/1e6)+' εκατ. €';
+  return euroNumber.format(value)+' €';
+}
+function leagueMoney(amount){
+  return `<span class="league-money" title="${euroNumber.format(Number(amount)*euroRate())} €"><strong>${euroLabel(amount)}</strong><small>${gp(amount)}</small></span>`;
+}
 const gp=n=>Number(n||0).toLocaleString('el-GR')+' GP';
 const grp=p=>GROUP[p]||'MID';
 const team=id=>S.all.find(t=>t.id===id);
@@ -64,14 +76,14 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod07').catch(()=>({}))]).then(([data,ratings])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod08').catch(()=>({}))]).then(([data,ratings])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
       const groups=new Map();
       for(const player of S.cat){
         const ref=ratings[player.id];
-        if(ref?.base===player.ovr&&Number.isInteger(ref.max)&&ref.max>=player.ovr&&httpsURL(ref.source)){
+        if(ref?.base===player.ovr&&Number.isInteger(ref.max)&&ref.max>=player.ovr&&(httpsURL(ref.source)||(player.img>0&&player.img===ref.artworkIndex))){
           player.maxRating=ref.max;player.ratingSource=ref.source;
         }
         const key=identity(player);
@@ -95,7 +107,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod07').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod08').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -127,12 +139,12 @@ document.addEventListener('keydown',event=>{
 });
 function ask(o){S.pend=o.run;const p=pl(o.pid);
   openM(`<div class="box"><div class="bh">${o.title}</div>${pcardHTML(o.pid)}<p style="margin:0">${o.note||''}</p>
-  <div class="flow"><div><span>${o.label||'Budget'} τώρα</span><b>${gp(o.before)}</b></div><div class="ar">→</div><div><span>Μετά</span><b class="${o.after<o.before?'neg':''}">${gp(o.after)}</b></div></div>
+  <div class="flow"><div><span>${o.label||'Budget'} τώρα</span>${leagueMoney(o.before)}</div><div class="ar">→</div><div><span>Μετά</span><b class="${o.after<o.before?'neg':''}">${leagueMoney(o.after)}</b></div></div>
   <div class="row" style="justify-content:flex-end"><button class="ghost" data-act="closeM">Άκυρο</button><button class="${o.warn?'warn':''}" data-act="go">${o.ok}</button></div></div>`)}
 const SN={speed:'Speed',acceleration:'Acceleration',finishing:'Finishing',lowPass:'Low Pass',dribbling:'Dribbling',physicalContact:'Physical Contact',defensiveAwareness:'Defensive Awareness',stamina:'Stamina',gkAwareness:'GK Awareness',gkCatching:'GK Catching',gkParrying:'GK Parrying',gkReflexes:'GK Reflexes',gkReach:'GK Reach',jump:'Jump'};
 const plink=pid=>`<button class="lnk" data-act="pinfo" data-id="${esc(pid)}">${esc(pl(pid).name)}${dupTag(pid)}</button>`;
 function pcardHTML(pid){const p=pl(pid),d=DET[p.name+'|'+p.ovr],o=ownerOf(pid);
-  return `<div class="pcard">${efelCard(pid,130)}<div class="o">${p.ovr}<small>${esc(p.pos)}</small></div><h3>${esc(p.name)}</h3><div class="s">${d?esc(d.ps)+' · ':''}${o?esc(o.name):'Ελεύθερος'}</div><div class="s">Αξία EFEL <b>${gp(p.price)}</b> · eFootball ≈ ${gp(efbVal(p.ovr))} ${tierTag(p.price)}</div></div>`}
+  return `<div class="pcard">${efelCard(pid,130)}<div class="o">${p.ovr}<small>${esc(p.pos)}</small></div><h3>${esc(p.name)}</h3><div class="s">${d?esc(d.ps)+' · ':''}${o?esc(o.name):'Ελεύθερος'}</div><div class="s">Αξία EFEL ${leagueMoney(p.price)}</div></div>`}
 function playerHTML(pid){const p=pl(pid),d=DET[p.name+'|'+p.ovr],o=ownerOf(pid),mt=myTeam(),r=o&&(o.roster||[]).find(x=>x.pid===pid);
   const season=cfg().phase==='season'&&cfg().windowOpen;let act='';
   if(mt&&season&&!o)act=`<button data-act="buy" data-id="${esc(pid)}">Αγορά · ${gp(p.price)}</button>`;
@@ -140,7 +152,7 @@ function playerHTML(pid){const p=pl(pid),d=DET[p.name+'|'+p.ovr],o=ownerOf(pid),
   else if(mt&&cfg().phase!=='season'&&cfg().biddingOpen&&!o)act=`<span class="small muted">Κάνε κρυφή προσφορά από τη λίστα της Αγοράς.</span>`;
   else if(mt&&o&&o.id===mt.id){act=contractEnds(r)?`<button data-act="renew" data-id="${esc(pid)}|1">Ανανέωση 1 σεζόν</button><button class="ghost" data-act="renew" data-id="${esc(pid)}|2">2 σεζόν</button>`:'';
     act+=cfg().windowOpen?`<button class="ghost" data-act="release" data-id="${esc(pid)}">Αποδέσμευση (+50%)</button>`:`<span class="small muted">Αποδέσμευση: όταν ανοίξει η μεταγραφική (${windowText()}).</span>`}
-  return `<div class="box"><div class="bh">Στοιχεία παίκτη</div>${pcardHTML(pid)}${p.maxRating?`<p class="small">Βασικό OVR ${p.ovr} · <b>MAX OVR ${p.maxRating}</b> · <a href="${esc(p.ratingSource)}" target="_blank" rel="noopener">PESDB ↗</a></p>`:''}${mediaCredits(MEDIA.players?.[p.id])}${valueBox(p)}
+  return `<div class="box"><div class="bh">Στοιχεία παίκτη</div>${pcardHTML(pid)}${p.maxRating?`<p class="small">Βασικό OVR ${p.ovr} · <b>MAX OVR ${p.maxRating}</b>${p.ratingSource?` · <a href="${esc(p.ratingSource)}" target="_blank" rel="noopener">PESDB ↗</a>`:''}</p>`:''}${p.img?`<details class="original-art"><summary>Πρωτότυπη κάρτα eFootball</summary>${cardImg(p,180,'original-card')}</details>`:''}${mediaCredits(MEDIA.players?.[p.id])}${valueBox(p)}
   <div class="kv"><div>Ομάδα<b>${o?tlink(o.id)+(o.is_auto?' (αυτόματη)':''):'Ελεύθερος'}</b></div>${r&&r.activation!=='active'?`<div>Κατάσταση<b>${actLabel(r)}</b></div>`:''}${r?`<div>Κόστος απόκτησης<b>${gp(r.paid)}</b></div><div>Συμβόλαιο<b>ως σεζόν ${r.cu??'—'}${contractEnds(r)?' · λήγει':''}</b></div>`:''}${d?`<div>Ύψος<b>${esc(d.h)} cm</b></div><div>Πόδι<b>${esc(d.f)}</b></div><div>Ηλικία<b>${d.a}</b></div><div>Weak foot<b>${esc(d.wf)}</b></div><div>Form<b>${esc(d.fm)}</b></div>`:''}</div>
   ${d?d.st.map(([k,v])=>`<div class="sbar"><span>${SN[k]||k}</span><div class="bar"><i style="width:${Math.min(100,v)}%;background:${v>=85?'var(--ok)':v>=75?'var(--sky)':'#9aa7b8'}"></i></div><b>${v}</b></div>`).join('')+`<div class="sks">${d.sk.map(s=>`<span>${esc(s)}</span>`).join('')}</div>`:'<p class="muted small">Δεν υπάρχουν αναλυτικά στοιχεία για αυτόν τον παίκτη.</p>'}
   <div class="row" style="margin-top:12px">${starBtn(pid)}<button class="ghost" data-act="cmp" data-id="${esc(pid)}">${S.cmpA&&S.cmpA!==pid?'Σύγκριση με '+esc(pl(S.cmpA).name):'⇄ Σύγκριση'}</button>${o?`<button class="ghost" data-act="tinfo" data-id="${esc(o.id)}">${crest(o,18)} ${esc(o.name)}</button>`:''}</div><div class="row" style="margin-top:12px;justify-content:space-between"><a href="https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(p.name)}" target="_blank" rel="noopener">Προφίλ στο Transfermarkt ↗</a>${act}</div></div>`}
@@ -527,7 +539,7 @@ function vMarket(){
       else if(!draft&&!o)a=`<button data-act="buy" data-id="${p.id}">Αγορά</button>`;
       }
     if(mt&&!draft&&o&&!mine)a+=`<button class="ghost" data-act="offer" data-id="${p.id}">Πρόταση</button>`;
-    return `<tr><td><span class="pos ${grp(p.pos)}">${esc(p.pos)}</span></td><td>${starBtn(p.id)}${cardImg(p,26,'thumb')}${plink(p.id)}</td><td class="num">${p.maxRating??p.ovr}${p.maxRating?' <small>MAX</small>':''}</td><td class="num">${gp(p.price)} ${tierTag(p.price)}</td><td class="num muted">≈${kfmt(efbVal(p.ovr))}</td><td>${o?`${tdot(o.id)}${tname(o.id)}`:'<span class="muted">Ελεύθερος</span>'}</td><td><div class="row">${a}</div></td></tr>`}).join('');
+    return `<tr><td><span class="pos ${grp(p.pos)}">${esc(p.pos)}</span></td><td>${starBtn(p.id)}${cardImg(p,26,'thumb')}${plink(p.id)}</td><td class="num">${p.maxRating??p.ovr}${p.maxRating?' <small>MAX</small>':''}</td><td class="num">${leagueMoney(p.price)} ${tierTag(p.price)}</td><td class="num muted">≈${kfmt(efbVal(p.ovr))}</td><td>${o?`${tdot(o.id)}${tname(o.id)}`:'<span class="muted">Ελεύθερος</span>'}</td><td><div class="row">${a}</div></td></tr>`}).join('');
   return `<section class="card"><h2>Αγορά παικτών<button class="hbtn" data-act="help" data-id="tiers">? Τιμές</button></h2>${head}${bidsBox}${shortPanel()}${S.offerFor?offerBox():''}
   <div class="filters">
    <input type="search" id="fq" placeholder="Αναζήτηση παίκτη" value="${esc(f.q)}" aria-label="Αναζήτηση">
@@ -537,8 +549,8 @@ function vMarket(){
    <div class="fgrid">
     <label>Ζώνη<select id="fg"><option value="">Όλες</option>${Object.keys(GNAME).map(g=>`<option value="${g}" ${f.g===g?'selected':''}>${GNAME[g]}</option>`).join('')}</select></label>
     <label>Θέση<select id="fpos"><option value="">Όλες</option>${POSL.map(x=>`<option ${f.pos===x?'selected':''}>${x}</option>`).join('')}</select></label>
-    <label>Τιμή από (K)<input id="fpmin" type="number" min="0" step="5" value="${esc(f.pmin)}" placeholder="π.χ. 20"></label>
-    <label>έως (K)<input id="fpmax" type="number" min="0" step="5" value="${esc(f.pmax)}" placeholder="π.χ. 80"></label>
+    <label>Τιμή από (χιλ. GP)<input id="fpmin" type="number" min="0" step="5" value="${esc(f.pmin)}" placeholder="π.χ. 20"></label>
+    <label>έως (χιλ. GP)<input id="fpmax" type="number" min="0" step="5" value="${esc(f.pmax)}" placeholder="π.χ. 80"></label>
     <label>OVR από<input id="fomin" type="number" min="40" max="99" value="${esc(f.omin)}" placeholder="π.χ. 75"></label>
     <label>έως<input id="fomax" type="number" min="40" max="99" value="${esc(f.omax)}"></label>
    </div>
@@ -550,12 +562,12 @@ function vMarket(){
    <div class="row" style="justify-content:space-between">${mt?`<label class="small"><input type="checkbox" id="faff" ${f.afford?'checked':''}> Μόνο όσοι χωράνε στα ελεύθερα GP μου (${gp(free)})</label>`:'<span></span>'}
     <span class="row" style="gap:6px"><button class="ghost sm ${f.view==='list'?'on':''}" data-act="fview" data-id="list">Λίστα</button><button class="ghost sm ${f.view==='cards'?'on':''}" data-act="fview" data-id="cards">Κάρτες</button><button class="ghost sm" data-act="freset">Καθαρισμός</button></span></div>
   </div>
-  ${S.cat.length?`<p class="small muted">${rows.length.toLocaleString('el-GR')} παίκτες${rows.length>shown.length?` · βλέπεις ${offset+1}–${offset+shown.length}`:''}. Αξία EFEL = η ελάχιστη τιμή στη λίγκα · eFootball = περίπου τι κοστίζει η standard κάρτα στο παιχνίδι.</p>${f.view==='cards'?`<div class="cgrid">${shown.map(p=>`<div class="cwrap"><button class="cbtn" data-act="pinfo" data-id="${esc(p.id)}" aria-label="${esc(p.name)}">${efelCard(p.id,150)}</button>${starBtn(p.id)}</div>`).join('')}</div>`:`<table class="mk"><thead><tr><th>Θέση</th><th>Παίκτης</th><th class="num">OVR</th><th class="num">Αξία EFEL</th><th class="num" title="Περίπου τι κοστίζει στο eFootball">eFootball</th><th>Ομάδα</th><th></th></tr></thead><tbody>${rowsH}</tbody></table>`}${pager(rows.length,offset,60,'fpage')}`:'<p class="empty">Ο κατάλογος είναι άδειος.</p>'}</section>`;
+  ${S.cat.length?`<p class="small muted">${rows.length.toLocaleString('el-GR')} παίκτες${rows.length>shown.length?` · βλέπεις ${offset+1}–${offset+shown.length}`:''}. Ισοτιμία προβολής · 1 GP EFEL = ${euroRate()} €. Οι τιμές eFootball είναι εκτιμήσεις ανά βασικό OVR.</p>${f.view==='cards'?`<div class="cgrid">${shown.map(p=>`<div class="cwrap"><button class="cbtn" data-act="pinfo" data-id="${esc(p.id)}" aria-label="${esc(p.name)}">${efelCard(p.id,150)}</button>${starBtn(p.id)}</div>`).join('')}</div>`:`<table class="mk"><thead><tr><th>Θέση</th><th>Παίκτης</th><th class="num">OVR</th><th class="num">Αξία EFEL</th><th class="num" title="Περίπου τι κοστίζει στο eFootball">eFootball</th><th>Ομάδα</th><th></th></tr></thead><tbody>${rowsH}</tbody></table>`}${pager(rows.length,offset,60,'fpage')}`:'<p class="empty">Ο κατάλογος είναι άδειος.</p>'}</section>`;
 }
 function offerBox(){
   const p=pl(S.offerFor),o=ownerOf(p.id),mt=myTeam();if(!o||!mt)return '';
   return `<div class="panel" id="offerBox"><b>Πρόταση στην ${esc(o.name)} για τον ${esc(p.name)}</b>
-  <label class="small">GP που δίνεις<br><input id="ogp" type="number" step="1000" min="0" value="${p.price}"></label>
+  <label class="small">GP που δίνεις<br><input id="ogp" type="number" step="1000" min="0" value="${p.price}"><output class="gp-preview" for="ogp">${euroLabel(p.price)}</output></label>
   <label class="small">Και παίκτη σε ανταλλαγή (προαιρετικά)<br><select id="oswap"><option value="">Κανένας</option>${(mt.roster||[]).map(r=>`<option value="${r.pid}">${esc(pl(r.pid).pos)} · ${esc(pl(r.pid).name)}</option>`).join('')}</select></label>
   <div class="row"><button data-act="sendOffer">Αποστολή πρότασης</button><button class="ghost" data-act="closeOffer">Άκυρο</button></div></div>`;
 }
@@ -587,7 +599,7 @@ function dealCard(o,acts){const mt=myTeam(),p=pl(o.pid),st=o.status==='open'?(mt
    <div class="dl-body"><div class="dl-top"><span class="ribbon r-${cls}">${lab}</span>${o.status==='open'&&o.round>1?`<span class="tag">Γύρος ${o.round}/${maxR}</span>`:''}${o.status==='open'&&o.expires?`<span class="small muted">⏳ ${left(o.expires)}</span>`:''}${o.status!=='open'?`<span class="small muted">${ago(o.ts)}</span>`:''}</div>
     <div class="dl-who">${who}</div>
     <div class="dl-route">${clubChip(o.to)}<span class="dl-arrow" aria-hidden="true">➜</span>${clubChip(o.from)}</div>
-    <div class="dl-fee"><span class="fee">${o.gp?gp(o.gp):'Χωρίς GP'}</span>${o.swap?`<span class="swap">+ ${faceImg(pl(o.swap),26)} ${plink(o.swap)} <small>${pl(o.swap).ovr} · ανταλλαγή</small></span>`:''}<span class="small muted">βασική τιμή ${gp(p.price)}</span></div>
+    <div class="dl-fee"><span class="fee">${o.gp?leagueMoney(o.gp):'Χωρίς GP'}</span>${o.swap?`<span class="swap">+ ${faceImg(pl(o.swap),26)} ${plink(o.swap)} <small>${pl(o.swap).ovr} · ανταλλαγή</small></span>`:''}<span class="small muted">βασική τιμή ${gp(p.price)}</span></div>
     ${o.note&&(o.hist||[]).length<2?`<div class="quote">«${esc(o.note)}»</div>`:''}
     ${o.status==='agreed'?`<div class="note small">Συμφωνήσατε. Η μεταγραφή ολοκληρώνεται αυτόματα με το άνοιγμα της μεταγραφικής (${windowText()}). Τα GP του αγοραστή μένουν δεσμευμένα ως τότε.</div>`:''}
     ${offerThread(o)}
@@ -635,7 +647,7 @@ const A={
       run:()=>w(async()=>{await rpc('efel_make_offer',{p_player:npid(pid),p_gp:g,p_swap:npid(swap)});S.offerFor=null},'Η πρόταση στάλθηκε')})},
   counter(id){const o=S.offers.find(x=>x.id===id);if(!o)return;const mt=myTeam(),buyer=o.from===mt.id,B=team(o.from);
     openM(`<div class="box"><div class="bh">Αντιπρόταση</div>${pcardHTML(o.pid)}<p class="small">Τώρα: <b>${offerTerms(o)}</b>${buyer?'':` από την ${tname(o.from)}`}. Γύρος ${o.round}/${cfg().counterRounds||4}.</p>
-     <label class="small">GP<br><input id="cgp" type="number" step="1000" min="0" value="${o.gp}"></label>
+     <label class="small">GP<br><input id="cgp" type="number" step="1000" min="0" value="${o.gp}"><output class="gp-preview" for="cgp">${euroLabel(o.gp)}</output></label>
      <label class="small">Παίκτης ανταλλαγής από ${buyer?'σένα':'την '+esc(B.name)} (προαιρετικά)<br><select id="cswap"><option value="">Κανένας</option>${(B.roster||[]).map(r=>pl(r.pid)).sort((a,b)=>b.ovr-a.ovr).map(p=>`<option value="${p.id}" ${o.swap===p.id?'selected':''}>${esc(p.pos)} · ${esc(p.name)} · ${p.ovr}</option>`).join('')}</select></label>
      <label class="small">Μήνυμα (προαιρετικά)<br><input id="cnote" maxlength="200" placeholder="${buyer?'π.χ. Τελευταία μου πρόταση':'π.χ. Τον θέλω για βασικό, ζητάω λίγο παραπάνω'}"></label>
      <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="ghost" data-act="closeM">Άκυρο</button><button data-act="sendCounter" data-id="${id}">Αποστολή αντιπρότασης</button></div></div>`)},
@@ -737,7 +749,9 @@ document.addEventListener('click',async e=>{if(e.target.id==='ov'){closeM();retu
   if(el.dataset.confirm&&!el.dataset.armed){el.dataset.armed='1';const t=el.textContent;el.textContent='Πάτα ξανά για επιβεβαίωση';setTimeout(()=>{if(el.isConnected){el.textContent=t;delete el.dataset.armed}},3500);return}
   if(!Object.hasOwn(A,el.dataset.act))return;const f=A[el.dataset.act];el.disabled=true;try{await f(el.dataset.id,el)}finally{el.disabled=false}
 });
-document.addEventListener('input',e=>{if(e.target.id==='rq'){const q=e.target.value.trim().toLowerCase();for(const c of document.querySelectorAll('.rules section.card')){const hit=!q||c.textContent.toLowerCase().includes(q);c.hidden=!hit;for(const li of c.querySelectorAll('li'))li.classList.toggle('hit',!!q&&li.textContent.toLowerCase().includes(q))}return}if(e.target.id==='fq'){S.mf.q=e.target.value;S.mf.offset=0;clearTimeout(S._q);S._q=setTimeout(()=>{render();const i=$('#fq');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
+document.addEventListener('input',e=>{if(['ogp','cgp'].includes(e.target.id)){
+  const preview=e.target.parentElement.querySelector('output');if(preview)preview.textContent=e.target.value===''?'':euroLabel(e.target.valueAsNumber);
+  return}if(e.target.id==='rq'){const q=e.target.value.trim().toLowerCase();for(const c of document.querySelectorAll('.rules section.card')){const hit=!q||c.textContent.toLowerCase().includes(q);c.hidden=!hit;for(const li of c.querySelectorAll('li'))li.classList.toggle('hit',!!q&&li.textContent.toLowerCase().includes(q))}return}if(e.target.id==='fq'){S.mf.q=e.target.value;S.mf.offset=0;clearTimeout(S._q);S._q=setTimeout(()=>{render();const i=$('#fq');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)}});
 document.addEventListener('change',e=>{if(e.target.id==='simHuman')S.simHuman=e.target.checked;if(e.target.id==='avf'){const f=e.target.files[0];if(!f)return;if(f.size>2e6)return toast('Η φωτογραφία πρέπει να είναι έως 2MB');const P=S.prof?.[S.me]||{},path=`${S.me}/avatar-${Date.now()}.${f.type.split('/')[1]||'jpg'}`;toast('Ανέβασμα…');
     sb.storage.from('avatars').upload(path,f,{upsert:true,contentType:f.type}).then(({error})=>{if(error)return toast('Δεν ανέβηκε: '+error.message);const url=sb.storage.from('avatars').getPublicUrl(path).data.publicUrl;closeM();
       w(()=>rpc('efel_update_profile',{p_name:'',p_efname:P.efootball_name||'',p_platform:P.platform||'',p_contact:P.contact||'',p_avatar:url}),'Η φωτογραφία σου ανέβηκε')})}if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}{const M={fg:'g',fpos:'pos',fpmin:'pmin',fpmax:'pmax',fomin:'omin',fomax:'omax',fsort:'sort',fav:'av'};if(M[e.target.id]){S.mf[M[e.target.id]]=e.target.value;S.mf.offset=0;render(true)}if(e.target.id==='faff'){S.mf.afford=e.target.checked;render(true)}}});
@@ -881,7 +895,7 @@ function paperTeaser(){const hl=S.leagues.find(l=>l.kind==='human')?.id,ms=S.all
 function efbVal(ovr){const t=cfg().efb||{},ks=Object.keys(t).map(Number).sort((a,b)=>a-b);if(!ks.length)return 0;const lo=ks[0],hi=ks[ks.length-1];
   if(ovr>hi)return t[hi]+(ovr-hi)*30000;if(ovr<lo)return t[lo];return t[ovr]??t[lo]}
 const kfmt=v=>v>=1e6?(v/1e6).toFixed(1).replace('.0','')+'M':Math.round(v/1000)+'K';
-function valueBox(p){return `<div class="vals"><div class="v-efb" title="Περίπου τι κοστίζει η standard κάρτα στο eFootball"><span>Αξία στο eFootball</span><b>≈ ${gp(efbVal(p.ovr))}</b><small>standard κάρτα, εκτίμηση ανά OVR</small></div><div class="v-efel"><span>Αξία στην EFEL</span><b>${gp(p.price)}</b><small>1 GP EFEL ≈ ${cfg().ratio||3} GP eFootball</small></div></div>`}
+function valueBox(p){return `<div class="vals"><div class="v-efb" title="Περίπου τι κοστίζει η standard κάρτα στο eFootball"><span>Αξία στο eFootball</span><b>≈ ${gp(efbVal(p.ovr))}</b><small>standard κάρτα, εκτίμηση ανά OVR</small></div><div class="v-efel"><span>Αξία στην EFEL</span>${leagueMoney(p.price)}<small>1 GP EFEL = ${euroRate()} € προβολής</small></div></div>`}
 const bar=(v,max,cls)=>`<div class="pbar ${cls||''}"><i style="width:${max?Math.max(2,Math.min(100,v/max*100)):0}%"></i></div>`;
 function seasonStats(id){const lg=team(id)?.league_id,all=S.allMatches.filter(m=>m.league_id===lg&&(m.home===id||m.away===id)),fin=all.filter(m=>m.status==='final').sort((a,b)=>a.md-b.md);
   const st=standings(lg),pos=st.findIndex(s=>s.id===id)+1,s=st[pos-1]||{};return {all,fin,st,pos,s,total:all.length,played:fin.length}}
@@ -1062,8 +1076,8 @@ function renderHeader(){const mt=myTeam(),c=cfg();
 /* ---- Γραφείο ---- */
 function sumCard(mt){const S2=seasonStats(mt.id),B=boardTarget(mt.id),ppg=S2.played?(S2.s.pts/S2.played).toFixed(2):'—',ok=S2.pos&&S2.pos<=B.tgt;
   return `<section class="sum" style="--tc:${esc(mt.color||'#456')}"><div class="sum-l"><div class="stad" aria-hidden="true"></div><button class="sum-crest" data-act="tinfo" data-id="${esc(mt.id)}" aria-label="${esc(mt.name)}">${crest(mt,120)}</button></div>
-   <div class="sum-r"><div class="lbl">Η ομάδα μου</div>
-    <div class="sum-k"><div class="skp"><b>${S2.pos||'—'}<sup>η</sup></b><span>θέση</span></div><div><b>${S2.s.pts||0}</b><span>βαθμοί</span></div><div><b>${S2.played}</b><span>αγώνες</span></div><div><b>${ppg}</b><span>β/αγ</span></div></div>
+   <div class="sum-r"><div class="lbl">${esc(mt.name)}</div>
+    <div class="sum-k"><div class="skp"><b>${S2.pos||'—'}${S2.pos?'<sup>η</sup>':''}</b><span>θέση</span></div><div><b>${S2.s.pts||0}</b><span>βαθμοί</span></div><div><b>${S2.played}</b><span>αγώνες</span></div><div><b>${ppg}</b><span>β/αγ</span></div></div>
     <div class="sum-p"><span>Πρόοδος σεζόν</span><div class="sum-pr">${bar(S2.played,S2.total)}<b>${S2.played}/${S2.total}</b></div></div>
     <button class="goal ${ok?'ok':''}" data-act="goal">${ico('target')}<span>Στόχος Διοίκησης: <b>${B.label}</b></span></button></div></section>`}
 function formCard(mt){const f=(seasonStats(mt.id).s.form||[]).slice(-5);
@@ -1088,7 +1102,7 @@ function nextMatchCard(mt){const nm=S.allMatches.filter(m=>m.status!=='final'&&(
    <div class="nm-l">${esc(leagueName(nm.league_id))} · ${nm.md}η αγωνιστική</div>${isLive(nm)?'<div class="livebadge">🔴 Παίζεται τώρα</div>':derbyTag(nm)}
    <div class="nm-vs"><button class="nm-t" data-act="tinfo" data-id="${esc(nm.home)}">${crest(team(nm.home),54)}<span>${tname(nm.home)}</span></button><i>VS</i><button class="nm-t" data-act="tinfo" data-id="${esc(nm.away)}">${crest(team(nm.away),54)}<span>${tname(nm.away)}</span></button></div>
    <div class="nm-d">${ico('cal')}<span>${when}</span></div>
-   <button class="pbtn" data-act="mcard" data-id="${nm.id}">Προετοιμασία αγώνα ${ico('chev')}</button></section>`}
+   <button class="pbtn" data-act="mcard" data-id="${nm.id}">Καρτέλα αγώνα ${ico('chev')}</button></section>`}
 function xiCard(mt){return `<section class="pnl xic"><div class="ph">${ico('shirt','gold')}<b>Ενδεκάδα</b><a class="fmt" href="#club">${esc(getLU(mt).f)}</a></div>${lineup(mt)}</section>`}
 const NTAG={renew:'Ανανέωση',transfer:'Μεταγραφή',agreed:'Προσυμφωνία',buy:'Απόκτηση',release:'Αποδέσμευση',contract_end:'Λήξη συμβολαίου',result:'Αποτέλεσμα',round:'Γύρος προσφορών',prizes:'Έπαθλα',note:'Ανακοίνωση'};
 function newsMedia(n){const pid=n.pid,club=team(n.to||n.tid||n.home);
@@ -1116,7 +1130,7 @@ function vHome(){
    <div class="pair">${xiCard(mt)}${newsCard()}</div>
    ${paperTeaser()}
    <div class="more4">${officeHTML(mt)}
-    <section class="box"><div class="bh">Budget<small>${ros.length}/${MAXR} παίκτες · <button class="lnk" style="color:#ffd766" data-act="gpinfo">Ανάλυση ›</button></small></div><div class="big">${Number(mt.budget).toLocaleString('el-GR')} <small>GP</small></div><div class="small muted" style="margin-top:8px">${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${c[g]}/${QUOTA[g]}`).join(' · ')}</div></section>
+    <section class="box"><div class="bh">Budget<small>${ros.length}/${MAXR} παίκτες · <button class="lnk" style="color:#ffd766" data-act="gpinfo">Ανάλυση ›</button></small></div><div class="big">${leagueMoney(mt.budget)}</div><div class="small muted" style="margin-top:8px">${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${c[g]}/${QUOTA[g]}`).join(' · ')}</div></section>
     <section class="box"><div class="bh">${esc(leagueName(S.lg))}<small><a href="#table" style="color:#cfe0ff">Όλη</a></small></div>${n?`<table class="st"><thead><tr><th></th><th></th><th></th><th class="num" title="Αγώνες">Αγ</th><th class="num" title="Βαθμοί">Β</th></tr></thead><tbody>${tb}</tbody></table>`:''}</section>
     <section class="box"><div class="bh">Μεταγραφές-ρεκόρ</div>${rec.length?`<table class="st"><tbody>${rec.map((x,i)=>`<tr class="zm"><td class="ps">${i+1}</td><td>${crest(x.t,20)}</td><td class="n">${plink(x.r.pid)}</td><td class="num"><b>${gp(x.r.paid)}</b></td></tr>`).join('')}</tbody></table>`:'<p class="muted small">Καμία μεταγραφή ακόμα.</p>'}</section>
     <section class="box cal"><div class="bh">Πρόγραμμα<small>${esc(mt.name)}</small></div>${cal}</section></div>
@@ -1143,7 +1157,7 @@ function scoutAct(p){const mt=myTeam(),o=ownerOf(p.id),c=cfg(),draft=c.phase!=='
 function ownTag(p){const o=ownerOf(p.id);return o?`<span class="own">${crest(o,16)} ${esc(o.abbr||o.name)}</span>`:'<span class="own fr">Ελεύθερος</span>'}
 function scoutRow(p){return `<div class="srow">${starBtn(p.id)}<button class="cbtn sface" data-act="pinfo" data-id="${esc(p.id)}" aria-label="${esc(p.name)}">${faceImg(p,52)}</button>
   <div class="s-n"><button class="lnk nm" data-act="pinfo" data-id="${esc(p.id)}">${esc(p.name)}${dupTag(p.id)}</button><div class="s-m"><span class="posb ${grp(p.pos)}">${esc(p.pos)}</span><span class="ovrb"><small>${p.maxRating?'MAX':'OVR'}</small><b>${p.maxRating??p.ovr}</b></span></div>${ownTag(p)}</div>
-  <div class="s-v"><div class="v1">${ico('coins')}<span><small>EFEL</small><b>${gp(p.price)}</b></span></div><div class="v2"><span><small>eFootball (περίπου)</small><b>${Number(efbVal(p.ovr)).toLocaleString('el-GR')} GP</b></span></div></div>
+  <div class="s-v"><div class="v1">${ico('coins')}<span><small>EFEL</small>${leagueMoney(p.price)}</span></div><div class="v2"><span><small>eFootball (περίπου)</small><b>${Number(efbVal(p.ovr)).toLocaleString('el-GR')} GP</b></span></div></div>
   <div class="s-a">${scoutAct(p)}</div></div>`}
 function topTarget(rows){const mt=myTeam(),SL=[...shortSet()].map(pl).filter(p=>p&&p.ovr&&!(mt&&ownerOf(p.id)?.id===mt.id)).sort((a,b)=>b.ovr-a.ovr);return SL[0]||rows.find(p=>!(mt&&ownerOf(p.id)?.id===mt.id))}
 function vTransfers(){
@@ -1163,8 +1177,8 @@ function vTransfers(){
   if(tab==='world')body=`<div class="fchips" style="margin:0 0 10px">${[['all','Όλες'],['human','Managers'],['auto','Αυτόματοι']].map(([k,l])=>`<button class="fchip ${wf===k?'on':''}" data-act="trWorld" data-id="${k}">${l}</button>`).join('')}</div>${Wv.length?`<div class="ttiles">${Wv.map(tTile).join('')}</div>`:'<p class="empty">Καμία κίνηση ακόμα.</p>'}`;
   else{const arr=L[tab]||[];body=arr.length?`<div class="deals">${arr.map(o=>dealCard(o,actsFor(o))).join('')}</div>`:`<p class="tempty">${empty[tab]}</p>`}
   const rows=scoutRows(f),offset=Math.min(f.offset||0,Math.max(0,Math.ceil(rows.length/30)-1)*30),shown=rows.slice(offset,offset+30),tt=offset?null:topTarget(rows),advOn=!!(f.g||f.omin||f.omax||f.pmax||f.afford),isTop=tt&&shortSet().has(tt.id);
-  const top=tt?`<section class="toptg"><div class="tt-face" style="--tc:${esc(ownerOf(tt.id)?.color||'#1b3a6b')}">${faceImg(tt,96)}</div><div class="tt-b"><span class="ribbon">${ico('star')} ${isTop?'Κορυφαίος στόχος':'Κορυφαίος στη λίστα'}</span><button class="lnk tt-n" data-act="pinfo" data-id="${esc(tt.id)}">${esc(tt.name)}</button><div class="s-m"><span class="posb ${grp(tt.pos)}">${esc(tt.pos)}</span><span class="ovrb"><small>OVR</small><b>${tt.ovr}</b></span>${ownTag(tt)}</div></div>
-     <div class="tt-v"><div><small>EFEL</small><b>${gp(tt.price)}</b></div><div><small>eFootball (περίπου)</small><b>${Number(efbVal(tt.ovr)).toLocaleString('el-GR')} GP</b></div></div><div class="tt-a">${scoutAct(tt)}</div></section>`:'';
+  const top=tt?`<section class="toptg"><div class="tt-face" style="--tc:${esc(ownerOf(tt.id)?.color||'#1b3a6b')}">${faceImg(tt,96)}</div><div class="tt-b"><span class="ribbon">${ico('star')} ${isTop?'Κορυφαίος στόχος':'Κορυφαίος στη λίστα'}</span><button class="lnk tt-n" data-act="pinfo" data-id="${esc(tt.id)}">${esc(tt.name)}</button><div class="s-m"><span class="posb ${grp(tt.pos)}">${esc(tt.pos)}</span><span class="ovrb"><small>${tt.maxRating?'MAX':'OVR'}</small><b>${tt.maxRating??tt.ovr}</b></span>${ownTag(tt)}</div></div>
+     <div class="tt-v"><div><small>EFEL</small>${leagueMoney(tt.price)}</div><div><small>eFootball (περίπου)</small><b>${Number(efbVal(tt.ovr)).toLocaleString('el-GR')} GP</b></div></div><div class="tt-a">${scoutAct(tt)}</div></section>`:'';
   const chip=(k,l)=>`<button class="sch ${f.av===k?'on':''}" data-act="sav" data-id="${k}">${l}</button>`;
   const sel=(id,opts,v)=>`<select id="${id}">${opts.map(([k,l])=>`<option value="${k}" ${v===k?'selected':''}>${l}</option>`).join('')}</select>`;
   const tabs=[['turn','Σε περιμένουν',L.turn.length],['wait','Σε αναμονή',L.wait.length],['agreed','Προσυμφωνίες',L.agreed.length]];
@@ -1175,7 +1189,7 @@ function vTransfers(){
    <button class="pbtn big" data-act="scout">+ Νέα πρόταση</button>
    <section class="pnl scout" id="scout"><div class="ph">${ico('target','gold')}<b>Στόχοι αγοράς / Σκάουτινγκ</b></div>
     <div class="sfind"><label class="sq">${ico('search')}<input type="search" id="sq" placeholder="Αναζήτηση παίκτη (όνομα, θέση…)" value="${esc(f.q)}" aria-label="Αναζήτηση παίκτη"></label><button class="sbtn ${advOn?'dot':''} ${f.adv?'on':''}" data-act="sadv">${ico('filter')}<span>Φίλτρα</span></button></div>
-    ${f.adv?`<div class="sadv"><label>Ζώνη${sel('sg',[['','Όλες'],...Object.keys(GNAME).map(g=>[g,GNAME[g]])],f.g)}</label><label>OVR από<input id="somin" type="number" min="40" max="99" value="${esc(f.omin)}"></label><label>OVR έως<input id="somax" type="number" min="40" max="99" value="${esc(f.omax)}"></label><label>Αξία EFEL έως (K)<input id="spmax" type="number" min="0" step="5" value="${esc(f.pmax)}"></label>${mt?`<label class="chk"><input type="checkbox" id="saff" ${f.afford?'checked':''}> Χωράνε στα ελεύθερα GP μου</label>`:''}<button class="sbtn sm" data-act="sreset">Καθαρισμός</button></div>`:''}
+    ${f.adv?`<div class="sadv"><label>Ζώνη${sel('sg',[['','Όλες'],...Object.keys(GNAME).map(g=>[g,GNAME[g]])],f.g)}</label><label>OVR από<input id="somin" type="number" min="40" max="99" value="${esc(f.omin)}"></label><label>OVR έως<input id="somax" type="number" min="40" max="99" value="${esc(f.omax)}"></label><label>Αξία EFEL έως (χιλ. GP)<input id="spmax" type="number" min="0" step="5" value="${esc(f.pmax)}"></label>${mt?`<label class="chk"><input type="checkbox" id="saff" ${f.afford?'checked':''}> Χωράνε στα ελεύθερα GP μου</label>`:''}<button class="sbtn sm" data-act="sreset">Καθαρισμός</button></div>`:''}
     <div class="schips">${chip('all','Όλοι')}${chip('free','Ελεύθεροι')}${chip('human','Σε managers')}<button class="sch ${f.av==='short'?'on':''}" data-act="sav" data-id="short">${ico('star')} Στόχοι μου</button></div>
     <div class="ssel"><label>Διαθεσιμότητα${sel('sav',[['free','Μόνο ελεύθεροι'],['all','Όλοι'],['human','Σε managers'],['auto','Σε αυτόματους'],['mine','Οι δικοί μου'],['short','★ Στόχοι μου']],f.av)}</label><label>Ταξινόμηση${sel('ssort',[['ovr','OVR ↓'],['pdesc','Αξία ↓'],['pasc','Αξία ↑'],['value','Αξία για τα λεφτά'],['name','Όνομα']],f.sort)}</label><label>Θέση${sel('spos',[['','Όλες οι θέσεις'],...POSL.map(x=>[x,x])],f.pos)}</label></div></section>
    ${top}
@@ -1350,12 +1364,14 @@ Object.assign(A,{
 /* ---- κάρτα παίκτη v5 ---- */
 efelCard=function(pid,w){const p=pl(pid),o=ownerOf(pid),tk=tierKey(p.price),T=TIERS.find(t=>t[0]===tk),sc=(w||180)/180,d=DET[p.name+'|'+p.ovr];
   const nm=p.name.split(' '),last=nm.length>1?nm.slice(-1)[0]:p.name,first=nm.length>1?nm.slice(0,-1).join(' '):'';
-  const st=d&&d.st?d.st.slice().sort((a,b)=>b[1]-a[1]).slice(0,3):null;
-  const foot=st?st.map(([k,v])=>`<span><b>${v}</b>${esc((SN[k]||k).slice(0,9))}</span>`).join(''):`<span><b>${Math.round(p.price/1000)}K</b>EFEL</span><span><b>${Math.round(efbVal(p.ovr)/1000)}K</b>eFootball</span><span><b>${{GK:'Τέρμα',DEF:'Άμυνα',MID:'Μέση',FWD:'Επίθεση'}[grp(p.pos)]||''}</b>ζώνη</span>`;
+  const bestStat=d?.st?.length?d.st.reduce((best,item)=>item[1]>best[1]?item:best):null;
+  const zone={GK:'Τέρμα',DEF:'Άμυνα',MID:'Μέση',FWD:'Επίθεση'}[grp(p.pos)]||'';
+  const footballInfo=bestStat?`<span><b>${esc(bestStat[1])}</b>${esc((SN[bestStat[0]]||bestStat[0]).slice(0,9))}</span>`:`<span><b>${zone}</b>ζώνη</span>`;
+  const foot=`<span class="card-fee"><b>${euroLabel(p.price)}</b>Αξία EFEL</span>${footballInfo}`;
   return `<div class="ecard e5 t-${tk} ${p.ovr>=88?'holo':''}" style="--s:${sc}"><div class="e5-in"><i class="e5-foil" aria-hidden="true"></i><i class="e5-glow" aria-hidden="true"></i>
    <div class="e5-l"><b class="e5-ovr" title="${p.maxRating?'MAX OVR':'Βασικό OVR'}">${p.maxRating??p.ovr}</b>${p.maxRating?'<small>MAX</small>':''}<span class="e5-pos">${esc(p.pos)}</span><span class="e5-crest">${o?crest(o,Math.round(22*sc)):''}</span></div>
    <span class="e5-mark">EF<b>E</b>L</span>
-   <div class="e5-face">${faceImg(p,Math.round(128*sc))}</div>
+   <div class="e5-face ${playerPortrait(p)?'is-photo':p.img||p.variantFace?'is-art':'is-fallback'}">${faceImg(p,Math.round(128*sc))}</div>
    <div class="e5-name">${first?`<small>${esc(first)}</small>`:''}<b>${esc(last)}</b></div>
    <div class="e5-tier"><span>${T[1]}</span></div>
    <div class="e5-foot">${foot}</div><i class="e5-shine" aria-hidden="true"></i></div></div>`};
@@ -1376,7 +1392,8 @@ function budgetHTML(){const mt=myTeam();if(!mt)return '';const f=S.fin||{},c=cfg
   const minT=gate+pMin,maxT=gate+winMax+pMax;
   const line=(l,v,s)=>`<div class="bl-row"><span>${l}${s?`<small>${s}</small>`:''}</span><b>${v}</b></div>`;
   return `<div class="box bud"><div class="bh">Budget και αξία συλλόγου<small>${esc(mt.name)}</small></div>
-   <div class="bud-hero"><div><span>Ελεύθερα GP</span><b>${gp(f.free??mt.budget)}</b></div><div><span>Συνολική αξία συλλόγου</span><b>${gp((+mt.budget)+val)}</b><small>budget + αξία ρόστερ</small></div></div>
+   <div class="bud-hero"><div><span>Ελεύθερα</span>${leagueMoney(f.free??mt.budget)}</div><div><span>Συνολική αξία συλλόγου</span>${leagueMoney((+mt.budget)+val)}<small>budget + αξία ρόστερ</small></div></div>
+   <p class="exchange-note">Ισοτιμία προβολής · 1 GP eFootball = 200 € · 1 GP EFEL = ${euroRate()} €. Οι συναλλαγές γίνονται σε GP EFEL.</p>
    <h4>Αναμενόμενα έσοδα υπόλοιπης σεζόν</h4>
    <div class="bud-range"><b>${gp(minT)}</b><i></i><b>${gp(maxT)}</b></div><p class="small muted" style="text-align:center;margin:2px 0 8px">ελάχιστο (καμία νίκη, τελευταία θέση) · μέγιστο (όλες νίκες, 1η θέση)</p>
    ${line('Έσοδα έδρας',gp(gate),`${remH} αγώνες στην έδρα × ${gp(c.homeGate||0)}`)}
@@ -1515,7 +1532,7 @@ function frList(mine,mt){const act=mine.filter(f=>!['final','declined','cancelle
   return act.map(f=>friendlyRow(f,mt)).join('')+(done.length?`<div class="small muted" style="margin:10px 0 4px">Ολοκληρωμένα (${done.length})</div>`:'')+done.slice(0,k).map(f=>friendlyRow(f,mt)).join('')+(done.length>5?`<button class="ghost" data-act="frAll">${S.frAll?'Λιγότερα':'Όλα τα φιλικά ('+done.length+')'}</button>`:'')}
 A.frAll=()=>{S.frAll=!S.frAll;render(true)};
 /* header: τα ελεύθερα GP με ετικέτα */
-{const base=renderHeader;renderHeader=function(){base();const mt=myTeam(),el=$('#gpchip');if(el&&mt){el.innerHTML=`<small class="gpl">Ελεύθερα</small>${Number(S.fin?.free??mt.budget).toLocaleString('el-GR')} GP`;el.parentElement.title='Ελεύθερα GP: ό,τι μένει μετά από προσφορές, προτάσεις και απόθεμα ρόστερ. Πάτα για ανάλυση.'}}}
+{const base=renderHeader;renderHeader=function(){base();const mt=myTeam(),el=$('#gpchip');if(el&&mt){el.innerHTML=`<small class="gpl">Ελεύθερα</small>${euroLabel(S.fin?.free??mt.budget)}`;el.parentElement.title='Ελεύθερα GP: ό,τι μένει μετά από προσφορές, προτάσεις και απόθεμα ρόστερ. Πάτα για ανάλυση.'}}}
 /* αποκάλυψη γύρου: όχι για άδειο γύρο */
 {const base=momentsCheck;momentsCheck=function(){const r=S.news.find(n=>n.type==='round');if(r&&!(r.items||[]).length&&!(r.rej||[]).length&&r.ts>LS.get('seenRound_'+S.me,0))LS.set('seenRound_'+S.me,r.ts);return base()}}
 /* ζώνες ρόστερ σε σχέση με το ελάχιστο */
