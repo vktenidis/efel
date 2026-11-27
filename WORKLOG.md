@@ -42,3 +42,7 @@ Mid-season and final fan awards, archived winners, read receipts, push messaging
 Release implementation commit 087beb73451f66d11975f7e6e7504b7f0c65b0df. [PR #5 and its integration status](https://github.com/vktenidis/efel/pull/5). [GitHub Pages deployment history](https://github.com/vktenidis/efel/deployments/github-pages). [Production website](https://vktenidis.github.io/efel/).
 
 Applied the calendar_club_activity migration to the connected EFEL Supabase project. Read-only verification found both new tables enforcing RLS, five policies, both new RPCs executing with caller privileges, and anonymous roles excluded from private messages and invitations. Live payment settings were confirmed as 8/3, participation 1,500 GP and win bonus 500 GP. No production match, invitation, message, roster, balance or payout was created for testing. The post-migration security advisor returned no finding naming a new calendar object. For frontend deployment verification compare the published app.js and index.html to this release; the cache marker is efel-prod07.
+
+## Euro equivalents and player presentation · 27 November 2026
+
+Starting from f4c2f1c. Add display equivalents using the requested eFootball GP anchor, audit the price inputs actually present, correct the office league-position suffix, integrate player photography into cards and check the published UI at mobile and desktop sizes. Keep all financial actions in the current EFEL unit and distinguish verified reference values from estimates.
