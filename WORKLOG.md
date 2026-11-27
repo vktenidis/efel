@@ -62,3 +62,7 @@ There are now 337 verified MAX ratings, previously ten. New records use the orig
 Playwright passed 12 manager routes at 360, 390, 430, 768, 1024, 1440 and 1920 px. The browser measured a positive gap between the numeral and suffix at each width. It decoded an added local photograph, displayed 65,000 GP as €39m, updated the preview to €36m for 60,000 GP and asserted that the transfer requested 60,000 GP. Other isolated flows include bids, scores, scheduling, private messages and admin gating. JavaScript syntax, economy scenarios, catalogue reconciliation and image decoding also passed. Screenshots use test clubs and budgets.
 
 [Mobile office](docs/matchday/home-390.webp) · [Desktop office](docs/matchday/home-1440.webp) · [Mobile player details](docs/matchday/player-390.webp)
+
+## Euro transactions and navigation · 27 November 2026
+
+Baseline b4e3873. Audit manager-facing currency entry, confirmation and settlement. Introduce exact euro entry with validation against the league's existing settlement precision, review navigation groups and mobile access, expand licensed portraits, test financial requests on fixtures and check the published build.
