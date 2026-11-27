@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict');
+const project=require('../assets/ui/economy-model.js');
+const scenario=(place,weekly,upgrades=0)=>project({place,weekly,upgrades,weeks:6});
+assert.deepEqual(scenario(1,6).seasons.map(s=>s.affordable),[false,true,true]);
+assert.deepEqual(scenario(4,8).seasons.map(s=>s.affordable),[false,false,true]);
+assert.deepEqual(scenario(8,2).seasons.map(s=>s.affordable),[false,false,false]);
+assert.equal(scenario(1,6,2).seasons[0].payroll,6160000);
+assert.equal(scenario(1,6,2).seasons[1].affordable,false);
+assert.ok(scenario(1,6).starterFees+scenario(1,6).starterWages<28000000);
+assert.ok(22*500000+3*6000000>28000000);
+assert.throws(()=>scenario(1,9),RangeError);
+console.log('Passed three-season acquisition, payroll and starting-roster scenarios.');

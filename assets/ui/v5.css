@@ -173,3 +173,18 @@ textarea{width:100%;box-sizing:border-box}
 .recap .rc-t td{padding:5px 4px;border-top:1px solid rgba(255,255,255,.07)}
 .recap .rc-t tr.me td{background:rgba(246,184,28,.12)}
 @media (max-width:420px){.recap .rc-top{grid-template-columns:1fr}}
+
+.planner {display:grid;gap:.75rem}
+.planner label {display:grid;gap:.3rem}
+.planner :is(input,textarea,select) {width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+.planner h3,.planner p {margin:.4rem 0}
+.availability-times {display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+#conversation {max-height:44vh;overflow:auto;overflow-wrap:anywhere}
+#conversation p {padding:.45rem;border-bottom:1px solid var(--line,#293951);white-space:pre-wrap}
+#manager-contacts {overflow-wrap:anywhere}
+.fan-progress {padding:.65rem 0}
+.fan-progress summary {cursor:pointer}
+.fan-progress progress {max-width:30%;accent-color:var(--gold)}
+.cal-booked {color:var(--gold);font-size:.7rem}
+.cal-availability {color:#74d9c7;font-size:.7rem}
+@media(max-width:600px){.cal-availability span{display:none}}
