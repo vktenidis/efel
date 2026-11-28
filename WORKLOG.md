@@ -122,3 +122,7 @@ Starting from 2b8ac8d, refined the standings table and club directory surfaces, 
 ## Mobile standings correction · efel-prod16
 
 Starting from 7c6a36c, aligned each club crest with its name and restored all statistics to the horizontally scrollable mobile table. A visible hint explains the gesture. Playwright checked logo/name geometry, horizontal scrolling and club-profile opening at 360, 390 and 430 px, plus the twelve-route suite through 1920 px. No database changes.
+
+## Mobile office fitting · efel-prod17
+
+Starting from d34bb30, the weekly summary and lineup each occupy a full mobile row. Weekly amounts can wrap within their tile, and the PES and portrait lineup views have more room. Browser QA checked widths 360, 390 and 430 px, both pitch modes, an eleven-player fixture and a long monetary value. The twelve-route suite passed through 1920 px. No database changes.
