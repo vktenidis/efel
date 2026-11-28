@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod19').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod19').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod20').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod20').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod19').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod20').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -1776,7 +1776,7 @@ async function calendarDay(day){
   }catch(error){list.textContent=error.message||'Η φόρτωση απέτυχε.'}
 }
 async function inbox(){
-  openM('<div class="box planner"><div class="bh">Μηνύματα managers</div><div id="manager-contacts">Φόρτωση…</div></div>');
+  openM('<div class="box planner manager-messages"><div class="bh">Μηνύματα managers</div><div id="manager-contacts">Φόρτωση…</div></div>');
   const target=$('#manager-contacts'),mt=myTeam();
   try{
     const {data,error}=await sb.from('manager_messages').select('sender,recipient,body').order('id',{ascending:false}).limit(100);
@@ -1789,7 +1789,7 @@ async function inbox(){
 }
 async function thread(id){
   if(!/^[a-f0-9-]{36}$/i.test(id))return;
-  openM(`<div class="box planner"><div class="bh">${esc(S.names[id]||'Manager')}<small>Ιδιωτική συνομιλία</small></div><div id="conversation" aria-live="polite">Φόρτωση…</div>
+  openM(`<div class="box planner manager-messages"><div class="bh">${esc(S.names[id]||'Manager')}<small>Ιδιωτική συνομιλία</small></div><div id="conversation" aria-live="polite">Φόρτωση…</div>
     <button class="ghost" data-act="refreshThread" data-id="${id}">Ανανέωση</button>
     ${myTeam()&&S.all.some(t=>t.manager===id)?`<label>Μήνυμα<textarea id="message-body" maxlength="1000"></textarea></label><button data-act="sendMessage" data-id="${id}">Αποστολή</button>`:''}
     <button class="ghost" data-act="inbox">Όλες οι συνομιλίες</button></div>`);
