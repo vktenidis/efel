@@ -183,3 +183,7 @@ The owner requested small, independently testable changes, with this handoff kep
 14. Show both managers and their photographs on the match card.
 
 The finance, academy, season progression, push and lineup persistence items need end-to-end design and isolated tests. No production data migration should be assumed. Existing verified MAX and source-price limitations are recorded in the earlier release entries.
+
+### Completed first item · efel-prod27
+
+Removed the duplicate lineup entry from the full navigation menu. The club entry, lineup tab and existing direct links remain available. Playwright verified one club entry, no duplicate lineup menu entry, and twelve routes at widths from 360 to 1920 px. The remaining items above are pending.
