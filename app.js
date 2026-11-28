@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod17').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod17').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod18').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod18').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod17').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod18').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
