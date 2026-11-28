@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod24').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod24').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod25').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod25').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod24').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod25').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -482,7 +482,7 @@ function render(force){
   if(!sb){$('#view').innerHTML='<div class="card empty">Λείπουν οι ρυθμίσεις σύνδεσης (config.js).</div>';return}
   document.body.classList.toggle('sign-in',!S.me);
   if(!S.me){$('#view').innerHTML=`<section class="signin"><div class="signin-content"><h2>eFootball<br>Evolution League</h2><p>Ανάλαβε σύλλογο, χτίσε το ρόστερ σου και παίξε στο πρωτάθλημα της EFEL.</p><button data-act="login">Σύνδεση με Google</button></div></section>`;return}
-  if(!S.loaded){$('#view').innerHTML=S.loadFailed?'<section class="card empty"><p>Η λίγκα δεν φόρτωσε.</p><button data-act="retryLoad">Δοκίμασε ξανά</button></section>':'<div class="card empty" role="status">Φόρτωση λίγκας…</div>';return}
+  if(!S.loaded){$('#view').innerHTML=S.loadFailed?'<section class="card empty state-error" role="alert"><p>Η λίγκα δεν φόρτωσε.</p><button data-act="retryLoad">Δοκίμασε ξανά</button></section>':'<div class="card empty state-loading" role="status">Φόρτωση λίγκας…</div>';return}
   if(r==='admin'&&!S.owner){$('#view').innerHTML='<section class="card empty">Η διαχείριση είναι διαθέσιμη στους διοργανωτές.</section>';return}
   if(!S.all.length){$('#view').innerHTML=S.owner?`<div class="card"><h2>Ας στήσουμε τον κόσμο της EFEL</h2><p class="muted">Δημιουργεί 3 λίγκες (1 ανθρώπινη, 2 αυτόματες), 24 συλλόγους, ρόστερ για τους αυτόματους και πρόγραμμα. Θέλει πρώτα να έχει φορτωθεί ο κατάλογος παικτών.</p><button data-act="setupWorld">Δημιουργία κόσμου</button></div>`:'<div class="card empty">Η λίγκα δεν έχει στηθεί ακόμα.</div>';return}
   const pages={club:vClub,paper:vPaper,more:vMore,rules:vRules,calendar:vCalendar,squad:()=>{S.clubTab='xi';return vClub()},home:vHome,table:vTable,matches:vMatches,market:vMarket,teams:vTeams,transfers:vTransfers,admin:vAdmin};
