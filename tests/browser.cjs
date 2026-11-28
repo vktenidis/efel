@@ -389,7 +389,7 @@ async function test() {
     const {page:admin,errors}=await setup(browser,'admin',1440);
     await admin.evaluate(()=>{location.hash='admin'});
     await admin.locator('#view[data-route=admin] .card').first().waitFor();
-    assert.equal(await admin.locator('#navAdmin').getAttribute('hidden'),null);
+    await admin.locator('#navAdmin').waitFor({state:'visible'});
     await admin.locator('#a_budget').fill('360000001');
     await admin.locator('[data-act=saveCfg]').click();
     assert.equal(await admin.evaluate(()=>window.qaRequests.filter(([n])=>n==='efel_set_config').length),0);
@@ -425,6 +425,36 @@ async function test() {
       assert.deepEqual(errors,[]);await page.close();
     }
 
+    for(const [width,mode] of [[390,'pes'],[1440,'faces']]){
+      const {page,errors}=await setup(browser,'manager',width);
+      await page.evaluate(()=>{location.hash='squad'});
+      await page.locator('#view[data-route=squad]').waitFor();
+      if(mode==='faces'){await page.evaluate(()=>localStorage.setItem('efel_pitch_qa-user',JSON.stringify('faces')));await page.reload();await page.locator('#view[data-route=squad]').waitFor()}
+      const player=page.locator(mode==='pes'?'.pes-field [data-act=slot][data-drag-pid]':'.pitch [data-act=slot][data-drag-pid]').first();
+      await player.scrollIntoViewIfNeeded();
+      const pid=await player.getAttribute('data-drag-pid');
+      await player.click();assert.equal(await player.evaluate(el=>el.classList.contains('sel')),true);
+      await player.click();assert.equal(await player.evaluate(el=>el.classList.contains('sel')),false);
+      const src=await player.boundingBox(),from={x:Math.round(src.x+src.width/2),y:Math.round(src.y+src.height/2)};
+      const bench=page.locator('.sqh:has-text("Αναπληρωματικοί") + .sql [data-act=bench]').first();
+      const previous=await bench.getAttribute('data-id');
+      let cdp;
+      if(width===390){cdp=await page.context().newCDPSession(page);await cdp.send('Emulation.setTouchEmulationEnabled',{enabled:true});await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[from]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:from.x+15,y:from.y+15}]});}
+      else{await page.mouse.move(from.x,from.y);await page.mouse.down();await page.mouse.move(from.x+15,from.y+15,{steps:3})}
+      assert.equal(await page.locator('.squad-drag-ghost').isVisible(),true);
+      assert.ok((await page.locator('.squad-drag-ghost').innerText()).length>2);
+      if(width===390){await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:from.x,y:880}]});await page.waitForFunction(()=>{const r=document.querySelector('.sqh + .sql [data-act=bench]')?.getBoundingClientRect();const b=[...document.querySelectorAll('.sqh')].find(e=>e.textContent.includes('Αναπληρωματικοί'))?.nextElementSibling?.querySelector('[data-act=bench]')?.getBoundingClientRect();return b&&b.top>100&&b.bottom<810},null,{timeout:12000});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:from.x,y:450}]});await page.waitForTimeout(100)}else await bench.evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));const box=await bench.boundingBox(),to={x:Math.round(box.x+box.width/2),y:Math.round(box.y+box.height/2)};
+      if(width===390)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[to]});else await page.mouse.move(to.x,to.y,{steps:5});
+      await page.waitForTimeout(250);
+      assert.equal(await bench.evaluate(el=>el.classList.contains('squad-drop-target')),true);
+      if(screenshots&&width===390)await page.screenshot({path:screenshots+'/pitch-to-bench-390.png'});
+      if(width===390){await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach()}else await page.mouse.up();
+      await page.getByText('Δεν υπάρχουν εκκρεμείς αλλαγές.').waitFor();
+      assert.equal(await page.locator(mode==='pes'?'.pes-field [data-act=slot][data-id="0"]':'.pitch [data-act=slot][data-id="0"]').getAttribute('data-drag-pid'),previous);
+      assert.equal(await bench.getAttribute('data-id'),pid);
+      assert.equal(await page.locator('.squad-drag-ghost').count(),0);
+      assert.deepEqual(errors,[]);await page.close();
+    }
     {
       const {page,errors}=await setup(browser,'manager',390);
       await page.evaluate(()=>{location.hash='squad'});

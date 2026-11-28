@@ -1139,3 +1139,5 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
 .squad-drag-ghost{position:fixed;z-index:10000;top:0;left:0;pointer-events:none;max-width:190px;padding:10px 14px;border:2px solid #ffda70;border-radius:9px;background:#203a50;color:#fff;font:700 15px "Fira Sans",system-ui,sans-serif;box-shadow:0 8px 24px #0009;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .club4 .squad-drop-target,.club4 .sqr .sqb.squad-drop-target{outline:3px solid #ffda70;outline-offset:2px;box-shadow:0 0 0 5px #ffda7050}
 @media(max-width:430px){.sqr:not(.empty){grid-template-columns:34px minmax(0,1fr) auto;gap:4px}.sqr .squad-drag{width:34px;min-width:34px}.club4 .sqr .sbtn.sm{padding:0 7px;font-size:13px}}
+
+.club4 :is(.pdot,.slot)[data-drag-pid]{touch-action:none;cursor:grab;user-select:none}.club4 :is(.pdot,.slot)[data-drag-pid]:active{cursor:grabbing}

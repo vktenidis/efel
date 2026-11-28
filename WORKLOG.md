@@ -228,3 +228,10 @@ Limits: drafts are retained in the current page session, not across forced tab t
 The owner reported that prod33's new grip broke the squad row layout and gave no visible indication of dragging. Restored a compact three-column row for grip, player and card at mobile and desktop widths. Dragging now shows a floating player label, dims the source, highlights the drop target, and scrolls at viewport edges. Existing selection and autosave remain available.
 
 Browser QA checked row geometry and horizontal overflow at 360, 390, 430 and 1440 px; inspected the 390 px row and an active drag screenshot; tested visible feedback, drop and cleanup using mouse and emulated touch; and passed the twelve-route suite at 360–1920 px. No production squad data or database schema was changed.
+
+
+## Drag from pitch to squad list · efel-prod35
+
+Managers can drag an occupied pitch position directly onto a player in the squad list or another position. The moving label identifies the player, the target highlights, edge scrolling permits reaching the list, and tap selection remains available. Both PES and portrait pitch views support dragging; image native dragging is suppressed. Pointer capture begins only after movement so normal taps keep working.
+
+Playwright verified pitch-to-bench swaps with emulated touch and automatic scrolling on 390 px, and with mouse in the portrait view on desktop; it checked selected-state taps, visual feedback, autosave, and the existing twelve routes at 360–1920 px. Tested with isolated fixtures; no database changes.
