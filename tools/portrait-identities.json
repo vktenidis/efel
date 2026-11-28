@@ -667,7 +667,10 @@
     "position": "RMF",
     "nationality": "Italy",
     "birthDate": "1995-02-09",
-    "heightCm": 178
+    "heightCm": 178,
+    "excludedFiles": [
+      "AC_Monza_vs._UC_Sampdoria,_20_September_2025_03_(Patrick_Ciurria).jpg"
+    ]
   },
   "s137600": {
     "name": "Amine El Ouazzani",

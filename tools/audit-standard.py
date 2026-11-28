@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def audit(export=None):
     cards = json.loads((ROOT / 'standard.json').read_text())
     ratings = json.loads((ROOT / 'assets/verified-ratings.json').read_text())
+    prices = json.loads((ROOT / 'assets/standard-prices.json').read_text())
     with (ROOT / 'supabase/players.csv').open(newline='') as stream:
         seed = {row['id']: row for row in csv.DictReader(stream)}
     assert len(seed) == len(cards) == len({row[0] for row in cards})
@@ -19,6 +20,10 @@ def audit(export=None):
     for cid, name, pos, base, idx in cards:
         source = seed[cid[1:]]
         assert (name, pos, base, idx) == (source['name'], source['pos'], int(source['ovr']), int(source['img'])), cid
+        if cid in prices:
+            quote = prices[cid]
+            assert (quote['name'], quote['position']) == (name, pos) and quote['gp'] > 0, cid
+            assert quote['source'].endswith('/player/' + cid[1:] + '/'), cid
         ref = ratings.get(cid)
         if ref:
             assert ref['base'] == base and base <= ref['max'] <= 120, cid
@@ -31,15 +36,21 @@ def audit(export=None):
         with export.open('w', newline='') as stream:
             writer = csv.writer(stream)
             writer.writerow(['card_id', 'catalogue_name', 'position', 'base_ovr', 'verified_max_ovr',
-                             'reference_url', 'artwork_index', 'ingame_gp', 'ingame_gp_source'])
+                             'reference_url', 'artwork_index', 'ingame_gp', 'ingame_gp_source',
+                             'current_standard_gp', 'current_source_ovr', 'current_source', 'checked'])
             for cid, name, pos, base, idx in cards:
                 ref = ratings.get(cid, {})
+                quote = prices.get(cid, {})
+                same_base = quote.get('sourceOVR') == base
                 writer.writerow([cid, name, pos, base, ref.get('max', ''), ref.get('source', ''),
-                                 ref.get('artworkIndex', ''), seed[cid[1:]].get('ingame_gp', ''),
-                                 seed[cid[1:]].get('ingame_gp_source', '')])
+                                 ref.get('artworkIndex', ''), quote.get('gp', '') if same_base else '',
+                                 quote.get('source', '') if same_base else '', quote.get('gp', ''),
+                                 quote.get('sourceOVR', ''), quote.get('source', ''), quote.get('checked', '')])
 
     return {
         'cards': len(cards),
+        'current_standard_gp_quotes': len(prices),
+        'quoted_cards_with_matching_base': sum(prices[r[0]]['sourceOVR'] == r[3] for r in cards if r[0] in prices),
         'card_ids_with_verified_max': len(ratings),
         'missing_verified_max': len(cards) - len(ratings),
         'seed_efel_price_counts': Counter(row['price'] for row in seed.values()),

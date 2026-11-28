@@ -234,3 +234,24 @@ textarea{width:100%;box-sizing:border-box}
 
 .box :is(.original-art,.media-credit)>summary {color:#c3d9e9;opacity:1;cursor:pointer;min-height:36px;align-content:center}
 @media(max-width:600px){.home4 .pbtn[data-act="mcard"] {max-width:100%;white-space:normal;min-height:44px;line-height:1.15}}
+
+/* Primary destinations stay within reach. The directory also exposes secondary routes on desktop. */
+#nav #navMore {display:flex!important}
+@media(min-width:701px){
+  #nav a:is([href="#paper"],[href="#rules"],[href="#teams"]) {display:none}
+}
+@media(max-width:700px){
+  #nav.in {grid-template-columns:repeat(5,minmax(0,1fr))}
+  #nav a[data-m] {min-height:48px;justify-content:center}
+}
+.menu-directory .menu-group {margin:1.3rem 0 0}
+.menu-directory .menu-group h3 {font:700 1rem/1.3 "Fira Sans",sans-serif;letter-spacing:.02em;margin:0 0 .55rem;color:#c3d4e3}
+.menu-group .morebtn {min-width:0;overflow:hidden}
+.menu-group .morebtn[href="#squad"]::before {background-image:url(club.webp)}
+.menu-group .morebtn[href="#calendar"]::before {background-image:url(matches.webp)}
+.menu-count {position:absolute;top:.4rem;right:.4rem;border-radius:4px;padding:.2em .45em;background:#f0c35f;color:#142135}
+input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numeric:tabular-nums}
+.vals .v-efel {font-variant-numeric:tabular-nums}
+@media(max-width:700px){
+  .tb .hid #lname {font-size:clamp(16px,4.5vw,22px);white-space:normal;overflow-wrap:anywhere;line-height:1.05}
+}

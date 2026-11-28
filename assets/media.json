@@ -11,6 +11,39 @@
       "identity": "Kylian Mbappé",
       "restrictions": "personality"
     },
+    "s133543": {
+      "name": "Erling Haaland",
+      "path": "assets/players/s133543.webp",
+      "commonsFile": "Erling_Haaland_Morocco_v_Norway_7_June_2026-51.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Erling_Haaland_Morocco_v_Norway_7_June_2026-51.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Erling Haaland",
+      "restrictions": "personality"
+    },
+    "s47287": {
+      "name": "Harry Kane",
+      "path": "assets/players/s47287.webp",
+      "commonsFile": "Harry_Kane_England_v_Ghana_23_June_2026-024_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Harry_Kane_England_v_Ghana_23_June_2026-024_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Harry Kane",
+      "restrictions": "personality"
+    },
+    "s117047": {
+      "name": "Vinícius Júnior",
+      "path": "assets/players/s117047.webp",
+      "commonsFile": "Vinícius_Júnior_Brazil_V_Morocco_13_June_2026-207_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Vin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Vinícius Júnior",
+      "restrictions": "personality"
+    },
     "s135067": {
       "name": "Vitinha",
       "path": "assets/players/s135067.webp",
@@ -20,6 +53,17 @@
       "source": "https://commons.wikimedia.org/wiki/File:Vitinha_USMNT_v_Portugal_Mar_31_2026-50_(cropped).jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Vitinha (footballer, born February 2000)",
+      "restrictions": "personality"
+    },
+    "s101520": {
+      "name": "David Raya",
+      "path": "assets/players/s101520.webp",
+      "commonsFile": "David_Raya_Argentina_v_Spain_19_July_2026-003_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:David_Raya_Argentina_v_Spain_19_July_2026-003_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "David Raya",
       "restrictions": "personality"
     },
     "s108959": {
@@ -77,6 +121,17 @@
       "identity": "Lamine Yamal",
       "restrictions": "personality"
     },
+    "s129369": {
+      "name": "Michael Olise",
+      "path": "assets/players/s129369.webp",
+      "commonsFile": "Michael_Olise_France_v_Senegal_16_June_2026-307_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Michael_Olise_France_v_Senegal_16_June_2026-307_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Michael Olise",
+      "restrictions": "personality"
+    },
     "s83943203": {
       "name": "Mohamed Salah",
       "path": "assets/players/s83943203.webp",
@@ -119,6 +174,17 @@
       "source": "https://commons.wikimedia.org/wiki/File:Raphinha_Brazil_V_Morocco_13_June_2026-133_(cropped).jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Raphinha",
+      "restrictions": "personality"
+    },
+    "s110815": {
+      "name": "Rodri",
+      "path": "assets/players/s110815.webp",
+      "commonsFile": "Rodri_Argentina_v_Spain_19_July_2026-187_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Rodri_Argentina_v_Spain_19_July_2026-187_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Rodri (footballer, born 1996)",
       "restrictions": "personality"
     },
     "s50374711": {
@@ -407,6 +473,17 @@
       "identity": "Enzo Fernández",
       "restrictions": "personality"
     },
+    "s142061": {
+      "name": "Gregor Kobel",
+      "path": "assets/players/s142061.webp",
+      "commonsFile": "2023-08-12_TSV_Schott_Mainz_gegen_Borussia_Dortmund_(DFB-Pokal_2023-24)_by_Sandro_Halank–090.jpg",
+      "author": "Sandro Halank, Wikimedia Commons",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:2023-08-12_TSV_Schott_Mainz_gegen_Borussia_Dortmund_(DFB-Pokal_2023-24)_by_Sandro_Halank%E2%80%93090.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Gregor Kobel",
+      "restrictions": "personality"
+    },
     "s138000": {
       "name": "Jamal Musiala",
       "path": "assets/players/s138000.webp",
@@ -438,6 +515,17 @@
       "source": "https://commons.wikimedia.org/wiki/File:Lautaro_Martinez_Argentina_v_Spain_19_July_2026-049_(cropped).jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Lautaro Martínez",
+      "restrictions": "personality"
+    },
+    "s33185": {
+      "name": "Manuel Neuer",
+      "path": "assets/players/s33185.webp",
+      "commonsFile": "Manuel_Neuer_Ecuador_v_Germany_25_June_2026-148.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Manuel_Neuer_Ecuador_v_Germany_25_June_2026-148.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Manuel Neuer",
       "restrictions": "personality"
     },
     "s116575": {
@@ -483,6 +571,17 @@
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Rúben Dias",
       "restrictions": "personality"
+    },
+    "s114662": {
+      "name": "Alessandro Bastoni",
+      "path": "assets/players/s114662.webp",
+      "commonsFile": "Norway_Italy_-_June_2025_A_36_(cropped).jpg",
+      "author": "MichaelEmilio",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Norway_Italy_-_June_2025_A_36_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Alessandro Bastoni",
+      "restrictions": ""
     },
     "s104226": {
       "name": "Bernardo Silva",
@@ -614,6 +713,17 @@
       "source": "https://commons.wikimedia.org/wiki/File:Martin_Odegaard_France_v_Norway_26_June_26-014.jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Martin Ødegaard",
+      "restrictions": "personality"
+    },
+    "s119531": {
+      "name": "Matheus Cunha",
+      "path": "assets/players/s119531.webp",
+      "commonsFile": "Matheus_Cunha_Brazil_V_Morocco_13_June_2026-178_(cropped).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Matheus_Cunha_Brazil_V_Morocco_13_June_2026-178_(cropped).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Matheus Cunha",
       "restrictions": "personality"
     },
     "s60447": {
@@ -1396,6 +1506,17 @@
       "identity": "Francisco Moura",
       "restrictions": ""
     },
+    "s38635": {
+      "name": "Jasper Cillessen",
+      "path": "assets/players/s38635.webp",
+      "commonsFile": "GAE_-_NEC_-_53493777654_(Jasper_Cillessen).jpg",
+      "author": "Carlo Bruil Fotografie",
+      "license": "https://creativecommons.org/licenses/by/2.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:GAE_-_NEC_-_53493777654_(Jasper_Cillessen).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Jasper Cillessen",
+      "restrictions": ""
+    },
     "s100299": {
       "name": "Kieran Trippier",
       "path": "assets/players/s100299.webp",
@@ -1416,6 +1537,50 @@
       "source": "https://commons.wikimedia.org/wiki/File:Marcus_Ingvartsen_Red_Bulls_v_San_Diego_10_October_2026-063.jpg",
       "changes": "Resized and converted to WebP. Display crop.",
       "identity": "Marcus Ingvartsen",
+      "restrictions": "personality"
+    },
+    "s173008": {
+      "name": "Orlando Gill",
+      "path": "assets/players/s173008.webp",
+      "commonsFile": "Orlando_Gill_France_v_Paraguay_4_July_2026-003_(cropped,_3-4).jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Orlando_Gill_France_v_Paraguay_4_July_2026-003_(cropped,_3-4).jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Orlando Gill",
+      "restrictions": "personality"
+    },
+    "s154109": {
+      "name": "Mohanad Lasheen",
+      "path": "assets/players/s154109.webp",
+      "commonsFile": "Mohanad_Lasheen_Argentina_v_Egypt_7_July_2026-196.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Mohanad_Lasheen_Argentina_v_Egypt_7_July_2026-196.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Mohanad Lasheen",
+      "restrictions": "personality"
+    },
+    "s127802": {
+      "name": "Mohamed Ihattaren",
+      "path": "assets/players/s127802.webp",
+      "commonsFile": "Mohamed_Ihattaren_2020.png",
+      "author": "Brahim Vlogs",
+      "license": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Mohamed_Ihattaren_2020.png",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Mohamed Ihattaren",
+      "restrictions": ""
+    },
+    "s84040189": {
+      "name": "Mohanad Lasheen",
+      "path": "assets/players/s154109.webp",
+      "commonsFile": "Mohanad_Lasheen_Argentina_v_Egypt_7_July_2026-196.jpg",
+      "author": "Bryan Berlin",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "source": "https://commons.wikimedia.org/wiki/File:Mohanad_Lasheen_Argentina_v_Egypt_7_July_2026-196.jpg",
+      "changes": "Resized and converted to WebP. Display crop.",
+      "identity": "Mohanad Lasheen",
       "restrictions": "personality"
     }
   },
