@@ -258,6 +258,11 @@ async function test() {
         await dialog.getByText('39.000.000 €',{exact:true}).first().waitFor();
         assert.equal(await dialog.locator('.player-detail .vals').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
         await dialog.locator('.v-efb').getByText('450.000 GP',{exact:true}).waitFor();
+        const searchLink=dialog.getByRole('link',{name:/Αναζήτηση στο eFootBase μέσω Google/});
+        const searchUrl=new URL(await searchLink.getAttribute('href'));
+        assert.equal(searchUrl.hostname,'www.google.com');
+        assert.equal(searchUrl.searchParams.get('q'),'site:efootbase.com Kylian Mbappé');
+        assert.equal(await searchLink.getAttribute('target'),'_blank');
         assert.match(await dialog.locator('.v-efb').innerText(),/OVR πηγής 89, καταλόγου 85/);
         await dialog.getByText('39 εκατ. €',{exact:true}).first().waitFor();
         await dialog.locator('.e5-face.is-photo img').evaluate(img=>img.decode());

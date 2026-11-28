@@ -187,3 +187,7 @@ The finance, academy, season progression, push and lineup persistence items need
 ### Completed first item · efel-prod27
 
 Removed the duplicate lineup entry from the full navigation menu. The club entry, lineup tab and existing direct links remain available. Playwright verified one club entry, no duplicate lineup menu entry, and twelve routes at widths from 360 to 1920 px. The remaining items above are pending.
+
+### Player search link · efel-prod28
+
+Completed backlog item 5 as a small independent change. Player details now link to a Google search restricted to eFootBase and the exact displayed name. The link identifies Google as the intermediary. It does not assert a verified player match; users select the correct result. Browser QA checked the encoded Mbappé query and passed twelve routes at seven widths. No database changes. Items 2–4 and 6–14 remain pending.
