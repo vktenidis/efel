@@ -118,3 +118,7 @@ Starting from 6d97981, refreshed calendar days, month navigation, matchday selec
 ## Standings and club directory refinement · efel-prod15
 
 Starting from 2b8ac8d, refined the standings table and club directory surfaces, row contrast, club-colour headers and keyboard focus. The horizontally scrollable standings region now has an accessible name and can receive keyboard focus. Playwright passed twelve routes at seven widths from 360 to 1920 px and opened club profiles from both standings and the club directory. No database changes.
+
+## Mobile standings correction · efel-prod16
+
+Starting from 7c6a36c, aligned each club crest with its name and restored all statistics to the horizontally scrollable mobile table. A visible hint explains the gesture. Playwright checked logo/name geometry, horizontal scrolling and club-profile opening at 360, 390 and 430 px, plus the twelve-route suite through 1920 px. No database changes.
