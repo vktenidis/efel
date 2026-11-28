@@ -178,6 +178,20 @@ async function test() {
           await page.locator('#rq').fill('');
           assert.equal(await page.locator('.rules section.card[hidden]').count(),0);
         }
+        if(route==='home'&&[390,1440].includes(width)){
+          await page.evaluate(()=>{const b=document.createElement('button');b.dataset.act='onbGo';b.dataset.id='0';b.id='qa-onboarding';document.body.append(b)});
+          await page.locator('#qa-onboarding').click();
+          const guide=page.getByRole('dialog').locator('.onb');
+          await guide.waitFor();
+          await guide.locator('[data-act=onbGo]').click();
+          await guide.getByText('Η αγορά').waitFor();
+          await guide.locator('[data-act=onbEnd]').click();
+          await page.evaluate(()=>{const b=document.createElement('button');b.dataset.act='help';b.dataset.id='activation';b.id='qa-help';document.body.append(b)});
+          await page.locator('#qa-help').click();
+          await page.getByRole('dialog').locator('.help-detail').waitFor();
+          assert.equal(await page.getByRole('dialog').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+          await page.keyboard.press('Escape');
+        }
         if(route==='home'){
           const rank=page.locator('.skp>b');
           assert.equal(await rank.textContent(),'8η');

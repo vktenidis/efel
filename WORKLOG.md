@@ -158,3 +158,7 @@ Starting from b9f489a, refined budget analysis surfaces, amount wrapping, lineup
 ## Loading and empty states · efel-prod25
 
 Starting from 74a32bb, refined loading, error and empty-result surfaces, added status/alert semantics and reduced-motion handling. Playwright passed twelve routes at seven widths, including an empty match schedule at 390 px and the existing empty player search. No database changes.
+
+## First-time guidance and help · efel-prod26
+
+Starting from 76675f5, refined the onboarding and contextual help dialogs, mobile action layout and keyboard focus. Updated the onboarding match description to mention calendar availability and friendly invitations. Playwright passed twelve routes at seven widths, including onboarding advance/skip and activation help at 390 and 1440 px. No database changes.
