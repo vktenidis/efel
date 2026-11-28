@@ -260,6 +260,59 @@ async function test() {
     assert.equal(await admin.locator('#model-output p').filter({hasText:'Τέλος 2ης σεζόν'}).filter({hasText:'Καλύπτεις'}).count(),1);
     assert.deepEqual(errors,[]);
     await admin.close();
+    const catalogue=JSON.parse(fs.readFileSync(require('node:path').join(__dirname,'../standard.json'),'utf8'));
+    const ids=catalogue.filter(p=>p[3]<72&&p[3]>65).slice(0,12).map(row=>Number(row[0].slice(1)));
+    fixture.roster=[110718,...ids].map(player_id=>({club_id:1,player_id,paid:5000,contract_until:1,activation:'active'}));
+    fixture.players.push({id:ids[0],price:90000});
+    fixture.config.push({key:'min_zone',value:{GK:2}});
+    fixture.matches.push({id:21,league_id:1,season_no:1,md:3,home:1,away:3,status:'open'},
+      {id:22,league_id:1,season_no:1,md:9,home:2,away:1,hg:3,ag:2,status:'final',updated_at:new Date().toISOString()});
+    // The next opponent is unassigned. Profile history includes an away result without an agreed kickoff.
+    fixture.club_managers=fixture.club_managers.slice(0,1);
+    fixture.efel_friendly_relationships=[{club_a:1,club_b:2,played:5,paid_a_week:2,paid_b_week:2}];
+    for(const width of [390,1440]){
+      const {page,errors}=await setup(browser,'manager',width);
+      const dialog=page.getByRole('dialog');
+      const todo=page.locator('.ros.todo');
+      await todo.locator('[data-id=contracts] .symbol-count').getByText('13',{exact:true}).waitFor();
+      await todo.locator('.office-alert').filter({hasText:'Χωρίς manager'}).locator('.club-media').waitFor();
+      if(screenshots)await todo.screenshot({path:screenshots+'/office-alerts-'+width+'.png'});
+      for(const [tile,title] of [['.wkc','Η εβδομάδα σου'],['.budget-tile','Budget και αξία συλλόγου']]){
+        const trigger=page.locator(tile+' .tile-hit');
+        await trigger.click({position:{x:12,y:(await trigger.boundingBox()).height-12}});
+        await dialog.waitFor();
+        assert.ok((await dialog.textContent()).includes(title),title);
+        await page.keyboard.press('Escape');
+        await trigger.focus();await page.keyboard.press('Enter');await dialog.waitFor();
+        await page.keyboard.press('Escape');
+      }
+      await page.locator('.sum-crest').click();
+      const names=dialog.locator('.value-player');
+      assert.equal(await names.count(),5);
+      assert.equal(await names.first().getAttribute('data-id'),'s'+ids[0]);
+      const match=dialog.locator('.club-result[data-id="22"]');
+      assert.equal(await match.locator('.club-media').count(),2);
+      assert.equal(await match.locator('.score-chip').innerText(),'3–2');
+      assert.equal(await match.locator('time').getAttribute('title'),'Ενημέρωση σκορ');
+      const fans=dialog.locator('.fan-trigger');await fans.click();
+      await dialog.locator('.office-bubble:popover-open').getByText(/Κάθε επιβεβαιωμένο/).waitFor();
+      await page.keyboard.press('Escape');
+      assert.ok(await dialog.isVisible());
+      assert.equal(await page.evaluate(()=>document.elementFromPoint(innerWidth/2,innerHeight-8).closest('#nav')!==null),false);
+      assert.equal(await dialog.locator(':popover-open').count(),0);
+      if(screenshots)await page.screenshot({path:screenshots+'/club-'+width+'.png'});
+      await match.click();await dialog.getByText(/Τελικό αποτέλεσμα/i).first().waitFor();
+      await page.keyboard.press('Escape');
+      await page.evaluate(()=>{location.hash='matches'});
+      await page.locator('.friendly-help .help-trigger').click();
+      await page.locator('.office-bubble:popover-open').getByText(/Κανονίστε φιλικό/).waitFor();
+      const bubble=page.locator('.office-bubble:popover-open');
+      assert.ok(await bubble.evaluate(el=>{const r=el.getBoundingClientRect();return r.x>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&r.top>=0}));
+      if(screenshots&&width===390)await page.screenshot({path:screenshots+'/friendly-help-390.png'});
+      await bubble.locator('button').click();
+      assert.deepEqual(errors,[]);await page.close();
+    }
+    console.log('Passed office counters, full-tile mouse and keyboard activation, value order, result crests/dates and friendly popovers.');
     console.log('Passed sign-in wiring, search, pagination, player dialog, isolated bid, transfer and score submissions, and admin gating.');
   } finally { await browser.close(); }
 }

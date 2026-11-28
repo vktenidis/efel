@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod09').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod09').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod10').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod10').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod09').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod10').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -209,23 +209,43 @@ function matchHTML(id){const m=S.allMatches.find(x=>x.id===id);if(!m)return '';c
   <p class="small muted" style="margin:10px 0 0">${h2h.length?'Προηγούμενες αναμετρήσεις: '+h2h.map(x=>`<button class="lnk" data-act="mcard" data-id="${x.id}">${tname(x.home)} ${x.hs}-${x.as} ${tname(x.away)} (${x.md}η)</button>`).join(' · '):'Πρώτη αναμέτρηση των δύο ομάδων στη σεζόν.'}</p>
   ${m.proof?`<p class="small" style="margin:8px 0 0">📷 <a href="${esc(m.proof)}" target="_blank" rel="noopener">Screenshot τελικού σκορ</a></p>`:''}${fin?`<div class="row" style="justify-content:center;margin-top:10px"><button class="ghost" data-act="shareRes" data-id="${m.id}">📤 Κοινοποίηση αποτελέσματος</button></div>`:''}
   ${!fin&&(mine||(S.owner&&!team(m.home)?.is_auto))?`<div class="row" style="justify-content:flex-end;margin-top:10px"><button data-act="gomd" data-id="${m.id}">${m.status==='reported'?'Επιβεβαίωση σκορ':'Δήλωση σκορ'}</button></div>`:''}</div>`}
+function resultDate(m){
+  const final=S.news.find(n=>n.type==='result'&&n.match===m.id&&n.hs===m.hs&&n.as===m.as);
+  const candidates=[[m.sim?null:m.tagreed,'Συμφωνημένη έναρξη'],[final?.ts,'Οριστικοποίηση'],[m.up,'Ενημέρωση σκορ']];
+  for(const [value,label] of candidates){
+    const date=value&&new Date(value);
+    if(date&&Number.isFinite(date.getTime()))return {date,label};
+  }
+  return {date:null,label:'Χωρίς καταγεγραμμένη ημερομηνία'};
+}
+function resultTime(info){
+  if(!info.date)return '<small>Χωρίς ημερομηνία</small>';
+  const day=info.date.toLocaleDateString('el-GR',{day:'numeric',month:'short',year:'numeric'});
+  return `<time datetime="${info.date.toISOString()}" title="${info.label}">${day}<small>${info.label}</small></time>`;
+}
+function clubResult(m,id,info){
+  const diff=(m.hs-m.as)*(m.home===id?1:-1),scoreClass=diff>0?'W':diff<0?'L':'D';
+  const side=tid=>`<span class="result-side">${crest(team(tid),26)}<span>${tname(tid)}</span></span>`;
+  return `<button type="button" class="club-result" data-act="mcard" data-id="${esc(m.id)}">
+    ${resultTime(info)}<span class="result-teams">${side(m.home)}<b class="score-chip ${scoreClass}">${m.hs}–${m.as}</b>${side(m.away)}</span></button>`;
+}
 function teamHTML(id){const t=team(id);if(!t)return '';const st=standings(t.league_id),i=st.findIndex(s=>s.id===id),s=st[i]||{};
-  const ms=S.allMatches.filter(m=>m.status==='final'&&(m.home===id||m.away===id)).sort((a,b)=>a.md-b.md);
+  const ms=S.allMatches.filter(m=>m.status==='final'&&(m.home===id||m.away===id)).map(m=>({m,info:resultDate(m)})).sort((a,b)=>(b.info.date?.getTime()||0)-(a.info.date?.getTime()||0)||b.m.md-a.m.md);
   const nxt=S.allMatches.filter(m=>m.status!=='final'&&(m.home===id||m.away===id)).sort((a,b)=>a.md-b.md)[0];
-  const val=(t.roster||[]).reduce((a,r)=>a+(r.paid||0),0);
+  const val=(t.roster||[]).reduce((a,r)=>a+pl(r.pid).price,0);
   const tr=S.news.filter(n=>(n.type==='round'&&n.items.some(x=>x[0]===id))||((n.type==='buy'||n.type==='release')&&n.tid===id)||(n.type==='transfer'&&(n.from===id||n.to===id))).slice(0,8);
   const trl=tr.map(n=>{if(n.type==='round')return n.items.filter(x=>x[0]===id).map(x=>`<div><span>Γύρος ${n.round}: ${plink(x[1])}</span><span class="muted">${exactMoney(x[2])}</span></div>`).join('');
     if(n.type==='buy')return `<div><span>Αγορά: ${plink(n.pid)}</span><span class="muted">${exactMoney(n.price)}</span></div>`;if(n.type==='release')return `<div><span>Αποδέσμευση: ${plink(n.pid)}</span><span class="muted">+${exactMoney(n.refund)}</span></div>`;
     return n.to===id?`<div><span>Από ${tname(n.from)}: ${plink(n.pid)}</span><span class="muted">${exactMoney(n.gp)}</span></div>`:`<div><span>Σε ${tname(n.to)}: ${plink(n.pid)}</span><span class="muted">+${exactMoney(n.gp)}</span></div>`}).join('');
-  const top=(t.roster||[]).map(r=>pl(r.pid)).sort((a,b)=>b.ovr-a.ovr).slice(0,5);
+  const top=(t.roster||[]).map(r=>pl(r.pid)).sort((a,b)=>b.price-a.price||(b.maxRating??b.ovr)-(a.maxRating??a.ovr)||a.name.localeCompare(b.name)).slice(0,5);
   return `<div class="box tbox" style="--tc:${esc(t.color||'#456')}"><div class="bh">Καρτέλα ομάδας<small>${t.is_auto?'Αυτόματος σύλλογος':t.manager?'Manager: '+esc(S.names[t.manager]||'—'):'Ψάχνει manager'}</small></div>
   <div class="row" style="gap:14px;margin-bottom:10px">${crest(t,64)}<div><h3 style="font-size:26px">${esc(t.name)}</h3>${t.manager?`<div class="small" style="margin:2px 0">${mgrLine(t.manager)}${S.prof?.[t.manager]?.contact?` · ${esc(S.prof[t.manager].contact)}`:''}</div>`:''}<div class="muted small">${esc(leagueName(t.league_id))}${i>=0?' · '+(i+1)+'η θέση · '+(s.pts||0)+' βαθμοί':''}</div><div style="margin-top:4px">${(s.form||[]).slice(-5).map(f=>`<span class="dot ${f}"></span>`).join('')}</div></div></div>
   <div class="kv"><div>Ρεκόρ<b>${s.w||0}Ν ${s.d||0}Ι ${s.l||0}Η</b></div><div>Γκολ<b>${s.gf||0} - ${s.ga||0}</b></div><div>Budget<b>${exactMoney(t.budget)}</b></div><div>Αξία ρόστερ<b>${exactMoney(val)}</b></div><div>Έπαθλα σεζόν<b>${exactMoney(t.earned||0)}</b></div><div>Μ.Ο. OVR ενδεκάδας<b>${xiAvg(t)||'—'}</b></div></div>
   ${!t.is_auto?friendlyProgress(t):''}
   ${myTeam()&&t.manager&&t.manager!==S.me?`<button class="ghost" data-act="thread" data-id="${esc(t.manager)}">Μήνυμα στον manager</button>`:''}
-  ${top.length?`<div class="small muted" style="margin:8px 0 4px">Κορυφαίοι παίκτες</div><div class="ros">${top.map(p=>`<div><span><span class="pos ${grp(p.pos)}">${esc(p.pos)}</span> ${plink(p.id)}</span><span class="muted">${p.ovr}</span></div>`).join('')}</div>`:''}
-  <div class="small muted" style="margin:12px 0 4px">Αποτελέσματα</div>${ms.length?`<div class="ros">${ms.map(m=>{const hm=m.home===id,f=hm?m.hs:m.as,a=hm?m.as:m.hs,r=f>a?'W':f<a?'L':'D';return `<div><span>${m.md}η · ${hm?'vs':'@'} ${tlink(hm?m.away:m.home)}</span><button class="lnk res ${r}" data-act="mcard" data-id="${m.id}">${f}-${a}</button></div>`}).join('')}</div>`:'<p class="small muted">Κανένας αγώνας ακόμα.</p>'}
-  ${nxt?`<p class="small" style="margin:10px 0 0">Επόμενος: <b>${nxt.md}η</b> ${nxt.home===id?'vs':'@'} ${tlink(nxt.home===id?nxt.away:nxt.home)} <button class="ghost" style="min-height:32px;padding:0 10px" data-act="mcard" data-id="${nxt.id}">Καρτέλα αγώνα</button></p>`:''}
+  ${top.length?`<h4 class="club-heading">Πιο ακριβοί παίκτες</h4><div class="top-values">${top.map(p=>`<button class="value-player" data-act="pinfo" data-id="${esc(p.id)}"><span class="pos ${grp(p.pos)}">${esc(p.pos)}</span><strong>${esc(p.name)}</strong><span title="${exactMoney(p.price)}">${euroLabel(p.price)}</span></button>`).join('')}</div>`:''}
+  <h4 class="club-heading">Αποτελέσματα</h4>${ms.length?`<div class="club-results">${ms.map(({m,info})=>clubResult(m,id,info)).join('')}</div>`:'<p class="small muted">Κανένας αγώνας ακόμα.</p>'}
+  ${nxt?`<p class="small muted">Επόμενος αγώνας · ${nxt.tagreed?fmtDT(nxt.tagreed):'Αναμονή ώρας'} · ${tlink(nxt.home===id?nxt.away:nxt.home)} <button class="ghost" data-act="mcard" data-id="${nxt.id}">Καρτέλα αγώνα</button></p>`:''}
   ${trl?`<div class="small muted" style="margin:12px 0 4px">Μεταγραφές</div><div class="ros">${trl}</div>`:''}${clubHistory(id)}${t.manager?careerHTML(t.manager):''}</div>`}
 const DAYMS=864e5;
 const isoD=d=>d.toISOString().slice(0,10);
@@ -273,7 +293,7 @@ async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args||{});if(erro
 async function w(fn,ok){try{await fn();if(ok)toast(ok);await loadAll();return true}catch(e){toast((e?.message||'Κάτι πήγε στραβά, δοκίμασε ξανά.').replace(/([\d.]+) GP\b/g,(_,n)=>exactMoney(Number(n.replaceAll('.','')))).replaceAll('τα GP','τα διαθέσιμα χρήματα').replaceAll('Βάλε GP','Βάλε ποσό'))}}
 function mapNews(n){const p=n.payload||{},ts=Date.parse(n.ts),b={type:n.type,ts,league:sid(n.league_id),scope:n.scope||'league'};
   if(n.type==='round')return {...b,round:p.round,items:(p.items||[]).map(i=>[sid(i[0]),spid(i[1]),i[2],i[3]]),rej:(p.rejected||[]).map(i=>[spid(i[0]),i[1],i[2]])};
-  if(n.type==='result')return {...b,home:sid(p.home),away:sid(p.away),hs:p.hg,as:p.ag,md:p.md,pay:p.pay};
+  if(n.type==='result')return {...b,match:sid(p.match),home:sid(p.home),away:sid(p.away),hs:p.hg,as:p.ag,md:p.md,pay:p.pay};
   if(n.type==='transfer')return {...b,pid:spid(p.player),from:sid(p.from),to:sid(p.to),gp:p.gp,swap:spid(p.swap)};
   if(n.type==='agreed')return {...b,pid:spid(p.player),from:sid(p.from),to:sid(p.to),gp:p.gp,swap:spid(p.swap)};
   if(n.type==='buy')return {...b,tid:sid(p.club),pid:spid(p.player),price:p.price};
@@ -388,7 +408,7 @@ const contractEnds=r=>r&&r.cu!=null&&r.cu<=(cfg().seasonNo||1);
 const contractChip=r=>contractEnds(r)?'<span class="tag n" title="Το συμβόλαιο λήγει στο τέλος της σεζόν">Λήγει</span>':'';
 /* Γραφείο manager: εκκρεμότητες και οικονομική εικόνα */
 function officeHTML(mt){const f=S.fin||{},todo=myTodos(mt);
-  const fin=`<div class="kv" style="margin-top:6px;grid-template-columns:1fr 1fr"><div>Ελεύθερα<b>${exactMoney(f.free??mt.budget)}</b></div><div>Σε προσφορές<b>${exactMoney(f.in_bids||0)}</b></div><div>Σε προτάσεις<b>${exactMoney(f.in_offers||0)}</b></div><div>Απόθεμα ρόστερ <button class="qm" data-act="help" data-id="reserve" aria-label="Τι είναι">?</button><b>${exactMoney(f.reserve||0)}</b></div></div><p class="small muted" style="margin:6px 0 0">Το απόθεμα κρατά ${exactMoney(MINP)} για κάθε κενή θέση ως τους ${MAXR}, ώστε να μπορείς πάντα να κλείσεις το ρόστερ.</p>`;
+  const fin=`<div class="kv" style="margin-top:6px;grid-template-columns:1fr 1fr"><div>Ελεύθερα<b>${exactMoney(f.free??mt.budget)}</b></div><div>Σε προσφορές<b>${exactMoney(f.in_bids||0)}</b></div><div>Σε προτάσεις<b>${exactMoney(f.in_offers||0)}</b></div><div>Απόθεμα ρόστερ <button class="qm" data-act="help" data-id="reserve" aria-label="Τι είναι">?</button><b>${exactMoney(f.reserve||0)}</b></div></div><p class="small muted" style="margin:6px 0 0">Το απόθεμα κρατά ${exactMoney(MINP)} για κάθε κενή θέση ως τους ${cfg().reserveTo||SQT}.</p>`;
   return `<section class="box"><div class="bh">Γραφείο manager<small>${todo.length?todo.length+(todo.length>1?' εκκρεμότητες':' εκκρεμότητα'):'Όλα εντάξει'}</small></div>${todo.length?`<div class="ros todo">${todo.join('')}</div>`:'<p class="small muted">Καμία εκκρεμότητα αυτή τη στιγμή.</p>'}${fin}</section>`}
 /* Αρχείο σεζόν */
 function archiveHTML(){if(!S.archive.length)return '';const g={};for(const a of S.archive){const k=a.season_no+'|'+a.league_id;(g[k]=g[k]||[]).push(a)}
@@ -803,7 +823,7 @@ document.addEventListener('change',e=>{if(e.target.id==='simHuman')S.simHuman=e.
       w(()=>rpc('efel_update_profile',{p_name:'',p_efname:P.efootball_name||'',p_platform:P.platform||'',p_contact:P.contact||'',p_avatar:url}),'Η φωτογραφία σου ανέβηκε')})}if(e.target.id==='fsel'&&S.lu){S.lu.f=e.target.value;S.lu.dirty=1;S.sel=null;render(true)}{const M={fg:'g',fpos:'pos',fpmin:'pmin',fpmax:'pmax',fomin:'omin',fomax:'omax',fsort:'sort',fav:'av'};if(M[e.target.id]){S.mf[M[e.target.id]]=e.target.value;S.mf.offset=0;render(true)}if(e.target.id==='faff'){S.mf.afford=e.target.checked;render(true)}}});
 document.addEventListener('toggle',event=>{if(event.target.matches('.market-filters'))S.mf.filters=event.target.open},true);
 document.addEventListener('focusout',()=>setTimeout(()=>{if(S.dirty)render()},0));
-addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#ov').hidden)closeM()});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('.office-bubble:popover-open')&&!$('#ov').hidden)closeM()});
 addEventListener('hashchange',()=>{S.lu=null;S.sel=null;closeM();S.offerFor=S._keep||null;S._keep=null;render(true);scrollTo(0,0)});
 /* ================= ΕΜΠΕΙΡΙΑ: εφημερίδα, στιγμές, shortlist, ιστορία ================= */
 const LS={get(k,d){try{const v=localStorage.getItem('efel_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('efel_'+k,JSON.stringify(v))}catch(e){}}};
@@ -961,10 +981,11 @@ function weekly(mt){const wk=Date.now()-7*864e5,id=mt.id,ms=S.allMatches.filter(
   let w=0,d=0,l=0,gf=0,ga=0,inc=0;for(const m of ms){const f=m.home===id?m.hs:m.as,a=m.home===id?m.as:m.hs;gf+=f;ga+=a;f>a?w++:f<a?l++:d++}
   for(const n of S.news)if(n.ts>=wk&&n.type==='result'&&n.pay&&n.pay[id])inc+=+n.pay[id];
   const ins=[],outs=[];for(const n of S.news){if(n.ts<wk)continue;if(n.type==='transfer'){if(n.to===id)ins.push([n.pid,-n.gp]);if(n.from===id)outs.push([n.pid,n.gp])}if(n.type==='buy'&&n.tid===id)ins.push([n.pid,-n.price]);if(n.type==='release'&&n.tid===id)outs.push([n.pid,n.refund]);if(n.type==='round')for(const i of n.items)if(i[0]===id)ins.push([i[1],-i[2]])}
-  const net=inc+[...ins,...outs].reduce((a,x)=>a+x[1],0);
+  const renewals=S.news.filter(n=>n.ts>=wk&&n.type==='renew'&&n.tid===id).reduce((sum,n)=>sum+n.cost,0);
+  const net=inc+[...ins,...outs].reduce((a,x)=>a+x[1],0)-renewals;
   return `<section class="box weekly"><div class="bh">Η εβδομάδα σου<small>τελευταίες 7 μέρες</small></div>
    <div class="wk"><div><b>${ms.length}</b><span>αγώνες</span></div><div><b class="W">${w}</b><span>νίκες</span></div><div><b class="D">${d}</b><span>ισοπαλίες</span></div><div><b class="L">${l}</b><span>ήττες</span></div><div><b>${gf}-${ga}</b><span>γκολ</span></div><div><b class="${net<0?'neg':'up'}">${net<0?'−':'+'}${euroLabel(Math.abs(net))}</b><span>καθαρά έσοδα</span></div></div>
-   ${ms.length?`<div class="wkm">${ms.map(m=>{const f=m.home===id?m.hs:m.as,a=m.home===id?m.as:m.hs;return `<button class="chipm ${f>a?'W':f<a?'L':'D'}" data-act="mcard" data-id="${m.id}">${crest(team(m.home===id?m.away:m.home),16)} ${f}-${a}</button>`}).join('')}</div>`:'<p class="small muted">Κανένας αγώνας αυτή την εβδομάδα.</p>'}
+   ${ms.length?`<div class="club-results">${ms.map(m=>clubResult(m,id,resultDate(m))).join('')}</div>`:'<p class="small muted">Κανένας αγώνας αυτή την εβδομάδα.</p>'}
    ${ins.length||outs.length?`<div class="small" style="margin-top:6px">${ins.map(x=>`<span class="tag in">⬇ ${plink(x[0])}</span>`).join(' ')} ${outs.map(x=>`<span class="tag out">⬆ ${plink(x[0])}</span>`).join(' ')}</div>`:''}
    <p class="small muted" style="margin:6px 0 0">Έσοδα από αγώνες: +${exactMoney(inc)}</p></section>`}
 function officeHero(mt){const S2=seasonStats(mt.id),B=boardTarget(mt.id),W=nextWindow(),f=S2.s.form||[],uid=mt.manager;
@@ -1069,6 +1090,10 @@ async function boot(){
 }
 /* ================= v4 UI (mockups Billy 26/11): header, Γραφείο, Μεταγραφές, Η ομάδα μου ================= */
 const IC={
+  document:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h13l6 6v20H7z" fill="#244766"/><path d="M20 3v7h6M11 14h11M11 18h9M11 22h5"/></svg>',
+  managerOff:'<svg viewBox="0 0 32 32"><circle cx="13" cy="8" r="5" fill="#efd7ac"/><path d="M2 28v-4a11 11 0 0 1 22 0v4" fill="#aac3d6"/><path d="m10 17 3 2 3-2-2 4 1 5-2 2-2-2 1-5z" fill="#14253a"/><circle cx="25" cy="23" r="7" fill="#ac2c45"/><path d="m22 20 6 6m0-6-6 6" stroke="#fff" stroke-width="2"/></svg>',
+  fans:'<svg viewBox="0 0 32 32"><g fill="currentColor"><circle cx="16" cy="10" r="4"/><circle cx="6" cy="12" r="3"/><circle cx="26" cy="12" r="3"/><path d="M9 27v-4a7 7 0 0 1 14 0v4zM1 25v-4a5 5 0 0 1 8-4 10 10 0 0 0-2 8zm24 0a10 10 0 0 0-2-8 5 5 0 0 1 8 4v4z"/></g></svg>',
+  pitch:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="24" height="26" rx="2"/><path d="M4 16h24M10 3v5h12V3M10 29v-5h12v5"/><circle cx="16" cy="16" r="4"/></svg>',
   mail:'<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 4h20v16H2zm2 2 8 6 8-6zm16 2-8 6-8-6v10h16z"/></svg>',
   user:'<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 12c5 0 9 3 9 7v1H3v-1c0-4 4-7 9-7z"/></svg>',
   bell:'<svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.4-2h-4.8a2.5 2.5 0 0 0 2.4 2zm7-6V11a7 7 0 0 0-5.5-6.8V3a1.5 1.5 0 0 0-3 0v1.2A7 7 0 0 0 5 11v5l-2 2v1h18v-1z"/></svg>',
@@ -1092,26 +1117,31 @@ const ico=(k,c)=>`<span class="ic ${c||''}" aria-hidden="true">${IC[k]||''}</spa
 const goTo=(a,inner,cls)=>a.startsWith('#')?`<a class="${cls||''}" href="${a}">${inner}</a>`:`<button class="${cls||''}" ${a}>${inner}</button>`;
 
 /* ---- εκκρεμότητες ως αντικείμενα: t τίτλος, s υπότιτλος, a ενέργεια (#hash ή data-act), row η πλήρης γραμμή ---- */
+function officeAlert(icon,title,detail,action,{count,club,warning=false}={}){
+  const symbol=`<span class="office-symbol" aria-hidden="true">${club?crest(club,29):''}${ico(icon)}${count!=null?`<b class="symbol-count">${count}</b>`:''}${warning?'<i class="symbol-warning">!</i>':''}</span>`;
+  const inside=`${symbol}<span class="alert-copy"><strong>${title}</strong><small>${detail}</small></span>${ico('chev')}`;
+  return action.startsWith('#')?`<a class="office-alert" href="${action}">${inside}</a>`:`<button type="button" class="office-alert" ${action}>${inside}</button>`;
+}
 function myTodoItems(mt){const L=[],B='style="min-height:34px;padding:0 10px"';
   for(const r of mt.roster||[])if(r.activation==='pending')L.push({t:`Ενεργοποίησε τον ${esc(pl(r.pid).name)}`,s:r.deadline?'Επιβεβαίωσε ως '+fmtD(new Date(r.deadline)):'Επιβεβαίωσε ότι έχεις την κάρτα',a:`data-act="pinfo" data-id="${esc(r.pid)}"`,
     row:`<div><span>${actChip(r)} Ενεργοποίησε τον <b>${plink(r.pid)}</b> <button class="qm" data-act="help" data-id="activation" aria-label="Τι είναι">?</button>${r.deadline?' ως '+fmtDT(r.deadline):''}</span><span class="row" style="gap:6px"><button ${B} data-act="actConfirm" data-id="${r.pid}">Έχω την κάρτα</button><button class="ghost" ${B} data-act="actUnable" data-id="${r.pid}">Δεν μπορώ</button></span></div>`});
   const inc=S.offers.filter(o=>o.status==='open'&&o.turn===mt.id);
   if(inc.length)L.push({t:`${inc.length} ${inc.length>1?'προτάσεις περιμένουν':'πρόταση περιμένει'} απάντηση`,s:'Αποδοχή, απόρριψη ή αντιπρόταση',a:'#transfers',
-    row:`<div><span>${inc.length} ${inc.length>1?'προτάσεις περιμένουν':'πρόταση περιμένει'} την απάντησή σου</span><a href="#transfers"><button class="ghost" ${B}>Δες</button></a></div>`});
+    row:officeAlert('mail','Προτάσεις μεταγραφής',`${inc.length} σε αναμονή απάντησης`,'#transfers',{count:inc.length})});
   for(const m of S.allMatches.filter(m=>m.status==='reported'&&(m.home===mt.id||m.away===mt.id)&&m.by!==mt.id))
     L.push({t:`Επιβεβαίωσε το ${m.hs}-${m.as}`,s:`${esc(team(m.home)?.name||'')} - ${esc(team(m.away)?.name||'')}`,a:`data-act="gomd" data-id="${m.id}"`,
       row:`<div><span>Επιβεβαίωσε το <b>${tname(m.home)} ${m.hs}-${m.as} ${tname(m.away)}</b></span><button ${B} data-act="confirm" data-id="${m.id}">Σωστό</button></div>`});
   for(const m of S.allMatches.filter(m=>m.status!=='final'&&m.tprop&&!m.tagreed&&m.tpropBy!==mt.id&&(m.home===mt.id||m.away===mt.id)))
     L.push({t:`Πρόταση ώρας για την ${m.md}η`,s:`Από ${esc(team(m.tpropBy)?.name||'')} · ${m.slots.length} ${m.slots.length>1?'επιλογές':'επιλογή'}`,a:`data-act="gomd" data-id="${m.id}"`,
-      row:`<div><span>Ο ${tname(m.tpropBy)} προτείνει ώρα για την ${m.md}η: <b>${m.slots.map(x=>fmtDT(x)).join(' ή ')}</b></span><button ${B} data-act="gomd" data-id="${m.id}">Απάντηση</button></div>`});
+      row:officeAlert('cal',`Πρόταση ώρας · ${tname(m.tpropBy)}`,m.slots.map(x=>fmtDT(x)).join(' ή '),`data-act="gomd" data-id="${m.id}"`)});
   const ends=(mt.roster||[]).filter(contractEnds);
   if(ends.length)L.push({t:`${ends.length} ${ends.length>1?'συμβόλαια λήγουν':'συμβόλαιο λήγει'}`,s:'Ανανέωσε παίκτες',a:'data-act="clubGo" data-id="contracts"',
-    row:`<div><span>${ends.length} ${ends.length>1?'συμβόλαια λήγουν':'συμβόλαιο λήγει'} στο τέλος της σεζόν: ανανέωσε όποιους θες να κρατήσεις</span><button class="ghost" ${B} data-act="clubGo" data-id="contracts">Συμβόλαια</button></div>`});
+    row:officeAlert('document','Λήξη συμβολαίων',`${ends.length} προς ανανέωση στο τέλος της σεζόν`,'data-act="clubGo" data-id="contracts"',{count:ends.length,warning:true})});
   for(const m of S.allMatches.filter(m=>m.status==='disputed'&&(m.home===mt.id||m.away===mt.id)))
     L.push({t:'Διαφωνία στο σκορ',s:`${esc(team(m.home)?.name||'')} - ${esc(team(m.away)?.name||'')}: δηλώστε ξανά`,a:`data-act="gomd" data-id="${m.id}"`,
       row:`<div><span><span class="tag n">Διαφωνία</span> ${tname(m.home)} - ${tname(m.away)}: δηλώστε ξανά</span><button class="ghost" ${B} data-act="gomd" data-id="${m.id}">Άνοιγμα</button></div>`});
   if(cfg().biddingOpen)L.push({t:`Γύρος προσφορών ${cfg().round}`,s:`${myBids().length}/${cfg().bidsPerRound||8} προσφορές${cfg().deadline?' · ως '+esc(cfg().deadline):''}`,a:'#market',
-    row:`<div><span>Ανοιχτός γύρος προσφορών${cfg().deadline?' ως '+esc(cfg().deadline):''} · ${myBids().length}/${cfg().bidsPerRound||8} προσφορές</span><a href="#market"><button class="ghost" ${B}>Αγορά</button></a></div>`});
+    row:officeAlert('coins',`Δημοπρασία · γύρος ${cfg().round}`,`${myBids().length}/${cfg().bidsPerRound||8} προσφορές${cfg().deadline?' · ως '+esc(cfg().deadline):''}`,'#market')});
   return L}
 function myTodos(mt){return myTodoItems(mt).map(x=>x.row)}
 
@@ -1148,8 +1178,8 @@ function weekCard(mt){const wk=Date.now()-7*864e5,id=mt.id,ms=S.allMatches.filte
   for(const n of S.news)if(n.ts>=wk&&n.type==='result'&&n.pay&&n.pay[id])inc+=+n.pay[id];
   let mv=0;for(const n of S.news){if(n.ts<wk)continue;if(n.type==='transfer'){if(n.to===id)mv-=n.gp||0;if(n.from===id)mv+=n.gp||0}if(n.type==='buy'&&n.tid===id)mv-=n.price;if(n.type==='release'&&n.tid===id)mv+=n.refund;if(n.type==='renew'&&n.tid===id)mv-=n.cost;if(n.type==='round')for(const i of n.items)if(i[0]===id)mv-=i[2]}
   const net=inc+mv;
-  return `<section class="pnl wkc"><div class="ph">${ico('chart','gold')}<b>Η εβδομάδα σου</b><button class="lnk more" data-act="week" aria-label="Λεπτομέρειες">${ico('chev')}</button></div>
-   <div class="wtiles"><div class="wt"><b>${ms.length}</b><span>αγώνες</span></div><div class="wt"><b class="cW">${w}</b><span>νίκες</span></div><div class="wt"><b>${d}</b><span>ισοπαλίες</span></div><div class="wt"><b class="cL">${l}</b><span>ήττες</span></div><div class="wt"><b>${gf}-${ga}</b><span>γκολ</span></div><div class="wt"><b class="${net<0?'cL':'cW'}">${net<0?'−':'+'}${euroLabel(Math.abs(net))}</b><span>καθαρά έσοδα</span></div></div></section>`}
+  return `<section class="pnl wkc action-tile"><div class="ph">${ico('chart','gold')}<b>Η εβδομάδα σου</b><span class="more" aria-hidden="true">${ico('chev')}</span></div>
+   <div class="wtiles"><div class="wt"><b>${ms.length}</b><span>αγώνες</span></div><div class="wt"><b class="cW">${w}</b><span>νίκες</span></div><div class="wt"><b>${d}</b><span>ισοπαλίες</span></div><div class="wt"><b class="cL">${l}</b><span>ήττες</span></div><div class="wt"><b>${gf}-${ga}</b><span>γκολ</span></div><div class="wt"><b class="${net<0?'cL':'cW'}">${net<0?'−':'+'}${euroLabel(Math.abs(net))}</b><span>καθαρά έσοδα</span></div></div><button type="button" class="tile-hit" data-act="week" aria-label="Η εβδομάδα σου · λεπτομέρειες"></button></section>`}
 function nextMatchCard(mt){const nm=S.allMatches.filter(m=>m.status!=='final'&&(m.home===mt.id||m.away===mt.id)).sort((a,b)=>a.md-b.md)[0];
   if(!nm)return `<section class="pnl nmc"><div class="ph">${ico('cal')}<b>Επόμενος αγώνας</b></div><p class="small muted" style="text-align:center;margin:18px 0">Η σεζόν σου ολοκληρώθηκε.</p></section>`;
   const when=nm.tagreed?fmtDT(nm.tagreed):`${fmtD(mdDate(nm.md))} · ώρα προς συμφωνία`;
@@ -1176,8 +1206,10 @@ function vHome(){
   const n=st.length,tb=st.map((s,i)=>`<tr class="${i===0?'z1':i>=n-1&&n>3?'zl':'zm'} ${s.id===mt.id?'me':''}"><td class="ps">${i<3&&s.p>0?`<img src="m${i+1}.jpg" alt="${i+1}">`:i+1}</td><td>${crest(team(s.id),20)}</td><td class="n">${tlink(s.id)}</td><td class="num muted">${s.p}</td><td class="num pts">${s.pts}</td></tr>`).join('');
   const rec=S.all.flatMap(t=>(t.roster||[]).map(r=>({t,r}))).sort((a,b)=>b.r.paid-a.r.paid).slice(0,3);
   const my=S.allMatches.filter(m=>m.home===mt.id||m.away===mt.id).sort((a,b)=>a.md-b.md),nx=my.find(m=>m.status!=='final');
-  const cal=`<div class="calrow">${my.map(m=>{const home=m.home===mt.id,opp=home?m.away:m.home;let r='';if(m.status==='final'){const f=home?m.hs:m.as,a=home?m.as:m.hs;r=`<span class="res ${f>a?'W':f<a?'L':'D'}">${f}-${a}</span>`}
-     return `<button class="cd ${nx&&m.id===nx.id?'on':''}" data-act="mcard" data-id="${m.id}"><div class="dn">${m.md}η</div><div class="cb">${crest(team(opp),28)}<span>${home?'Έδρα':'Εκτός'}</span>${r}</div></button>`}).join('')}</div>`;
+  const cal=`<div class="calrow office-fixtures">${my.map(m=>{
+    const final=m.status==='final',info=final?resultDate(m):{date:m.tagreed?new Date(m.tagreed):mdDate(m.md),label:m.tagreed?'Συμφωνημένη έναρξη':'Πρόγραμμα'};
+    return `<button class="cd ${nx&&m.id===nx.id?'on':''}" data-act="mcard" data-id="${m.id}" aria-label="${tname(m.home)} – ${tname(m.away)} · ${final?m.hs+'–'+m.as:info.label}">
+      ${resultTime(info)}<span class="fixture-pair">${crest(team(m.home),22)}<b>${final?m.hs+'–'+m.as:'vs'}</b>${crest(team(m.away),22)}</span></button>`}).join('')}</div>`;
   const ros=mt.roster||[],c={GK:0,DEF:0,MID:0,FWD:0};for(const r of ros)c[grp(pl(r.pid).pos)]++;
   return `<div class="home4">${sumCard(mt)}${roundResults()}
    <div class="pair">${formCard(mt)}${nextStepCard(mt)}</div>
@@ -1185,7 +1217,7 @@ function vHome(){
    <div class="pair">${xiCard(mt)}${newsCard()}</div>
    ${paperTeaser()}
    <div class="more4">${officeHTML(mt)}
-    <section class="box"><div class="bh">Budget<small>${ros.length}/${MAXR} παίκτες · <button class="lnk" style="color:#ffd766" data-act="gpinfo">Ανάλυση ›</button></small></div><div class="big">${leagueMoney(mt.budget)}</div><div class="small muted" style="margin-top:8px">${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${c[g]}/${QUOTA[g]}`).join(' · ')}</div></section>
+    <section class="box budget-tile action-tile"><div class="bh">Budget<small>${ros.length}/${MAXR} παίκτες · <span class="tile-hint">Ανάλυση ›</span></small></div><div class="big">${leagueMoney(mt.budget)}</div><div class="small muted" style="margin-top:8px">${Object.keys(QUOTA).map(g=>`${GNAME[g]} ${c[g]}/${QUOTA[g]}`).join(' · ')}</div><button type="button" class="tile-hit" aria-label="Ανάλυση budget" data-act="gpinfo"></button></section>
     <section class="box"><div class="bh">${esc(leagueName(S.lg))}<small><a href="#table" style="color:#cfe0ff">Όλη</a></small></div>${n?`<table class="st"><thead><tr><th></th><th></th><th></th><th class="num" title="Αγώνες">Αγ</th><th class="num" title="Βαθμοί">Β</th></tr></thead><tbody>${tb}</tbody></table>`:''}</section>
     <section class="box"><div class="bh">Μεταγραφές-ρεκόρ</div>${rec.length?`<table class="st"><tbody>${rec.map((x,i)=>`<tr class="zm"><td class="ps">${i+1}</td><td>${crest(x.t,20)}</td><td class="n">${plink(x.r.pid)}</td><td class="num"><b>${exactMoney(x.r.paid)}</b></td></tr>`).join('')}</tbody></table>`:'<p class="muted small">Καμία μεταγραφή ακόμα.</p>'}</section>
     <section class="box cal"><div class="bh">Πρόγραμμα<small>${esc(mt.name)}</small></div>${cal}</section></div>
@@ -1483,7 +1515,7 @@ function friendlyRow(f,mt){const id=mt?.id,mine=id&&(f.home===id||f.away===id),m
 function friendliesHTML(){const mt=myTeam(),c=cfg(),L=(S.friendlies||[]).filter(f=>!['declined','cancelled'].includes(f.status)||(mt&&(f.home===mt.id||f.away===mt.id)&&Date.now()-Date.parse(f.updated_at)<3*864e5));
   const mine=mt?L.filter(f=>f.home===mt.id||f.away===mt.id):[],other=L.filter(f=>!mine.includes(f)&&f.status==='final').slice(0,6);
   return `<section class="pnl frs"><div class="ph">${ico('cal','gold')}<b>Φιλικά</b>${mt?`<button class="pbtn sm" style="margin-left:auto" data-act="frNew">+ Νέο φιλικό</button>`:''}</div>
-   <p class="small muted">Κανονίστε φιλικό με όποιον manager θέλετε. Όταν ο αντίπαλος επιβεβαιώσει το σκορ, παίρνετε και οι δύο <b>${exactMoney(c.frFee??1500)}</b> και ο νικητής <b>+${exactMoney(c.frWin??500)}</b> (ισοπαλία +${exactMoney(Math.floor((c.frWin??500)/2))} ο καθένας). Πληρώνονται έως ${c.frWeek??8} φιλικά ανά σύλλογο και ${c.frPair??3} ανά ζευγάρι κάθε 7 μέρες. Τα φιλικά δεν μετρούν στη βαθμολογία.</p>
+   <div class="friendly-help">${helpBubble('Πώς λειτουργούν τα φιλικά;',`<p class="small muted">Κανονίστε φιλικό με όποιον manager θέλετε. Όταν ο αντίπαλος επιβεβαιώσει το σκορ, παίρνετε και οι δύο <b>${exactMoney(c.frFee??1500)}</b> και ο νικητής <b>+${exactMoney(c.frWin??500)}</b> (ισοπαλία +${exactMoney(Math.floor((c.frWin??500)/2))} ο καθένας). Πληρώνονται έως ${c.frWeek??8} φιλικά ανά σύλλογο και ${c.frPair??3} ανά ζευγάρι κάθε 7 μέρες. Τα φιλικά δεν μετρούν στη βαθμολογία.</p>`)}</div>
    ${mt?friendlyProgress(mt):''}
    ${mine.length?frList(mine,mt):'<p class="tempty">Δεν έχεις φιλικά. Πάτα «+ Νέο φιλικό».</p>'}
    ${other.length?`<div class="small muted" style="margin:10px 0 4px">Τελευταία φιλικά της λίγκας</div>${other.map(f=>friendlyRow(f,mt)).join('')}`:''}</section>`}
@@ -1563,7 +1595,7 @@ function frLeft(mt){
   const left=frLeft(mt),max=(c.frFee??1500)+(c.frWin??500),opp=S.all.filter(t=>t.id!==mt.id&&t.manager&&!t.is_auto);
   const bar=`<div class="frbonus"><div><b>${left?`Σου μένουν ${left} πληρωμένα φιλικά αυτή την εβδομάδα`:'Συμπλήρωσες τα πληρωμένα φιλικά της εβδομάδας'}</b><span>${left?`έως +${exactMoney(left*max)} για τον σύλλογό σου`:'Μπορείς να παίξεις κι άλλα, χωρίς έσοδα. Νέα πληρωμένα σε λίγες μέρες.'}</span></div></div>
    ${opp.length?`<div class="frquick">${opp.map(t=>`<button class="frq" data-act="frNew" data-id="${esc(t.id)}">${crest(t,26)}<span>${esc(t.name)}</span><small>${esc(S.names[t.manager]||'')}</small></button>`).join('')}</div>`:''}`;
-  return h.replace('<p class="small muted">Κανονίστε',bar+'<p class="small muted">Κανονίστε')}}
+  return h.replace('<div class="friendly-help">',bar+'<div class="friendly-help">')}}
 /* «Το επόμενο βήμα σου»: όταν δεν εκκρεμεί τίποτα, πρόταση για φιλικό */
 {const base=nextStepCard;nextStepCard=function(mt){if(myTodoItems(mt).length)return base(mt);const left=frLeft(mt),opp=S.all.some(t=>t.id!==mt.id&&t.manager&&!t.is_auto);
   if(!left||!opp)return base(mt);const c=cfg();
@@ -1598,18 +1630,18 @@ function zoneShort(mt){const mz=cfg().minZone;if(!mz||!mt)return [];const c={GK:
 {const base=myTodoItems;myTodoItems=function(mt){const L=base(mt),B='style="min-height:34px;padding:0 10px"',c=cfg();
   for(const m of S.allMatches.filter(m=>(m.home===mt.id||m.away===mt.id)&&m.status!=='final'&&isOverdue(m))){const opp=m.home===mt.id?m.away:m.home;
     L.unshift({t:`Εκπρόθεσμος: ${m.md}η αγωνιστική`,s:`Με ${esc(team(opp)?.name||'')} · η προθεσμία ήταν ${fmtD(new Date(mdDate(m.md).getTime()+(c.reportDays||4)*DAYMS))}`,a:`data-act="gomd" data-id="${m.id}"`,
-      row:`<div><span><span class="tag n">Εκπρόθεσμος</span> ${m.md}η με ${tname(opp)}: παίξτε και δηλώστε το σκορ, αλλιώς αποφασίζει η διοργάνωση</span><button class="ghost" ${B} data-act="gomd" data-id="${m.id}">Άνοιγμα</button></div>`})}
+      row:officeAlert('cal','Εκπρόθεσμος αγώνας',`${tname(opp)} · δήλωση σκορ`,`data-act="gomd" data-id="${m.id}"`,{warning:true})})}
   {const m=S.allMatches.filter(m=>(m.home===mt.id||m.away===mt.id)&&m.status!=='final').sort((a,b)=>a.md-b.md).find(m=>{const o=team(m.home===mt.id?m.away:m.home);return o&&!o.is_auto&&!o.manager});
    if(m){const opp=m.home===mt.id?m.away:m.home,d=new Date(mdDate(m.md).getTime()+((c.forfeitDays||3)+1)*DAYMS);
     L.push({t:`Ο αντίπαλος της ${m.md}ης δεν έχει manager`,s:`Αν δεν βρεθεί ως ${fmtD(d)}, ${c.forfeitMode==='walkover'?'κατακύρωση 3-0 υπέρ σου':'ο αγώνας προσομοιώνεται από τα ρόστερ'}`,a:`data-act="gomd" data-id="${m.id}"`,
-      row:`<div><span>Η ${tname(opp)} δεν έχει manager: αν δεν βρεθεί ως ${fmtD(d)}, η ${m.md}η ${c.forfeitMode==='walkover'?'κατακυρώνεται 3-0 υπέρ σου':'προσομοιώνεται από τα ρόστερ'}. Αν την παίξετε πριν, δήλωσε το σκορ κανονικά.</span></div>`})}}
+      row:officeAlert('managerOff',tname(opp),`Χωρίς manager · ${c.forfeitMode==='walkover'?'κατακύρωση':'προσομοίωση'} από ${fmtD(d)}`,`data-act="gomd" data-id="${m.id}"`,{club:team(opp)})})}}
   const out=S.offers.filter(o=>o.status==='agreed'&&o.to===mt.id);
   if(out.length){const w=nextWindow();L.push({t:`${out.length} ${out.length>1?'παίκτες φεύγουν':'παίκτης φεύγει'} στο άνοιγμα της μεταγραφικής`,s:`${out.slice(0,3).map(o=>esc(pl(o.pid).name)).join(', ')}${out.length>3?'…':''}${w&&!w.open?' · '+w.txt:''}`,a:'#transfers',
-    row:`<div><span><b>Προσυμφωνίες:</b> στο άνοιγμα της μεταγραφικής φεύγουν ${out.map(o=>plink(o.pid)).join(', ')}. Κανόνισε αντικαταστάτες.</span><a href="#transfers"><button class="ghost" ${B}>Μεταγραφές</button></a></div>`})}
+    row:officeAlert('swap','Προσυμφωνίες',`Αποχώρηση στο άνοιγμα · ${out.map(o=>esc(pl(o.pid).name)).join(', ')}`,'#transfers',{count:out.length})})}
   for(const z of zoneShort(mt))L.push({t:`Λίγοι ${GNAME[z.g].toLowerCase()}: ${z.have}/${z.need}`,s:'Το ελάχιστο ρόστερ μπλοκάρει πωλήσεις σε αυτή τη ζώνη',a:'#transfers',
-    row:`<div><span>Έχεις ${z.have} ${GNAME[z.g].toLowerCase()} (ελάχιστο ${z.need}). Δεν μπορείς να πουλήσεις άλλους σε αυτή τη ζώνη ώσπου να αποκτήσεις.</span><a href="#transfers"><button class="ghost" ${B}>Αγορά</button></a></div>`});
+    row:officeAlert('shirt',GNAME[z.g],`${z.have} από ${z.need} απαιτούμενους · πωλήσεις σε αναμονή`,'#transfers',{warning:true})});
   if(c.phase==='season'&&!(mt.lineup?.xi||[]).filter(Boolean).length&&(mt.roster||[]).length>=11)L.push({t:'Αποθήκευσε την ενδεκάδα σου',s:'Οι συμμετοχές μετρούν από την αποθηκευμένη ενδεκάδα',a:'#squad',
-    row:`<div><span>Δεν έχεις αποθηκευμένη ενδεκάδα: χωρίς αυτήν δεν γράφονται συμμετοχές στους παίκτες σου.</span><a href="#squad"><button class="ghost" ${B}>Ενδεκάδα</button></a></div>`});
+    row:officeAlert('pitch','Ενδεκάδα','Αποθήκευσε σχηματισμό για τις συμμετοχές','#squad')});
   return L}}
 /* τέλος σεζόν: ανασκόπηση στο Γραφείο */
 function seasonRecap(mt){const c=cfg(),sn=(c.seasonNo||1)-1;if(!mt||sn<1)return '';if(c.phase!=='offseason'&&S.allMatches.some(m=>m.status==='final'&&(m.home===mt.id||m.away===mt.id)))return '';
@@ -1693,6 +1725,12 @@ function calendarBookings(day,mt){
   }
   return entries.sort((a,b)=>Date.parse(a.time)-Date.parse(b.time));
 }
+let bubbleSequence=0;
+function helpBubble(label,body,trigger){
+  const id='office-help-'+(++bubbleSequence);
+  return `<button class="${trigger?'fan-trigger':'help-trigger'}" type="button" popovertarget="${id}" aria-label="${label}">${trigger||label+' ⓘ'}</button>
+    <aside id="${id}" class="office-bubble" popover="auto" aria-label="${label}"><header><b>${label}</b><button type="button" popovertarget="${id}" popovertargetaction="hide" aria-label="Κλείσιμο επεξήγησης">×</button></header>${body}</aside>`;
+}
 function friendlyProgress(mt){
   if(!Array.isArray(S.relationships))return '<p class="small">Τα στοιχεία φιλάθλων δεν είναι διαθέσιμα.</p>';
   const pairs=S.relationships.filter(r=>[String(r.club_a),String(r.club_b)].includes(mt.id));
@@ -1703,9 +1741,11 @@ function friendlyProgress(mt){
     const badge=r.played>=30?'Αδελφοποιημένοι σύλλογοι':r.played>=10?'Φιλικά σωματεία':r.played>=5?'Γνώριμοι σύλλογοι':'';
     return `<li>${tname(String(opponent))} · ${r.played} φιλικά${badge?' · '+badge:''}</li>`;
   });
-  return `<details class="fan-progress"><summary>Φίλαθλοι · ${total} <progress value="${total}" max="${next}" aria-label="Φίλαθλοι μέχρι τους ${next}"></progress></summary>
-    <p>Κάθε επιβεβαιωμένο φιλικό δίνει έναν φίλαθλο. Διαφορετικοί αντίπαλοι: ${pairs.length}${variety?' · '+variety:''}.</p>
-    ${rows.length?'<ul>'+rows.join('')+'</ul>':''}<small>Σχέσεις συλλόγων στα 5, 10 και 30 φιλικά. Διακρίσεις ποικιλίας στους 3 και 5 αντιπάλους.</small></details>`;
+  const trigger=`${ico('fans')}<strong>Φίλαθλοι</strong><b>${total}</b><span class="fan-meter" aria-hidden="true"><i style="width:${100*total/next}%"></i></span><span aria-hidden="true">ⓘ</span>`;
+  const body=`<p>Κάθε επιβεβαιωμένο φιλικό προσθέτει έναν φίλαθλο, ακόμη και μετά το όριο πληρωμών.</p>
+    <p><b>${total} φίλαθλοι · ${pairs.length} διαφορετικοί αντίπαλοι</b>${variety?' · '+variety:''}</p>
+    ${rows.length?'<ul>'+rows.join('')+'</ul>':''}<p>Σχέσεις συλλόγων στα 5, 10 και 30 φιλικά. Διακρίσεις στους 3 και 5 διαφορετικούς αντιπάλους.</p>`;
+  return `<div class="supporter-panel">${helpBubble('Φίλαθλοι · '+total,body,trigger)}</div>`;
 }
 async function calendarDay(day){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(day))return;

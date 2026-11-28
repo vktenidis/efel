@@ -84,3 +84,17 @@ The isolated database test covers an actual euro bid, proposal, counter, accepta
 ## Manager office and club match history · 28 November 2026
 
 Baseline 19ab084. Compress office alerts into actionable symbols and short labels, make the week and budget tiles fully clickable, improve supporter contrast and friendly help, and show top squad market values plus dated, crested scorelines. Verify at phone and desktop widths before publication.
+
+### Release efel-prod10
+
+The manager office now renders short alerts with symbols for contract expiries, missing managers, pre-agreements, positional cover, lineups, offers and scheduling. The contract badge reflects the current count. Unmanaged opponents display their crest and a suited manager with a red cross. Existing actions for accepting a result or activating a player remain explicit.
+
+The entire week and budget panels open their analyses with a pointer or keyboard. Both the weekly summary and detail include renewal costs. Raised edges and restrained gradients distinguish actionable tiles. The mobile modal sits above the fixed navigation.
+
+Club profiles list the five highest current EFEL market values, with deterministic tie-breaks. The roster valuation sums those market values. Each scoreline shows home and away crests and the home-first score, with the latest dated results first on the profile. The app stores agreed kickoff and result events, without a dedicated played-at timestamp. The date label identifies agreed kickoff, finalization, or the last score update. Unknown dates remain explicit.
+
+The fan button pairs a high-contrast count and meter with a crowd icon. Tapping it opens the explanation, current opponents and badges. Friendly payouts and weekly limits have a separate help bubble with live configuration. Bubbles support closing by button, outside click and Escape.
+
+Playwright passed 12 manager routes at seven widths from 360 to 1920 px. At 390 and 1440 px it also exercised mouse and keyboard tile activation, the 13-contract fixture, manager vacancy icon, price-based ranking, two-crested away scoreline, timestamp fallback and fan/friendly bubbles. The popover stayed within the viewport and Escape left the underlying club dialog open. Fixtures were isolated. JavaScript syntax and the existing three-season economy tests passed. No database migration required.
+
+[Office alerts](docs/office/office-alerts-390.webp) · [Club profile](docs/office/club-390.webp) · [Friendly help](docs/office/friendly-help-390.webp)

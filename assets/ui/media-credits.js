@@ -8,7 +8,7 @@ function link(url, host, label) {
   return anchor;
 }
 async function renderCredits() {
-  const response = await fetch('assets/media.json?v=efel-prod09');
+  const response = await fetch('assets/media.json?v=efel-prod10');
   if (!response.ok) throw new Error('Media list unavailable');
   const {players} = await response.json();
   const unique = new Map(Object.values(players).map(item => [item.path, item]));
