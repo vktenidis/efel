@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod22').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod22').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod23').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod23').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod22').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod23').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -193,7 +193,7 @@ function matchHTML(id){const m=S.allMatches.find(x=>x.id===id);if(!m)return '';c
   const ha=xiAvg(team(m.home)),aa=xiAvg(team(m.away));
   const mid=fin?`<div class="score" style="font-size:34px">${m.hs} - ${m.as}</div>`:`<div class="x">VS</div>`;
   const mt=myTeam(),mine=mt&&(m.home===mt.id||m.away===mt.id),opM=mine?team(m.home===mt.id?m.away:m.home)?.manager:null,opP=opM?S.prof?.[opM]||{}:null;
-  return `<div class="box"><div class="bh">${esc(leagueName(m.league_id))} · ${m.md}η<small>${fin?(m.sim?'Προσομοίωση':'Τελικό αποτέλεσμα'):m.status==='reported'?'Περιμένει επιβεβαίωση':m.status==='disputed'?'Υπό διαφωνία':m.tagreed?'Ώρα: '+fmtDT(m.tagreed):'Δεν έχει παιχτεί'}</small></div>
+  return `<div class="box match-detail"><div class="bh">${esc(leagueName(m.league_id))} · ${m.md}η<small>${fin?(m.sim?'Προσομοίωση':'Τελικό αποτέλεσμα'):m.status==='reported'?'Περιμένει επιβεβαίωση':m.status==='disputed'?'Υπό διαφωνία':m.tagreed?'Ώρα: '+fmtDT(m.tagreed):'Δεν έχει παιχτεί'}</small></div>
   ${derbyTag(m)}${isLive(m)?'<div class="livebadge">🔴 Παίζεται τώρα</div>':''}<div class="vs"><div class="t">${crest(team(m.home),58)}${tlink(m.home)}</div>${mid}<div class="t">${crest(team(m.away),58)}${tlink(m.away)}</div></div>
   ${fin?`<p style="text-align:center;margin:4px 0 8px;font-weight:700">${m.hs>m.as?tname(m.home)+' νίκησε':m.hs<m.as?tname(m.away)+' νίκησε':'Ισοπαλία'}</p>`:''}
   ${opM?`<div class="note small" style="margin:6px 0">Αντίπαλος: ${mgrLine(opM)}${opP.efootball_name?` · eFootball: <b>${esc(opP.efootball_name)}</b>`:''}${opP.contact?` · ${esc(opP.contact)}`:''}</div>`:''}
@@ -1308,7 +1308,7 @@ Object.assign(A,{
   todos(){const mt=myTeam();if(mt)openM(officeHTML(mt))},
   bell(){const mt=myTeam();if(!mt)return;const L=myTodoItems(mt),id=mt.id;
     const N=S.news.filter(n=>[n.tid,n.from,n.to,n.home,n.away].includes(id)).slice(0,6);
-    openM(`<div class="box"><div class="bh">Ειδοποιήσεις<small>${L.length?L.length+(L.length>1?' εκκρεμότητες':' εκκρεμότητα'):'Όλα εντάξει'}</small></div>
+    openM(`<div class="box notification-detail"><div class="bh">Ειδοποιήσεις<small>${L.length?L.length+(L.length>1?' εκκρεμότητες':' εκκρεμότητα'):'Όλα εντάξει'}</small></div>
      ${L.length?`<div class="bl">${L.map(x=>goTo(x.a.startsWith('#')?x.a:x.a,`${ico('clip')}<span class="ns-t"><b>${x.t}</b><small>${x.s}</small></span>${ico('chev','chv')}`,'ns-row')).join('')}</div>`:'<p class="small muted">Καμία εκκρεμότητα αυτή τη στιγμή.</p>'}
      ${N.length?`<div class="small muted" style="margin:12px 0 4px">Τελευταία για τον σύλλογό σου</div><ul class="feed">${N.map(n=>{const x=newsLine(n);return `<li><time>${ago(n.ts)}</time><div>${x.tag} <b>${x.h}</b></div></li>`}).join('')}</ul>`:''}
      <p class="small muted" style="margin-top:10px">Οι ειδοποιήσεις στο κινητό με κλειστή εφαρμογή έρχονται σε επόμενη έκδοση.</p></div>`)},

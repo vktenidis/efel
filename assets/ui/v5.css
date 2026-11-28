@@ -964,3 +964,41 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   #mb .player-detail .vals { gap:6px; }
   #mb .player-detail .vals > div { padding:9px 7px; }
 }
+
+/* Match details and notifications */
+#mb :is(.match-detail,.notification-detail) {
+  border:1px solid #47667b;
+  background:linear-gradient(155deg,#20394d,#12263a 60%,#0c1c2e);
+  box-shadow:inset 0 1px #c7dfea25,0 8px 22px #030a1470;
+}
+#mb .match-detail .vs {
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:8px;
+  padding:14px 8px;
+  border:1px solid #405d72;
+  border-radius:10px;
+  background:linear-gradient(120deg,#1d394d,#102439);
+}
+#mb .match-detail .vs .t { min-width:0; color:#eef6fa; }
+#mb .match-detail .vs .t button { max-width:100%; overflow-wrap:anywhere; white-space:normal; line-height:1.2; }
+#mb .match-detail .vs :is(.score,.x) { color:#ffe098; font-variant-numeric:tabular-nums; }
+#mb .match-detail :is(button,input,select),
+#mb .notification-detail button { min-height:44px; }
+#mb .notification-detail .ns-row {
+  min-width:0;
+  border:1px solid #405e73;
+  border-radius:9px;
+  background:linear-gradient(110deg,#213d50,#12273b);
+  box-shadow:inset 0 1px #c7e2ed1b,0 3px 6px #020a1450;
+}
+#mb .notification-detail .ns-t { min-width:0; overflow-wrap:anywhere; }
+#mb :is(.match-detail,.notification-detail) :is(button,a,input,select):focus-visible {
+  outline:3px solid #ffdc85;
+  outline-offset:2px;
+}
+@media(max-width:480px) {
+  #mb .match-detail .vs { padding:10px 4px; gap:4px; }
+  #mb .match-detail .vs .t { font-size:14px; }
+  #mb .match-detail .vs .score { font-size:clamp(22px,7vw,34px)!important; }
+  #mb .notification-detail .ns-row { padding:9px 7px; }
+}

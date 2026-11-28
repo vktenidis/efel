@@ -180,6 +180,10 @@ async function test() {
             return el.querySelector('sup').getBoundingClientRect().left-digit.getBoundingClientRect().right;
           });
           assert.ok(gap>0,'rank suffix overlaps the numeral at '+width);
+          await page.locator('#bell').click();
+          await page.getByRole('dialog').locator('.notification-detail').waitFor();
+          assert.equal(await page.getByRole('dialog').locator('.notification-detail').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+          await page.keyboard.press('Escape');
         }
         if(route==='more'){
           const menu=page.locator('.menu-directory');
@@ -257,6 +261,8 @@ async function test() {
         assert.equal(await page.evaluate(()=>window.qaRequests.find(([n])=>n==='efel_place_bid_eur')[1].p_eur),bidEur);
         await page.evaluate(()=>{location.hash='matches'});
         await page.locator('[data-act=mcard][data-id="1"]').first().click();
+        await dialog.locator('.match-detail .vs').waitFor();
+        assert.equal(await dialog.locator('.match-detail').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
         await dialog.locator('[data-act=slotEdit]').click();
         await dialog.locator('#league-time').fill('2030-03-15T20:00');
         await dialog.locator('#league-note').fill('Calendar QA');
