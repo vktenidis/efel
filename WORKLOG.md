@@ -138,3 +138,7 @@ Starting from 647aab0, redesigned the league newspaper with warm paper colour, f
 ## Messages and manager profile refinement · efel-prod20
 
 Starting from c8451c2, refined contact rows, conversation messages, the message editor and manager profile statistics. On narrow screens, profile statistics use two columns and long text can wrap. Playwright passed twelve routes at seven widths, opened manager profiles without dialog overflow and sent a message using isolated fixtures. No database changes.
+
+## Sign-in and organiser workspace refinement · efel-prod21
+
+Starting from cb0b041, refined the sign-in surface and organiser form contrast, touch targets and mobile sizing. Playwright passed twelve routes at seven widths, verified sign-in wiring and role-gated administration, and checked the admin screen at 390 px without document overflow. Configuration actions used isolated fixtures. No database changes.
