@@ -300,3 +300,59 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
 .office-symbol svg[fill="none"] {fill:none}
 #ov {z-index:65}
 #toast {z-index:70}
+
+/* Navigation directory */
+.menu-directory {
+  padding: clamp(16px, 3vw, 28px);
+  background: linear-gradient(155deg, #1b3049 0%, #111f32 38%, #0c192a 100%);
+  border: 1px solid #3b536c;
+  box-shadow: inset 0 1px #b7d4ec24, 0 12px 28px #040a1480;
+}
+.menu-directory > h2 {
+  margin: 0 0 1.3rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid #41566a;
+}
+.menu-directory .menu-group { margin: 1.45rem 0 0; }
+.menu-directory .menu-group h3 {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  color: #dceaf4;
+}
+.menu-directory .menu-group h3::before {
+  content: "";
+  width: 3px;
+  height: 1em;
+  border-radius: 2px;
+  background: #f2c368;
+  box-shadow: 0 0 9px #f2c36866;
+}
+.menu-directory .moregrid { gap: 10px; }
+.menu-directory .morebtn {
+  min-height: 96px;
+  border: 1px solid #3a536d;
+  border-radius: 10px;
+  background: linear-gradient(110deg, #223c56f5 0%, #13263de8 60%, #102137bd 100%);
+  box-shadow: inset 0 1px #d4e8f01c, 0 3px 0 #07111d, 0 7px 15px #03091350;
+  transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+.menu-directory .morebtn::before { opacity: .19; }
+.menu-directory .morebtn > svg, .menu-directory .morebtn > .av { color: #9adbd7; }
+.menu-directory .morebtn > span { color: #f1f6fa; }
+.menu-directory .morebtn > small { color: #c2d1df; }
+.menu-directory .morebtn:hover {
+  border-color: #8bb3c8;
+  box-shadow: inset 0 1px #d4e8f03d, 0 3px 0 #07111d, 0 7px 18px #03091370;
+}
+.menu-directory .morebtn:active { box-shadow: inset 0 2px 8px #03091388; }
+.menu-directory .morebtn:focus-visible { outline: 3px solid #ffdc86; outline-offset: 2px; }
+@media (max-width: 380px) {
+  .menu-directory { padding: 14px; }
+  .menu-directory .moregrid { gap: 8px; }
+  .menu-directory .morebtn { padding: 10px; column-gap: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-directory .morebtn { transition: none; }
+}
+.menu-directory button.morebtn { font-family: inherit; font-size: inherit; }
