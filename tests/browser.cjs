@@ -289,6 +289,11 @@ async function test() {
         await page.evaluate(()=>{location.hash='matches'});
         await page.locator('[data-act=mcard][data-id="1"]').first().click();
         await dialog.locator('.match-detail .vs').waitFor();
+        const managers=dialog.locator('.match-managers .match-manager');
+        assert.equal(await managers.count(),2);
+        assert.equal(await managers.locator('[data-act=mgr]').count(),2);
+        assert.equal(await managers.locator('.av').count(),2);
+        assert.equal(await dialog.locator('.match-managers').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
         assert.equal(await dialog.locator('.match-detail').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
         await dialog.locator('[data-act=slotEdit]').click();
         await dialog.locator('#league-time').fill('2030-03-15T20:00');

@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod28').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod28').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod29').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod29').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod28').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod29').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -195,6 +195,10 @@ function matchHTML(id){const m=S.allMatches.find(x=>x.id===id);if(!m)return '';c
   const mt=myTeam(),mine=mt&&(m.home===mt.id||m.away===mt.id),opM=mine?team(m.home===mt.id?m.away:m.home)?.manager:null,opP=opM?S.prof?.[opM]||{}:null;
   return `<div class="box match-detail"><div class="bh">${esc(leagueName(m.league_id))} · ${m.md}η<small>${fin?(m.sim?'Προσομοίωση':'Τελικό αποτέλεσμα'):m.status==='reported'?'Περιμένει επιβεβαίωση':m.status==='disputed'?'Υπό διαφωνία':m.tagreed?'Ώρα: '+fmtDT(m.tagreed):'Δεν έχει παιχτεί'}</small></div>
   ${derbyTag(m)}${isLive(m)?'<div class="livebadge">🔴 Παίζεται τώρα</div>':''}<div class="vs"><div class="t">${crest(team(m.home),58)}${tlink(m.home)}</div>${mid}<div class="t">${crest(team(m.away),58)}${tlink(m.away)}</div></div>
+  <div class="match-managers" aria-label="Προπονητές αγώνα">${[m.home,m.away].map((id,i)=>{
+    const club=team(id),uid=club?.manager;
+    return `<div class="match-manager"><small>${i?'Φιλοξενούμενος':'Γηπεδούχος'}</small>${uid?mgrLine(uid):`<span>${club?.is_auto?'Αυτόματος σύλλογος':'Χωρίς manager'}</span>`}</div>`;
+  }).join('')}</div>
   ${fin?`<p style="text-align:center;margin:4px 0 8px;font-weight:700">${m.hs>m.as?tname(m.home)+' νίκησε':m.hs<m.as?tname(m.away)+' νίκησε':'Ισοπαλία'}</p>`:''}
   ${opM?`<div class="note small" style="margin:6px 0">Αντίπαλος: ${mgrLine(opM)}${opP.efootball_name?` · eFootball: <b>${esc(opP.efootball_name)}</b>`:''}${opP.contact?` · ${esc(opP.contact)}`:''}</div>`:''}
   <table class="cmp"><tbody>
