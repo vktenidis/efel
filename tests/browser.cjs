@@ -163,6 +163,14 @@ async function test() {
         await page.locator('[data-act=fpage]:not(:disabled)').first().click();
         assert.ok((await page.locator('.pager').innerText()).includes('61–120'));
         await page.locator('#fav').selectOption('all');
+        await page.locator('#fq').fill('zzzz-no-player-987');
+        await page.locator('.market-empty').getByText('Δεν βρέθηκαν παίκτες').waitFor();
+        await page.locator('.market-empty [data-act=freset]').click();
+        await page.locator('[data-act=fview][data-id=cards]').click();
+        assert.equal(await page.locator('[data-act=fview][data-id=cards]').getAttribute('aria-pressed'),'true');
+        await page.locator('.cgrid .ecard').first().waitFor();
+        await page.locator('[data-act=fview][data-id=list]').click();
+        await page.locator('#fav').selectOption('all');
         await page.locator('#fq').fill('Mbappe');
         await page.getByRole('button',{name:'Kylian Mbappé',exact:true}).first().click();
         const dialog=page.getByRole('dialog');
