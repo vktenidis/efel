@@ -98,3 +98,7 @@ The fan button pairs a high-contrast count and meter with a crowd icon. Tapping 
 Playwright passed 12 manager routes at seven widths from 360 to 1920 px. At 390 and 1440 px it also exercised mouse and keyboard tile activation, the 13-contract fixture, manager vacancy icon, price-based ranking, two-crested away scoreline, timestamp fallback and fan/friendly bubbles. The popover stayed within the viewport and Escape left the underlying club dialog open. Fixtures were isolated. JavaScript syntax and the existing three-season economy tests passed. No database migration required.
 
 [Office alerts](docs/office/office-alerts-390.webp) · [Club profile](docs/office/club-390.webp) · [Friendly help](docs/office/friendly-help-390.webp)
+
+## Navigation directory refinement · efel-prod11
+
+Starting from c2db00f, refined the full menu with clearer group headings, higher-contrast labels, subtle photographic backgrounds and raised touch surfaces. Added visible keyboard focus and reduced-motion support. Existing destinations, role checks and actions are retained. Playwright passed 12 manager routes at 360, 390, 430, 768, 1024, 1440 and 1920 px, including the menu-to-calendar transition, mobile navigation and admin gating. The font inheritance adjustment was inspected alongside the menu layout. Subsequent sections remain available for separate, complete upgrades.
