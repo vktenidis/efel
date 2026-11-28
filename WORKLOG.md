@@ -199,3 +199,11 @@ Completed backlog item 14 for league match details. Both home and away managers 
 ### Roster player entry · efel-prod30
 
 Partial progress on backlog item 13. Removed the redundant "Διαχείριση" button from roster rows; the existing player name and portrait open the same player detail. Playwright checked the roster-to-player interaction and passed twelve routes at seven widths. Contract-management consolidation and other item 13 work remain pending. Image audit found existing lazy/async loading and service-worker caching; no performance improvement was asserted or deployed, and item 11 remains pending measurement.
+
+
+
+## Lineup duplicate correction · efel-prod31
+
+A starter selected from the roster list could be inserted into another occupied position without removing them from the original slot. The editor now swaps starters, and handles a starter/substitute swap regardless of selection order. Focused JavaScript checks covered starter swaps, bench swaps and empty slots; Playwright checked the populated lineup at mobile width and passed all twelve manager routes at seven widths from 360 to 1920 px. A read-only live query found zero clubs with duplicate saved starters at the time of review. No database or saved lineup data was changed.
+
+Remaining item 12: the server endpoints still save starters and bench separately and do not enforce uniqueness across both arrays; automatic saving, drag-and-drop, and atomic persistence require further design and isolated tests. Existing Supabase security advisor notices about authenticated SECURITY DEFINER functions warrant a separate authorization review; they do not alone establish an exploit. The advisor also reports unindexed foreign keys and a policy performance warning. No broad permission or data changes were made.

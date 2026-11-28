@@ -1385,10 +1385,11 @@ Object.assign(A,{
     else{const old=L.xi[i],j=L.bench.indexOf(s.pid);L.xi[i]=s.pid;if(j>=0){if(old)L.bench[j]=old;else L.bench.splice(j,1)}L.dirty=1;S.sel=null}render(true)},
   bench(pid){const L=S.lu;if(!L)return;const s=S.sel;L.bench=L.bench||[];
     if(s&&s.k==='x')return A.slot2(s.i,pid);
+    const xiIndex=L.xi.indexOf(pid);if(xiIndex>=0){if(s&&s.k==='b')return A.slot2(xiIndex,s.pid);return A.slot(xiIndex)}
     if(s&&s.k==='b'&&s.pid!==pid){const a=L.bench.indexOf(s.pid),b=L.bench.indexOf(pid);
       if(a>=0&&b>=0){L.bench[a]=pid;L.bench[b]=s.pid}else if(a>=0)L.bench[a]=pid;else if(b>=0)L.bench[b]=s.pid;L.dirty=1;S.sel=null}
     else S.sel=s&&s.k==='b'&&s.pid===pid?null:{k:'b',pid};render(true)},
-  slot2(i,pid){const L=S.lu,old=L.xi[i],j=L.bench.indexOf(pid);S.sel=null;L.xi[i]=pid;if(j>=0){if(old)L.bench[j]=old;else L.bench.splice(j,1)}L.dirty=1;render(true)},
+  slot2(i,pid){const L=S.lu,old=L.xi[i],j=L.bench.indexOf(pid),other=L.xi.indexOf(pid);S.sel=null;if(other===i){render(true);return}L.xi[i]=pid;if(other>=0)L.xi[other]=old;else if(j>=0){if(old)L.bench[j]=old;else L.bench.splice(j,1)}L.dirty=1;render(true)},
   async saveLU(){const L=S.lu;await w(async()=>{await rpc('efel_save_lineup',{p_f:L.f,p_xi:L.xi.map(npid)});await rpc('efel_save_bench',{p_bench:(L.bench||[]).map(npid)});L.dirty=0},'Η ενδεκάδα και ο πάγκος αποθηκεύτηκαν')},
   autoLU(){const mt=myTeam();S.lu={f:S.lu.f,xi:autoXI(mt,S.lu.f),dirty:1,t:mt.id};S.lu.bench=benchInit(mt);S.sel=null;render(true)},
   /* ενεργοποίηση */

@@ -410,6 +410,28 @@ async function test() {
     fixture.club_managers=fixture.club_managers.slice(0,1);
     fixture.clubs[0].lineup={f:'4-4-2',xi:[110718,...ids.slice(0,10)]};
     fixture.efel_friendly_relationships=[{club_a:1,club_b:2,played:5,paid_a_week:2,paid_b_week:2}];
+    {
+      const {page,errors}=await setup(browser,'manager',390);
+      await page.evaluate(()=>{location.hash='squad'});
+      await page.locator('#view[data-route=squad]').waitFor();
+      const starters=page.locator('.sqh:has-text("Βασικοί") + .sql [data-act=bench]');
+      await starters.first().waitFor();
+      const first=await starters.nth(0).getAttribute('data-id');
+      const second=await starters.nth(1).getAttribute('data-id');
+      await starters.nth(0).click();
+      await page.locator('.pes-field [data-act=slot][data-id="1"]').click();
+      assert.equal(await starters.nth(0).getAttribute('data-id'),second);
+      assert.equal(await starters.nth(1).getAttribute('data-id'),first);
+      assert.equal(new Set(await starters.evaluateAll(els=>els.map(e=>e.dataset.id))).size,11);
+      const bench=page.locator('.sqh:has-text("Αναπληρωματικοί") + .sql [data-act=bench]');
+      const substitute=await bench.first().getAttribute('data-id');
+      await bench.first().click();
+      await starters.first().click();
+      assert.equal(await starters.first().getAttribute('data-id'),substitute);
+      assert.ok((await bench.all()).length>0);
+      assert.deepEqual(errors,[]);
+      await page.close();
+    }
     for(const width of [390,1440]){
       const {page,errors}=await setup(browser,'manager',width);
       const dialog=page.getByRole('dialog');
