@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod29').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod29').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod30').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod30').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod29').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod30').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -1022,7 +1022,7 @@ function vClub(){const mt=myTeam();if(!mt)return `<section class="card emptyst">
        <button class="cbtn" data-act="pinfo" data-id="${esc(r.pid)}" aria-label="${esc(p.name)}">${faceImg(p,42)}</button>
        <div class="pr-n">${plink(r.pid)}<div class="small"><span class="pos ${g}">${esc(p.pos)}</span> <b>${p.ovr}</b> ${actChip(r)}${contractChip(r)} <span class="muted">συμβόλαιο ως σεζόν ${r.cu??'—'}</span></div></div>
        <div class="pr-v"><span title="Αξία στην EFEL">EFEL <b>${euroLabel(p.price)}</b></span><span class="muted" title="Τι πλήρωσες">πλήρ. ${euroLabel(r.paid||0)}</span></div>
-       <button class="ghost sm" data-act="pinfo" data-id="${esc(r.pid)}">Διαχείριση</button></div>`}).join('')}</div>`:'<p class="small muted">Κανένας παίκτης σε αυτή τη ζώνη.</p>'}</div>`).join('')+`<div class="row" style="margin-top:10px"><a href="#squad"><button>Ενδεκάδα</button></a><a href="#market"><button class="ghost">Αγορά</button></a></div>`}
+       </div>`}).join('')}</div>`:'<p class="small muted">Κανένας παίκτης σε αυτή τη ζώνη.</p>'}</div>`).join('')+`<div class="row" style="margin-top:10px"><a href="#squad"><button>Ενδεκάδα</button></a><a href="#market"><button class="ghost">Αγορά</button></a></div>`}
   else if(tab==='contracts'){const L=ros.slice().sort((a,b)=>(a.cu??99)-(b.cu??99)||pl(b.pid).ovr-pl(a.pid).ovr),sn=cfg().seasonNo||1;
     body=`<p class="small muted">Νέα απόκτηση = συμβόλαιο ${cfg().contractSeasons||2} σεζόν. Στην τελευταία σεζόν ανανεώνεις με ${cfg().renewPct||30}% της αξίας EFEL ανά σεζόν. Αν δεν ανανεώσεις, στο τέλος της σεζόν ο παίκτης γίνεται ελεύθερος.</p>
      <table class="ct"><thead><tr><th>Παίκτης</th><th>Λήξη</th><th class="num">Κόστος ανανέωσης</th><th></th></tr></thead><tbody>${L.map(r=>{const p=pl(r.pid),end=contractEnds(r),c1=Math.ceil(p.price*(cfg().renewPct||30)/100/1000)*1000;return `<tr class="${end?'end':''}"><td>${faceImg(p,26)} ${plink(r.pid)} <span class="muted small">${p.ovr}</span></td><td>${r.cu??'—'}${end?' <span class="tag n">λήγει</span>':r.cu!=null?` <span class="small muted">σε ${r.cu-sn+1} σεζόν</span>`:''}</td><td class="num">${exactMoney(c1)}/σεζόν</td><td>${end?`<button class="sm" data-act="renew" data-id="${esc(r.pid)}|1">+1</button> <button class="ghost sm" data-act="renew" data-id="${esc(r.pid)}|2">+2</button>`:''}</td></tr>`}).join('')}</tbody></table>`}
