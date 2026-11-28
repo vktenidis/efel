@@ -186,6 +186,10 @@ async function test() {
           assert.equal(await menu.locator('h3').count(),3);
           assert.equal(await menu.locator('a[href="#admin"]').count(),0);
           await menu.locator('[data-act=inbox]').waitFor();
+          await menu.locator('[data-act=mgr]').click();
+          await page.getByRole('dialog').locator('.mgrcard').waitFor();
+          assert.equal(await page.getByRole('dialog').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+          await page.keyboard.press('Escape');
           if(width<=430)assert.equal(await page.locator('#nav a:visible').count(),5);
           if(screenshots&&[390,1440].includes(width))await page.screenshot({path:screenshots+'/menu-'+width+'.png'});
           await menu.locator('a[href="#calendar"]').click();
@@ -270,6 +274,7 @@ async function test() {
         await page.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_calendar_friendly'&&args.p_opp===2&&args.p_note==='Friendly QA'));
         await page.locator('[data-act=inbox]').click();
         await dialog.locator('[data-act=thread]').first().click();
+        assert.equal(await dialog.locator('.manager-messages').count(),1);
         await dialog.locator('#message-body').fill('Private calendar message');
         await dialog.locator('[data-act=sendMessage]').click();
         await dialog.locator('#conversation').getByText('Private calendar message').waitFor();

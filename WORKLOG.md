@@ -134,3 +134,7 @@ Starting from f747f96, refined transfer scouting rows, offer surfaces, window st
 ## Newspaper and rules refinement · efel-prod19
 
 Starting from 647aab0, redesigned the league newspaper with warm paper colour, fine texture, serif headlines, double rules and a single-column mobile reading layout. Refined the rules reading surface and search focus. Playwright passed twelve routes at seven widths, including rules search/reset and a populated newspaper opened and closed at 390 and 1440 px. No database changes.
+
+## Messages and manager profile refinement · efel-prod20
+
+Starting from c8451c2, refined contact rows, conversation messages, the message editor and manager profile statistics. On narrow screens, profile statistics use two columns and long text can wrap. Playwright passed twelve routes at seven widths, opened manager profiles without dialog overflow and sent a message using isolated fixtures. No database changes.
