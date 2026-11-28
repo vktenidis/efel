@@ -130,3 +130,7 @@ Starting from d34bb30, the weekly summary and lineup each occupy a full mobile r
 ## Transfer desk and league paper refinement · efel-prod18
 
 Starting from f747f96, refined transfer scouting rows, offer surfaces, window status and input focus. Adjusted the newspaper header and close control for mobile. Playwright passed twelve routes at seven widths, including transfer search, offer and counter-offer fixtures. A populated newspaper fixture was opened and closed at 390 and 1440 px with no document overflow. No database changes.
+
+## Newspaper and rules refinement · efel-prod19
+
+Starting from 647aab0, redesigned the league newspaper with warm paper colour, fine texture, serif headlines, double rules and a single-column mobile reading layout. Refined the rules reading surface and search focus. Playwright passed twelve routes at seven widths, including rules search/reset and a populated newspaper opened and closed at 390 and 1440 px. No database changes.
