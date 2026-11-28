@@ -333,6 +333,15 @@ async function test() {
     await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_make_offer_eur'&&args.p_player===47287&&args.p_eur===36000000));
     assert.deepEqual(transferErrors,[]);
     await transfer.close();
+    const savedMatches=fixture.matches;
+    fixture.matches=[];
+    const {page:emptyPage,errors:emptyErrors}=await setup(browser,'manager',390);
+    await emptyPage.evaluate(()=>{location.hash='matches'});
+    await emptyPage.locator('#view[data-route=matches] .card.empty').waitFor();
+    assert.equal(await emptyPage.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    assert.deepEqual(emptyErrors,[]);
+    await emptyPage.close();
+    fixture.matches=savedMatches;
     const {page:mobileAdmin,errors:mobileAdminErrors}=await setup(browser,'admin',390);
     await mobileAdmin.evaluate(()=>{location.hash='admin'});
     await mobileAdmin.locator('#view[data-route=admin] #a_budget').waitFor();

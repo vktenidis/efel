@@ -154,3 +154,7 @@ Starting from fbdd554, refined match and notification dialog surfaces, team-name
 ## Budget and lineup editor refinement · efel-prod24
 
 Starting from b9f489a, refined budget analysis surfaces, amount wrapping, lineup rows, empty slots and keyboard focus. Browser tests passed twelve routes at seven widths, changed formation and invoked automatic lineup using fixtures, and checked the budget dialog for overflow. No database changes.
+
+## Loading and empty states · efel-prod25
+
+Starting from 74a32bb, refined loading, error and empty-result surfaces, added status/alert semantics and reduced-motion handling. Playwright passed twelve routes at seven widths, including an empty match schedule at 390 px and the existing empty player search. No database changes.

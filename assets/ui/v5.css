@@ -1046,3 +1046,37 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   .club4 .sqr .sqb { gap:4px; padding-right:5px; grid-template-columns:26px 36px minmax(0,1fr) auto auto auto; }
   .club4 .sqn { width:26px; height:26px; }
 }
+
+/* Loading, errors and empty results */
+#view > .card.empty,#view .tempty,#view .market-empty {
+  box-sizing:border-box;
+  color:#dbeaf3;
+  border:1px solid #456378;
+  border-radius:10px;
+  background:linear-gradient(145deg,#20394d,#11263a);
+  box-shadow:inset 0 1px #c6e2eb20,0 5px 14px #020a1455;
+  line-height:1.5;
+}
+#view > .card.empty { padding:24px; }
+#view .tempty { padding:16px; }
+#view .state-loading::before {
+  content:"";
+  display:inline-block;
+  width:16px;
+  height:16px;
+  margin-right:9px;
+  vertical-align:-3px;
+  border:2px solid #91adbb;
+  border-top-color:#ffdb87;
+  border-radius:50%;
+  animation:state-spin .8s linear infinite;
+}
+#view .state-error { border-color:#b77a78; }
+#view .state-error button,#view .market-empty button { min-height:44px; }
+#view :is(.state-error,.market-empty) button:focus-visible {
+  outline:3px solid #ffdb87;
+  outline-offset:2px;
+}
+@keyframes state-spin { to { transform:rotate(360deg); } }
+@media(prefers-reduced-motion:reduce) { #view .state-loading::before { animation:none; } }
+@media(max-width:480px) { #view > .card.empty { padding:18px; } }
