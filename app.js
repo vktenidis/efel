@@ -476,7 +476,7 @@ function render(force){
   S.dirty=false;
   const r=route();
   $('#view').dataset.route=r;
-  for(const a of document.querySelectorAll('#nav a')){const current=a.hash==='#'+r;a.classList.toggle('on',current);if(current)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')}
+  for(const a of document.querySelectorAll('#nav a')){const current=a.hash==='#'+r||(a.hash==='#calendar'&&r==='matches');a.classList.toggle('on',current);if(current)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')}
   $('#navAdmin').hidden=!S.owner;
   const mt=myTeam(),ln='eFootball Evolution League';renderHeader();
   document.documentElement.style.setProperty('--accent',mt&&/^#[0-9a-f]{6}$/i.test(mt.color||'')?mt.color:'#f6b81c');
@@ -491,7 +491,8 @@ function render(force){
   if(r==='admin'&&!S.owner){$('#view').innerHTML='<section class="card empty">Η διαχείριση είναι διαθέσιμη στους διοργανωτές.</section>';return}
   if(!S.all.length){$('#view').innerHTML=S.owner?`<div class="card"><h2>Ας στήσουμε τον κόσμο της EFEL</h2><p class="muted">Δημιουργεί 3 λίγκες (1 ανθρώπινη, 2 αυτόματες), 24 συλλόγους, ρόστερ για τους αυτόματους και πρόγραμμα. Θέλει πρώτα να έχει φορτωθεί ο κατάλογος παικτών.</p><button data-act="setupWorld">Δημιουργία κόσμου</button></div>`:'<div class="card empty">Η λίγκα δεν έχει στηθεί ακόμα.</div>';return}
   const pages={club:vClub,paper:vPaper,more:vMore,rules:vRules,calendar:vCalendar,squad:()=>{S.clubTab='xi';return vClub()},home:vHome,table:vTable,matches:vMatches,market:vMarket,teams:vTeams,transfers:vTransfers,admin:vAdmin};
-  $('#view').innerHTML=(Object.hasOwn(pages,r)?pages[r]:vHome)();
+  const hub=['calendar','matches'].includes(r)?`<section class="match-hub"><h1>Αγώνες &amp; ημερολόγιο</h1><nav aria-label="Προβολή αγώνων"><a href="#calendar" ${r==='calendar'?'aria-current="page"':''}>Ημερολόγιο</a><a href="#matches" ${r==='matches'?'aria-current="page"':''}>Αγώνες &amp; φιλικά</a></nav></section>`:'';
+  $('#view').innerHTML=hub+(Object.hasOwn(pages,r)?pages[r]:vHome)();
 }
 
 function tableHTML(full){
@@ -527,7 +528,7 @@ function vMore(){
     link('home','Προϋπολογισμός και στόχοι'),link('club','Ρόστερ και συμβόλαια'),
     link('market','Κατάλογος και δημοπρασίες'),link('transfers','Αναζήτηση και προτάσεις'),
     myTeam()?'<button class="morebtn" data-act="gpinfo">'+IC.coins+'<span>Οικονομικά</span><small>Έσοδα και δεσμεύσεις</small></button>':''])}
-    ${group('Διοργάνωση',[link('calendar','Διαθεσιμότητα και φιλικά'),link('matches','Πρόγραμμα και αποτελέσματα'),link('table','Κατάταξη πρωταθλημάτων'),link('teams','Σύλλογοι και προπονητές'),link('paper','Ειδήσεις της λίγκας'),link('rules','Κανόνες διοργάνωσης')])}
+    ${group('Διοργάνωση',[link('calendar','Αγώνες, φιλικά και διαθεσιμότητα'),link('table','Κατάταξη πρωταθλημάτων'),link('teams','Σύλλογοι και προπονητές'),link('paper','Ειδήσεις της λίγκας'),link('rules','Κανόνες διοργάνωσης')])}
     ${group('Λογαριασμός',[
       '<button class="morebtn" data-act="inbox">'+IC.mail+'<span>Μηνύματα</span><small>Συνομιλίες προπονητών</small></button>',
       `<button class="morebtn" data-act="mgr" data-id="${esc(S.me)}">${avatar(S.me,24)}<span>Καρτέλα προπονητή</span></button>`,

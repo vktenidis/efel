@@ -235,3 +235,10 @@ Browser QA checked row geometry and horizontal overflow at 360, 390, 430 and 144
 Managers can drag an occupied pitch position directly onto a player in the squad list or another position. The moving label identifies the player, the target highlights, edge scrolling permits reaching the list, and tap selection remains available. Both PES and portrait pitch views support dragging; image native dragging is suppressed. Pointer capture begins only after movement so normal taps keep working.
 
 Playwright verified pitch-to-bench swaps with emulated touch and automatic scrolling on 390 px, and with mouse in the portrait view on desktop; it checked selected-state taps, visual feedback, autosave, and the existing twelve routes at 360–1920 px. Tested with isolated fixtures; no database changes.
+
+
+## Matches and calendar navigation · efel-prod36
+
+Backlog item 3: the main navigation and menu now use one calendar entry for the combined matches/calendar destination. Both calendar and matches pages show a shared heading and clear links to switch between the calendar and matches/friendlies. Existing #calendar and #matches URLs remain valid, including links from alerts and existing match actions. The main navigation identifies either view as the same destination. Existing match, friendly and calendar behavior is unchanged.
+
+Playwright checked both direct links, navigation between views, active state, one menu entry, no horizontal overflow, existing invitations/results flows and twelve routes at 360–1920 px. Inspected both hub states at 390 px. No database changes.

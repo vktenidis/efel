@@ -115,6 +115,19 @@ async function test() {
         await page.evaluate(route=>{location.hash=route},route);
         await page.waitForSelector('#view[data-route="'+route+'"]');
         await page.waitForFunction(()=>!document.querySelector('.signin')&&document.querySelector('main').innerText.length>60);
+        if(route==='calendar'||route==='matches'){
+          const hub=page.locator('.match-hub');
+          assert.equal(await hub.getByRole('heading',{name:'Αγώνες & ημερολόγιο'}).count(),1);
+          assert.equal(await hub.locator('a[aria-current=page]').getAttribute('href'),'#'+route);
+          assert.equal(await page.locator('#nav a[href="#calendar"]').getAttribute('aria-current'),'page');
+          assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+          if(screenshots&&width===390)await hub.screenshot({path:screenshots+'/match-hub-'+route+'.png'});
+          if(route==='calendar'&&width===390){
+            await hub.locator('a[href="#matches"]').click();await page.locator('#view[data-route=matches]').waitFor();
+            assert.equal(await page.locator('.match-hub a[aria-current=page]').getAttribute('href'),'#matches');
+            await page.locator('.match-hub a[href="#calendar"]').click();await page.locator('#view[data-route=calendar]').waitFor();
+          }
+        }
         if(route==='squad'){
           await page.locator('#fsel').selectOption('4-3-3');
           assert.equal(await page.locator('#fsel').inputValue(),'4-3-3');
@@ -221,6 +234,8 @@ async function test() {
           assert.equal(await menu.locator('h3').count(),3);
           assert.equal(await menu.locator('a[href="#squad"]').count(),0);
           assert.equal(await menu.locator('a[href="#club"]').count(),1);
+          assert.equal(await menu.locator('a[href="#calendar"]').count(),1);
+          assert.equal(await menu.locator('a[href="#matches"]').count(),0);
           assert.equal(await menu.locator('a[href="#admin"]').count(),0);
           await menu.locator('[data-act=inbox]').waitFor();
           await menu.locator('[data-act=mgr]').click();
