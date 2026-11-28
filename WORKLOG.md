@@ -162,3 +162,28 @@ Starting from 74a32bb, refined loading, error and empty-result surfaces, added s
 ## First-time guidance and help · efel-prod26
 
 Starting from 76675f5, refined the onboarding and contextual help dialogs, mobile action layout and keyboard focus. Updated the onboarding match description to mention calendar availability and friendly invitations. Playwright passed twelve routes at seven widths, including onboarding advance/skip and activation help at 390 and 1440 px. No database changes.
+
+## Product issues and handoff · 28 November 2026
+
+The owner requested small, independently testable changes, with this handoff kept current for Claude. Ordered backlog:
+
+1. Remove the redundant "Ενδεκάδα" entry beside "Η ομάδα μου" in the main menu. Keep lineup accessible inside the club workspace and retain existing direct links.
+2. Unify the market and transfers navigation and reduce the density of transfer screens.
+3. Combine matches and calendar navigation into a single coherent destination.
+4. Redesign the club directory to reduce noise and make clubs understandable at a glance.
+5. Replace the Transfermarkt player link with a verified EFHub or eFootball database search link.
+6. Review catalogue cards below 65 rating and design a mid-season academy exception. Avoid removing owned records or losing player history.
+7. Review game-GP-to-euro pricing at 1,000 euros per game GP. Distinguish an in-game acquisition cost from EFEL transaction prices; actual bids can exceed the starting value. Review existing budgets, contracts and incomplete price coverage before financial changes.
+8. Design dynamic season pacing around completion of the first half and unanimous manager consent, with notification and bounded nudges. Recalculate transfer windows and proposed dates coherently, including concurrency and missed votes.
+9. Create layered navigation with simple first-level choices and connected detail screens.
+10. Add discoverable mobile installation and investigate notifications.
+11. Improve player image loading speed.
+12. Investigate duplicate lineup players; design drag-and-drop and reliable automatic saving.
+13. Centralize player actions in player details, including contract management and a game database search; reconsider comparison.
+14. Show both managers and their photographs on the match card.
+
+The finance, academy, season progression, push and lineup persistence items need end-to-end design and isolated tests. No production data migration should be assumed. Existing verified MAX and source-price limitations are recorded in the earlier release entries.
+
+### Completed first item · efel-prod27
+
+Removed the duplicate lineup entry from the full navigation menu. The club entry, lineup tab and existing direct links remain available. Playwright verified one club entry, no duplicate lineup menu entry, and twelve routes at widths from 360 to 1920 px. The remaining items above are pending.

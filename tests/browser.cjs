@@ -208,6 +208,8 @@ async function test() {
         if(route==='more'){
           const menu=page.locator('.menu-directory');
           assert.equal(await menu.locator('h3').count(),3);
+          assert.equal(await menu.locator('a[href="#squad"]').count(),0);
+          assert.equal(await menu.locator('a[href="#club"]').count(),1);
           assert.equal(await menu.locator('a[href="#admin"]').count(),0);
           await menu.locator('[data-act=inbox]').waitFor();
           await menu.locator('[data-act=mgr]').click();

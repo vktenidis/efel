@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod26').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod26').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod27').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod27').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod26').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod27').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -520,7 +520,6 @@ function vMore(){
   }
   return `<section class="card menu-directory"><h2>Μενού</h2>${group('Σύλλογος',[
     link('home','Προϋπολογισμός και στόχοι'),link('club','Ρόστερ και συμβόλαια'),
-    '<a class="morebtn" href="#squad">'+IC.shirt+'<span>Ενδεκάδα</span><small>Σχηματισμός και βασικοί</small></a>',
     link('market','Κατάλογος και δημοπρασίες'),link('transfers','Αναζήτηση και προτάσεις'),
     myTeam()?'<button class="morebtn" data-act="gpinfo">'+IC.coins+'<span>Οικονομικά</span><small>Έσοδα και δεσμεύσεις</small></button>':''])}
     ${group('Διοργάνωση',[link('calendar','Διαθεσιμότητα και φιλικά'),link('matches','Πρόγραμμα και αποτελέσματα'),link('table','Κατάταξη πρωταθλημάτων'),link('teams','Σύλλογοι και προπονητές'),link('paper','Ειδήσεις της λίγκας'),link('rules','Κανόνες διοργάνωσης')])}
