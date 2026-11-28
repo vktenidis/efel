@@ -489,3 +489,74 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   }
 }
 #view[data-route="market"] :is(.fchip,[data-act="fview"],[data-act="freset"]) { font-family:"Fira Sans",system-ui,sans-serif; font-weight:700; }
+
+/* Calendar and matchday surfaces */
+#view:is([data-route="calendar"],[data-route="matches"]) .card,
+#view[data-route="matches"] .pnl {
+  border: 1px solid #405c73;
+  background: linear-gradient(155deg,#1b3046,#111f32 55%,#0c192a);
+  box-shadow: inset 0 1px #c7e0eb20,0 7px 20px #020b1570;
+}
+#view[data-route="calendar"] .calg { gap: 6px; }
+#view[data-route="calendar"] .calg .wd {
+  color: #d3e3ee;
+  font-weight: 800;
+}
+#view[data-route="calendar"] .cday {
+  min-height: 74px;
+  border: 1px solid #3d5970;
+  border-radius: 8px;
+  color: #e8f1f8;
+  background: linear-gradient(155deg,#203950,#102338);
+  box-shadow: inset 0 1px #b6d7e41c,0 2px 4px #030b1455;
+}
+#view[data-route="calendar"] .cday.md {
+  border-color: #78aabc;
+  background: linear-gradient(155deg,#2b4e60,#142a3e);
+}
+#view[data-route="calendar"] .cday.today {
+  border: 2px solid #ffd474;
+  box-shadow: inset 0 1px #fff4ca44,0 0 0 2px #e8b75230;
+}
+#view[data-route="calendar"] .cday.out { opacity:.58; }
+#view[data-route="calendar"] .cal-availability { color:#a4f0df; }
+#view[data-route="calendar"] .cal-booked { color:#ffe09a; }
+#view[data-route="calendar"] [data-act="calNav"] { min-height:44px!important; min-width:44px; }
+#view[data-route="matches"] .mds {
+  padding: 6px 3px 10px;
+  scrollbar-color: #7999a9 #14263a;
+}
+#view[data-route="matches"] .mds button {
+  min-height: 48px;
+  border: 1px solid #4a657b;
+  border-radius: 8px;
+  color: #e2eff6;
+  background: linear-gradient(145deg,#27445a,#14273b);
+  box-shadow: inset 0 1px #c1dde927,0 3px 5px #030a1255;
+}
+#view[data-route="matches"] .mds button.on {
+  color: #172437;
+  border-color: #ffe093;
+  background: linear-gradient(150deg,#ffe6a5,#e6b34d);
+}
+#view[data-route="matches"] .match {
+  margin: 7px 0;
+  padding: 12px;
+  border: 1px solid #3c576c;
+  border-radius: 9px;
+  background: linear-gradient(110deg,#20394d,#122338);
+  box-shadow: inset 0 1px #b7d6e41c,0 3px 6px #030b1450;
+}
+#view[data-route="matches"] :is(.frs,.cps) {
+  border-radius: 11px;
+}
+#view:is([data-route="calendar"],[data-route="matches"]) :is(button,a,input,select,summary):focus-visible {
+  outline: 3px solid #ffdb87;
+  outline-offset: 2px;
+}
+@media(max-width:600px) {
+  #view[data-route="calendar"] .calg { gap: 3px; }
+  #view[data-route="calendar"] .cday { min-width:0; min-height:64px; padding:4px; }
+  #view[data-route="matches"] .match { gap:6px; padding:9px; }
+}
+#view:is([data-route="calendar"],[data-route="matches"]) button { font-family:"Fira Sans",system-ui,sans-serif; }

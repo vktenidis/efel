@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod13').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod13').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod14').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod14').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod13').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod14').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -279,7 +279,7 @@ function vCalendar(){const mt=myTeam(),mds=[...new Set(S.matches.map(m=>m.md))].
    <button data-act="sim" data-id="1">Επόμενη αγωνιστική ▶</button><button class="ghost" data-act="sim" data-id="3">+3</button><button class="ghost" data-act="sim" data-id="half" data-confirm="1">Ως τη μέση</button><button class="ghost" data-act="sim" data-id="30" data-confirm="1">Ως το τέλος</button></div>
    <p class="small muted" style="margin:8px 0 0">Παίζει αμέσως τις επόμενες αγωνιστικές, χωρίς να περιμένει ημερομηνίες, και οι αυτόματοι σύλλογοι κάνουν κινήσεις αγοράς σε κάθε βήμα. Τα αποτελέσματα σημειώνονται «Προσομοίωση». Πριν την κανονική έναρξη, τα σβήνεις όλα από τη Διαχείριση με «Μηδενισμός αποτελεσμάτων».</p></section>`:'');
   return `${sim}<div class="calwrap">
-  <section class="card"><h2><span>Ημερολόγιο σεζόν</span><span class="row" style="gap:6px"><button class="ghost" style="min-height:34px;padding:0 10px" data-act="calNav" data-id="-1">‹</button><span style="font:700 15px Fira Sans;color:#cfe3ff;text-transform:capitalize;min-width:130px;text-align:center">${mn}</span><button class="ghost" style="min-height:34px;padding:0 10px" data-act="calNav" data-id="1">›</button></span></h2>
+  <section class="card"><h2><span>Ημερολόγιο σεζόν</span><span class="row" style="gap:6px"><button class="ghost" style="min-height:34px;padding:0 10px" aria-label="Προηγούμενος μήνας" data-act="calNav" data-id="-1">‹</button><span style="font:700 15px Fira Sans;color:#cfe3ff;text-transform:capitalize;min-width:130px;text-align:center">${mn}</span><button class="ghost" style="min-height:34px;padding:0 10px" aria-label="Επόμενος μήνας" data-act="calNav" data-id="1">›</button></span></h2>
    <div class="calg">${['Δε','Τρ','Τε','Πε','Πα','Σα','Κυ'].map(x=>`<div class="wd">${x}</div>`).join('')}${cells}</div></section>
   <section class="card"><h2>Επόμενα</h2><button class="ghost" data-act="inbox">Μηνύματα managers</button>${ev?`<div class="evl">${ev}</div>`:'<p class="muted">Η σεζόν ολοκληρώθηκε.</p>'}
    <p class="small muted" style="margin-top:10px">Αγωνιστική κάθε ${cfg().mdEvery||3} μέρες από ${fmtD(seasonStart())}. Οι αγώνες της ανθρώπινης λίγκας παίζονται σε όποια σειρά θέλετε.</p></section></div>`}

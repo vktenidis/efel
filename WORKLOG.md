@@ -110,3 +110,7 @@ Starting from 37a2f36, refreshed the club header, surfaces, squad rows and seven
 ## Market workspace refinement · efel-prod13
 
 Starting from ad8226d, refined the catalogue surface, search controls, filters, result rows and card-view selection. Empty searches now explain how to clear filters. View toggles expose their pressed state and keyboard focus is visible. Playwright passed twelve routes at 360–1920 px and verified search, empty results, reset, card/list switching, player details, pagination and an isolated bid. No database changes.
+
+## Calendar and matchday refinement · efel-prod14
+
+Starting from 6d97981, refreshed calendar days, month navigation, matchday selector, match rows and friendly panels. Added accessible names to month navigation and visible keyboard focus. The browser suite passed at 360, 390, 430, 768, 1024, 1440 and 1920 px. It checked next/previous month, calendar invitations, friendly invitations, match result submission and the existing twelve manager routes with fixtures. No database changes.
