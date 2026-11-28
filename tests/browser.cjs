@@ -123,6 +123,14 @@ async function test() {
             const button=page.locator('.seg.club [data-id="'+tab+'"]');
             await button.click();
             assert.equal(await button.getAttribute('aria-selected'),'true');
+            if(tab==='roster'&&width===390){
+              const row=page.locator('.prow').first();
+              assert.equal(await row.getByRole('button',{name:'Διαχείριση'}).count(),0);
+              await row.locator('[data-act=pinfo]').first().click();
+              await page.getByRole('dialog').locator('.player-detail').waitFor();
+              await page.keyboard.press('Escape');
+            }
+
             if(screenshots&&[390,1440].includes(width)&&['roster','contracts','xi'].includes(tab))await page.screenshot({path:screenshots+'/club-'+tab+'-'+width+'.png'});
             assert.equal(await page.locator('.seg.club [aria-selected="true"]').count(),1);
             assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'club '+tab+' overflows at '+width);

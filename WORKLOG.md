@@ -195,3 +195,7 @@ Completed backlog item 5 as a small independent change. Player details now link 
 ### Match managers · efel-prod29
 
 Completed backlog item 14 for league match details. Both home and away managers appear with their existing avatar and profile link; clubs without a manager and automatic clubs have explicit labels. Playwright checked two manager links and avatar elements in a match fixture, plus twelve routes at seven widths. No database changes. Remaining backlog items 2–4 and 6–13 are pending.
+
+### Roster player entry · efel-prod30
+
+Partial progress on backlog item 13. Removed the redundant "Διαχείριση" button from roster rows; the existing player name and portrait open the same player detail. Playwright checked the roster-to-player interaction and passed twelve routes at seven widths. Contract-management consolidation and other item 13 work remain pending. Image audit found existing lazy/async loading and service-worker caching; no performance improvement was asserted or deployed, and item 11 remains pending measurement.
