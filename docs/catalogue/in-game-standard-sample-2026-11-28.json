@@ -1,0 +1,63 @@
+{
+  "observed_at": "2026-11-28",
+  "source": "eFootball Standard Player List displayed in the game",
+  "matching_note": "Catalogue IDs are candidate matches on visible name, position and base OVR; the game list did not expose its underlying card ID. Do not assume same historical card solely from this match.",
+  "entries": [
+    {
+      "candidate_catalogue_id": "s110718",
+      "name": "Kylian Mbappé",
+      "position": "CF",
+      "base_ovr": 85,
+      "max_level": 22,
+      "gp": 450000
+    },
+    {
+      "candidate_catalogue_id": "s135067",
+      "name": "Vitinha",
+      "position": "CMF",
+      "base_ovr": 84,
+      "max_level": 28,
+      "gp": 420000
+    },
+    {
+      "candidate_catalogue_id": "s133543",
+      "name": "Erling Haaland",
+      "position": "CF",
+      "base_ovr": 84,
+      "max_level": 24,
+      "gp": 450000
+    },
+    {
+      "candidate_catalogue_id": "s117047",
+      "name": "Vinícius Júnior",
+      "position": "LWF",
+      "base_ovr": 84,
+      "max_level": 26,
+      "gp": 420000
+    },
+    {
+      "candidate_catalogue_id": "s47287",
+      "name": "Harry Kane",
+      "position": "CF",
+      "base_ovr": 84,
+      "max_level": 22,
+      "gp": 300000
+    },
+    {
+      "candidate_catalogue_id": "s83943203",
+      "name": "Mohamed Salah",
+      "position": "RWF",
+      "base_ovr": 83,
+      "max_level": 22,
+      "gp": 200000
+    },
+    {
+      "candidate_catalogue_id": "s50374711",
+      "name": "Son Heung-Min",
+      "position": "LWF",
+      "base_ovr": 83,
+      "max_level": 22,
+      "gp": 200000
+    }
+  ]
+}

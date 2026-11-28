@@ -280,3 +280,12 @@ Any future change must validate identity, price source and version; handle missi
 
 The owner authorized viewing the open eFootball game only if it did not risk a flag or ban. Konami's published terms prohibit unapproved scraping or data mining and warn against automation software or bots for unfair advantage; Konami has also reported suspensions for suspected automated tools or macros. Because zero risk cannot be established, do not automate the game or systematically gather its data on this authorization. Ask the owner about a permitted source or a safe, user-controlled way to share specific prices. The earlier OVR-derived pricing proposal was not applied. References: https://legal.konami.com/games/efootball/terms/tou/en-us.html and https://www.konami.com/efootball/en/topic/news/5907
 
+
+
+## Owner-authorized in-game Standard sample · 28 November 2026
+
+After the account-risk explanation, the owner explicitly directed us to obtain the information from the open game. Seven GP prices were visually read from the game's Standard Player List and recorded in `docs/catalogue/in-game-standard-sample-2026-11-28.json`. Matches to EFEL catalogue entries use visible name, position and base OVR only; the game did not expose its underlying card IDs, so these remain candidate matches, not verified identical historical cards. No player was purchased and no EFEL prices or budgets were changed.
+
+Visible sample: Kylian Mbappé 450,000 GP; Vitinha 420,000; Erling Haaland 450,000; Vinícius Júnior 420,000; Harry Kane 300,000; Mohamed Salah 200,000; Son Heung-Min 200,000. These are direct observations from the open game on the date above, not an assertion that they remain current indefinitely.
+
+The owner was warned that collecting the full 19,412-player on-screen list manually would be very costly in time and usage. Keyboard and mouse inputs did not reliably move the list in this session; controller/key mapping is being clarified before more collection. The previous safety note applied to the earlier conditional instruction; the subsequent explicit user instruction authorizes a limited trial after the risk was disclosed, not any claim of zero account risk.
