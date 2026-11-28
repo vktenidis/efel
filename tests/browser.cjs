@@ -122,6 +122,14 @@ async function test() {
             assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'club '+tab+' overflows at '+width);
           }
         }
+        if(route==='calendar'){
+          const month=await page.locator('.calwrap h2').first().innerText();
+          await page.getByRole('button',{name:'Επόμενος μήνας'}).click();
+          assert.notEqual(await page.locator('.calwrap h2').first().innerText(),month);
+          await page.getByRole('button',{name:'Προηγούμενος μήνας'}).click();
+          assert.equal(await page.locator('.calwrap h2').first().innerText(),month);
+          assert.ok(await page.locator('.calg .cday').count()>=28);
+        }
         if(route==='home'){
           const rank=page.locator('.skp>b');
           assert.equal(await rank.textContent(),'8η');
