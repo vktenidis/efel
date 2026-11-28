@@ -42,6 +42,20 @@ async function test(){
       update config set value='"season"' where key='phase';
       update config set value='true' where key='window_open';`);
     await db.exec('set role anon');
+    await assert.rejects(query('select efel_save_squad($1,$2::jsonb,$3::jsonb)', ['4-4-2',JSON.stringify([1,2,3,4,5,6,7,8,9,10,11]),JSON.stringify([12,13])]),/permission denied/);
+    await as(1);
+    const xi=[1,2,3,4,5,6,7,8,9,10,11], bench=[12,13];
+    await query('select efel_save_squad($1,$2::jsonb,$3::jsonb)', ['4-4-2',JSON.stringify(xi),JSON.stringify(bench)]);
+    const before=(await query('select lineup from clubs where id=1')).rows[0].lineup;
+    assert.deepEqual(before.xi,xi); assert.deepEqual(before.bench,bench);
+    for(const [f,x,b] of [['4-4-2',[1,1,...xi.slice(2)],bench],['4-4-2',xi,[11,12]],['4-4-2',xi,[16]],['4-4-2',[16,...xi.slice(1)],bench],['bogus',xi,bench],['4-4-2',xi.slice(1),bench]]){
+      await assert.rejects(query('select efel_save_squad($1,$2::jsonb,$3::jsonb)',[f,JSON.stringify(x),JSON.stringify(b)]));
+      assert.deepEqual((await query('select lineup from clubs where id=1')).rows[0].lineup,before);
+    }
+    await as(2);
+    await assert.rejects(query('select efel_save_squad($1,$2::jsonb,$3::jsonb)',['4-4-2',JSON.stringify(xi),JSON.stringify(bench)]));
+    console.log('Verified atomic squad save, duplicate rejection, ownership and anonymous restrictions.');
+    await db.exec('set role anon');
     await assert.rejects(query('select efel_place_bid_eur(70002,36000000)'),/permission denied/);
     await as(1);
     for(const v of [null,-600,600.1,36000001,1288490188800]){

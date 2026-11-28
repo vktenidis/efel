@@ -46,6 +46,7 @@ const client = (data, role) => {
       rpc: async (name,args) => {
         window.qaRequests ||= [];
         window.qaRequests.push([name,args]);
+        if(name==='efel_save_squad'&&window.qaFailSave)return {data:null,error:{message:'QA αποτυχία'}};
         return {data:name==='efel_finance'?{free:600000}:name==='efel_window_dates'?[]:null,error:null};
       },
       channel() { return {on(){return this},subscribe(){return this}} },
@@ -429,6 +430,18 @@ async function test() {
       await starters.first().click();
       assert.equal(await starters.first().getAttribute('data-id'),substitute);
       assert.ok((await bench.all()).length>0);
+      await page.evaluate(()=>{window.qaFailSave=true});
+      await page.locator('[data-act=saveLU]').click();
+      await page.getByText('QA αποτυχία').waitFor();
+      assert.equal(await page.locator('[data-act=saveLU]').isEnabled(),true);
+      await page.evaluate(()=>{window.qaFailSave=false});
+      await page.locator('[data-act=saveLU]').click();
+      await page.getByText('Η ενδεκάδα και ο πάγκος αποθηκεύτηκαν').waitFor();
+      const saved=await page.evaluate(()=>window.qaRequests.filter(r=>r[0]==='efel_save_squad'));
+      assert.equal(saved.length,2);
+      assert.equal(saved[1][1].p_xi.length,11);
+      assert.ok(saved[1][1].p_bench.length>0);
+      assert.equal(await page.evaluate(()=>window.qaRequests.some(r=>r[0]==='efel_save_lineup'||r[0]==='efel_save_bench')),false);
       assert.deepEqual(errors,[]);
       await page.close();
     }
