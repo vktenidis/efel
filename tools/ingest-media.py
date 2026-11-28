@@ -41,6 +41,8 @@ def article_photo(title):
 
 def import_photo(card_id, identity, name, fallback):
     filename = identity.get('commonsFile') or article_photo(identity['article'])
+    if filename in identity.get('excludedFiles', []):
+        raise ValueError('reviewed image does not show the player’s face')
     info = metadata(filename)
     fields = {key: value['value'] for key, value in info['extmetadata'].items()}
     license_url = fields.get('LicenseUrl', '').replace('http:', 'https:', 1).removesuffix('/deed.en').rstrip('/') + '/'

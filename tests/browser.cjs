@@ -121,6 +121,18 @@ async function test() {
           });
           assert.ok(gap>0,'rank suffix overlaps the numeral at '+width);
         }
+        if(route==='more'){
+          const menu=page.locator('.menu-directory');
+          assert.equal(await menu.locator('h3').count(),3);
+          assert.equal(await menu.locator('a[href="#admin"]').count(),0);
+          await menu.locator('[data-act=inbox]').waitFor();
+          if(width<=430)assert.equal(await page.locator('#nav a:visible').count(),5);
+          if(screenshots&&[390,1440].includes(width))await page.screenshot({path:screenshots+'/menu-'+width+'.png'});
+          await menu.locator('a[href="#calendar"]').click();
+          await page.locator('#view[data-route=calendar]').waitFor();
+          await page.locator('#navMore').click();
+          await menu.waitFor();
+        }
         const overflowing=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
         assert.equal(overflowing,false,route+' overflows at '+width);
         if (screenshots&&[390,1440].includes(width)&&['home','market','transfers'].includes(route)) {
@@ -145,7 +157,9 @@ async function test() {
         await page.getByRole('button',{name:'Kylian Mbappé',exact:true}).first().click();
         const dialog=page.getByRole('dialog');
         await dialog.waitFor();
-        await dialog.getByText('65.000 GP',{exact:true}).first().waitFor();
+        await dialog.getByText('39.000.000 €',{exact:true}).first().waitFor();
+        await dialog.locator('.v-efb').getByText('450.000 GP',{exact:true}).waitFor();
+        assert.match(await dialog.locator('.v-efb').innerText(),/OVR πηγής 89, καταλόγου 85/);
         await dialog.getByText('39 εκατ. €',{exact:true}).first().waitFor();
         await dialog.locator('.e5-face.is-photo img').evaluate(img=>img.decode());
         if(screenshots)await page.screenshot({path:screenshots+'/player-390.png'});
@@ -162,9 +176,12 @@ async function test() {
         await dialog.locator('.e5-face .eface[style*="sp/"]').waitFor();
         await page.keyboard.press('Escape');
         await page.locator('#fq').fill('Harry Kane');
+        const bid=page.locator('input[id^=bid_]').first();
+        const bidEur=Number(await bid.inputValue());
         await page.locator('[data-act=bid]').first().click();
         await page.locator('[data-act=go]').click();
-        await page.waitForFunction(()=>window.qaRequests?.some(([name])=>name==='efel_place_bid'));
+        await page.waitForFunction(()=>window.qaRequests?.some(([name])=>name==='efel_place_bid_eur'));
+        assert.equal(await page.evaluate(()=>window.qaRequests.find(([n])=>n==='efel_place_bid_eur')[1].p_eur),bidEur);
         await page.evaluate(()=>{location.hash='matches'});
         await page.locator('[data-act=mcard][data-id="1"]').first().click();
         await dialog.locator('[data-act=slotEdit]').click();
@@ -204,22 +221,39 @@ async function test() {
     fixture.config.find(item=>item.key==='phase').value='season';
     fixture.config.find(item=>item.key==='window_open').value=true;
     fixture.roster.push({player_id:47287,club_id:2,paid:55000,activation:'active',contract_until:2});
+    fixture.offers=[{id:42,from_club:1,to_club:2,turn:1,round:2,status:'open',gp:60000,
+      player_id:47287,created_at:'2026-11-20T10:00:00Z',expires_at:'2030-03-17T10:00:00Z'}];
     const {page:transfer,errors:transferErrors}=await setup(browser,'manager',390);
     await transfer.evaluate(()=>{location.hash='transfers'});
+    await transfer.locator('[data-act=counter][data-id="42"]').click();
+    assert.equal(await transfer.locator('#cgp').inputValue(),'36000000');
+    await transfer.locator('#cgp').fill('39000600');
+    await transfer.locator('[data-act=sendCounter]').click();
+    await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_counter_offer_eur'&&args.p_offer===42&&args.p_eur===39000600));
     await transfer.locator('#sav').selectOption('all');
     await transfer.locator('#sq').fill('Harry Kane');
     await transfer.locator('[data-act=offerM][data-id=s47287]').first().click();
-    await transfer.locator('#ogp').fill('60000');
+    await transfer.locator('#ogp').fill('36000001');
+    await transfer.locator('[data-act=sendOffer]').click();
+    assert.equal(await transfer.locator('#ogp').evaluate(el=>el.validity.valid),false);
+    assert.equal(await transfer.locator('[data-act=go]').count(),0);
+    await transfer.locator('#ogp').fill('36000000');
     assert.equal(await transfer.locator('output[for=ogp]').innerText(),'36 εκατ. €');
     await transfer.locator('[data-act=sendOffer]').click();
     await transfer.locator('[data-act=go]').click();
-    await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_make_offer'&&args.p_player===47287&&args.p_gp===60000));
+    await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_make_offer_eur'&&args.p_player===47287&&args.p_eur===36000000));
     assert.deepEqual(transferErrors,[]);
     await transfer.close();
     const {page:admin,errors}=await setup(browser,'admin',1440);
     await admin.evaluate(()=>{location.hash='admin'});
     await admin.locator('#view[data-route=admin] .card').first().waitFor();
     assert.equal(await admin.locator('#navAdmin').getAttribute('hidden'),null);
+    await admin.locator('#a_budget').fill('360000001');
+    await admin.locator('[data-act=saveCfg]').click();
+    assert.equal(await admin.evaluate(()=>window.qaRequests.filter(([n])=>n==='efel_set_config').length),0);
+    await admin.locator('#a_budget').fill('360000600');
+    await admin.locator('[data-act=saveCfg]').click();
+    await admin.waitForFunction(()=>window.qaRequests.some(([n,a])=>n==='efel_set_config'&&a.p_key==='budget'&&a.p_value===600001));
     await admin.locator('[data-act=economyLab]').click();
     await admin.locator('#model-weeks').fill('6');
     await admin.locator('[data-act=modelForecast]').click();

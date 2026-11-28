@@ -1,0 +1,1682 @@
+{
+  "s100414": {
+    "checked": "2026-11-27",
+    "gp": 14000,
+    "name": "Patrick Ciurria",
+    "position": "RMF",
+    "source": "https://www.pesmaster.com/patrick-ciurria/efootball-2022/player/100414/",
+    "sourceOVR": 77
+  },
+  "s100811": {
+    "checked": "2026-11-27",
+    "gp": 4700,
+    "name": "Mehdi Jeannin",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/mehdi-jeannin/efootball-2022/player/100811/",
+    "sourceOVR": 71
+  },
+  "s101058": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Alejandro Grimaldo",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/alejandro-grimaldo/efootball-2022/player/101058/",
+    "sourceOVR": 84
+  },
+  "s101520": {
+    "checked": "2026-11-27",
+    "gp": 200000,
+    "name": "David Raya",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/david-raya/efootball-2022/player/101520/",
+    "sourceOVR": 87
+  },
+  "s101781": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "James Tarkowski",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/james-tarkowski/efootball-2022/player/101781/",
+    "sourceOVR": 81
+  },
+  "s102240": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Serhou Guirassy",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/serhou-guirassy/efootball-2022/player/102240/",
+    "sourceOVR": 84
+  },
+  "s102719": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Patrik Schick",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/patrik-schick/efootball-2022/player/102719/",
+    "sourceOVR": 83
+  },
+  "s103008": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Marcos Llorente",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/marcos-llorente/efootball-2022/player/103008/",
+    "sourceOVR": 84
+  },
+  "s103420": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Marco Asensio",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/marco-asensio/efootball-2022/player/103420/",
+    "sourceOVR": 83
+  },
+  "s103686": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Nicolò Barella",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/nicolo-barella/efootball-2022/player/103686/",
+    "sourceOVR": 84
+  },
+  "s104204": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Rúben Neves",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/ruben-neves/efootball-2022/player/104204/",
+    "sourceOVR": 84
+  },
+  "s104680": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "Dominic Solanke",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/dominic-solanke/efootball-2022/player/104680/",
+    "sourceOVR": 81
+  },
+  "s104731": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Tom King",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/tom-king/efootball-2022/player/104731/",
+    "sourceOVR": 74
+  },
+  "s105057": {
+    "checked": "2026-11-27",
+    "gp": 15000,
+    "name": "Yussuf Poulsen",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/yussuf-poulsen/efootball-2022/player/105057/",
+    "sourceOVR": 78
+  },
+  "s105297": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Rodrigo Bentancur",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/rodrigo-bentancur/efootball-2022/player/105297/",
+    "sourceOVR": 82
+  },
+  "s106435": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Alan Browne",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/alan-browne/efootball-2022/player/106435/",
+    "sourceOVR": 76
+  },
+  "s106671": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Gianluca Mancini",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/gianluca-mancini/efootball-2022/player/106671/",
+    "sourceOVR": 82
+  },
+  "s107612": {
+    "checked": "2026-11-27",
+    "gp": 22000,
+    "name": "Trézéguet",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/trezeguet/efootball-2022/player/107612/",
+    "sourceOVR": 79
+  },
+  "s107949": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Manuel Locatelli",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/manuel-locatelli/efootball-2022/player/107949/",
+    "sourceOVR": 83
+  },
+  "s107977": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "Moussa Niakhaté",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/moussa-niakhate/efootball-2022/player/107977/",
+    "sourceOVR": 81
+  },
+  "s108402": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Frank Zambo Anguissa",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/frank-zambo-anguissa/efootball-2022/player/108402/",
+    "sourceOVR": 83
+  },
+  "s108662": {
+    "checked": "2026-11-27",
+    "gp": 120000,
+    "name": "Frenkie de Jong",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/frenkie-de-jong/efootball-2022/player/108662/",
+    "sourceOVR": 85
+  },
+  "s109124": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Manuel Akanji",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/manuel-akanji/efootball-2022/player/109124/",
+    "sourceOVR": 83
+  },
+  "s109364": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Ivan Toney",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/ivan-toney/efootball-2022/player/109364/",
+    "sourceOVR": 82
+  },
+  "s109941": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Alessandro Deiola",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/alessandro-deiola/efootball-2022/player/109941/",
+    "sourceOVR": 76
+  },
+  "s110608": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Exequiel Palacios",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/exequiel-palacios/efootball-2022/player/110608/",
+    "sourceOVR": 82
+  },
+  "s110651": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Amir Rrahmani",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/amir-rrahmani/efootball-2022/player/110651/",
+    "sourceOVR": 82
+  },
+  "s110718": {
+    "checked": "2026-11-27",
+    "gp": 450000,
+    "name": "Kylian Mbappé",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/kylian-mbappe/efootball-2022/player/110718/",
+    "sourceOVR": 89
+  },
+  "s110762": {
+    "checked": "2026-11-27",
+    "gp": 47000,
+    "name": "Pepelu",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/pepelu/efootball-2022/player/110762/",
+    "sourceOVR": 81
+  },
+  "s110794": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Ezri Konsa",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/ezri-konsa/efootball-2022/player/110794/",
+    "sourceOVR": 83
+  },
+  "s111067": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "Gabriel Rojas",
+    "position": "LMF",
+    "source": "https://www.pesmaster.com/gabriel-rojas/efootball-2022/player/111067/",
+    "sourceOVR": 81
+  },
+  "s111518": {
+    "checked": "2026-11-27",
+    "gp": 4700,
+    "name": "Goya Hiroto",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/goya-hiroto/efootball-2022/player/111518/",
+    "sourceOVR": 71
+  },
+  "s112070": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "John McGinn",
+    "position": "RMF",
+    "source": "https://www.pesmaster.com/john-mcginn/efootball-2022/player/112070/",
+    "sourceOVR": 83
+  },
+  "s112084": {
+    "checked": "2026-11-27",
+    "gp": 14000,
+    "name": "Çağlar Söyüncü",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/caglar-soyuncu/efootball-2022/player/112084/",
+    "sourceOVR": 77
+  },
+  "s112583": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Nikola Milenković",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/nikola-milenkovic/efootball-2022/player/112583/",
+    "sourceOVR": 82
+  },
+  "s112863": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Marco Bleve",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/marco-bleve/efootball-2022/player/112863/",
+    "sourceOVR": 74
+  },
+  "s113065": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Fikayo Tomori",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/fikayo-tomori/efootball-2022/player/113065/",
+    "sourceOVR": 82
+  },
+  "s113503": {
+    "checked": "2026-11-27",
+    "gp": 22000,
+    "name": "Ludovic Ajorque",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/ludovic-ajorque/efootball-2022/player/113503/",
+    "sourceOVR": 79
+  },
+  "s113525": {
+    "checked": "2026-11-27",
+    "gp": 120000,
+    "name": "Éder Militão",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/eder-militao/efootball-2022/player/113525/",
+    "sourceOVR": 85
+  },
+  "s114038": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Scott Wharton",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/scott-wharton/efootball-2022/player/114038/",
+    "sourceOVR": 76
+  },
+  "s114624": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Moise Kean",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/moise-kean/efootball-2022/player/114624/",
+    "sourceOVR": 82
+  },
+  "s114880": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Boubacar Kamara",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/boubacar-kamara/efootball-2022/player/114880/",
+    "sourceOVR": 83
+  },
+  "s114975": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Ibrahima Konaté",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/ibrahima-konate/efootball-2022/player/114975/",
+    "sourceOVR": 83
+  },
+  "s115459": {
+    "checked": "2026-11-27",
+    "gp": 4700,
+    "name": "Lee Sang-Heon",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/lee-sangheon/efootball-2022/player/115459/",
+    "sourceOVR": 71
+  },
+  "s116138": {
+    "checked": "2026-11-27",
+    "gp": 15000,
+    "name": "Marcus Ingvartsen",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/marcus-ingvartsen/efootball-2022/player/116138/",
+    "sourceOVR": 78
+  },
+  "s116970": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Giovanni Di Lorenzo",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/giovanni-di-lorenzo/efootball-2022/player/116970/",
+    "sourceOVR": 83
+  },
+  "s117047": {
+    "checked": "2026-11-27",
+    "gp": 300000,
+    "name": "Vinícius Júnior",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/vinicius-junior/efootball-2022/player/117047/",
+    "sourceOVR": 88
+  },
+  "s118096": {
+    "checked": "2026-11-27",
+    "gp": 32000,
+    "name": "Mason Mount",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/mason-mount/efootball-2022/player/118096/",
+    "sourceOVR": 80
+  },
+  "s118353": {
+    "checked": "2026-11-27",
+    "gp": 22000,
+    "name": "Nicolás de la Cruz",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/nicolas-de-la-cruz/efootball-2022/player/118353/",
+    "sourceOVR": 79
+  },
+  "s119151": {
+    "checked": "2026-11-27",
+    "gp": 47000,
+    "name": "Raoul Bellanova",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/raoul-bellanova/efootball-2022/player/119151/",
+    "sourceOVR": 81
+  },
+  "s120158": {
+    "checked": "2026-11-27",
+    "gp": 5900,
+    "name": "Santiago Jiménez",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/santiago-jimenez/efootball-2022/player/120158/",
+    "sourceOVR": 73
+  },
+  "s121445": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Scott Wright",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/scott-wright/efootball-2022/player/121445/",
+    "sourceOVR": 74
+  },
+  "s121641": {
+    "checked": "2026-11-27",
+    "gp": 3700,
+    "name": "Lim Seung-Kyum",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/lim-seungkyum/efootball-2022/player/121641/",
+    "sourceOVR": 69
+  },
+  "s122271": {
+    "checked": "2026-11-27",
+    "gp": 47000,
+    "name": "Trevoh Chalobah",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/trevoh-chalobah/efootball-2022/player/122271/",
+    "sourceOVR": 81
+  },
+  "s122325": {
+    "checked": "2026-11-27",
+    "gp": 8000,
+    "name": "Matheus Bueno",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/matheus-bueno/efootball-2022/player/122325/",
+    "sourceOVR": 75
+  },
+  "s122333": {
+    "checked": "2026-11-27",
+    "gp": 110000,
+    "name": "Bryan Mbeumo",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/bryan-mbeumo/efootball-2022/player/122333/",
+    "sourceOVR": 84
+  },
+  "s124266": {
+    "checked": "2026-11-27",
+    "gp": 170000,
+    "name": "Antoine Semenyo",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/antoine-semenyo/efootball-2022/player/124266/",
+    "sourceOVR": 85
+  },
+  "s125834": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Nayef Aguerd",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/nayef-aguerd/efootball-2022/player/125834/",
+    "sourceOVR": 82
+  },
+  "s126110": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Dávid Hancko",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/david-hancko/efootball-2022/player/126110/",
+    "sourceOVR": 83
+  },
+  "s126821": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Miguel De La Fuente",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/miguel-de-la-fuente/efootball-2022/player/126821/",
+    "sourceOVR": 76
+  },
+  "s126825": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Djed Spence",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/djed-spence/efootball-2022/player/126825/",
+    "sourceOVR": 82
+  },
+  "s126868": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Jimmy Dunne",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/jimmy-dunne/efootball-2022/player/126868/",
+    "sourceOVR": 76
+  },
+  "s126918": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Viktor Gyökeres",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/viktor-gyokeres/efootball-2022/player/126918/",
+    "sourceOVR": 84
+  },
+  "s126925": {
+    "checked": "2026-11-27",
+    "gp": 170000,
+    "name": "Morgan Rogers",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/morgan-rogers/efootball-2022/player/126925/",
+    "sourceOVR": 85
+  },
+  "s127069": {
+    "checked": "2026-11-27",
+    "gp": 110000,
+    "name": "Ryan Gravenberch",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/ryan-gravenberch/efootball-2022/player/127069/",
+    "sourceOVR": 84
+  },
+  "s127217": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Jan Paul van Hecke",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/jan-paul-van-hecke/efootball-2022/player/127217/",
+    "sourceOVR": 82
+  },
+  "s127386": {
+    "checked": "2026-11-27",
+    "gp": 47000,
+    "name": "Khéphren Thuram",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/khephren-thuram/efootball-2022/player/127386/",
+    "sourceOVR": 81
+  },
+  "s127784": {
+    "checked": "2026-11-27",
+    "gp": 9800,
+    "name": "Victor Bobsin",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/victor-bobsin/efootball-2022/player/127784/",
+    "sourceOVR": 75
+  },
+  "s127802": {
+    "checked": "2026-11-27",
+    "gp": 18000,
+    "name": "Mohamed Ihattaren",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/mohamed-ihattaren/efootball-2022/player/127802/",
+    "sourceOVR": 77
+  },
+  "s128064": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Tailson Pinto",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/tailson-pinto/efootball-2022/player/128064/",
+    "sourceOVR": 74
+  },
+  "s128425": {
+    "checked": "2026-11-27",
+    "gp": 110000,
+    "name": "Edmond Tapsoba",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/edmond-tapsoba/efootball-2022/player/128425/",
+    "sourceOVR": 84
+  },
+  "s128751": {
+    "checked": "2026-11-27",
+    "gp": 5900,
+    "name": "Kusano Yuki",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/kusano-yuki/efootball-2022/player/128751/",
+    "sourceOVR": 73
+  },
+  "s129961": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Alphonso Davies",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/alphonso-davies/efootball-2022/player/129961/",
+    "sourceOVR": 83
+  },
+  "s130209": {
+    "checked": "2026-11-27",
+    "gp": 9800,
+    "name": "César Haydar",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/cesar-haydar/efootball-2022/player/130209/",
+    "sourceOVR": 75
+  },
+  "s131610": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Dani Villahermosa",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/dani-villahermosa/efootball-2022/player/131610/",
+    "sourceOVR": 74
+  },
+  "s132157": {
+    "checked": "2026-11-27",
+    "gp": 43000,
+    "name": "Brian Brobbey",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/brian-brobbey/efootball-2022/player/132157/",
+    "sourceOVR": 80
+  },
+  "s132387": {
+    "checked": "2026-11-27",
+    "gp": 15000,
+    "name": "Billy Gilmour",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/billy-gilmour/efootball-2022/player/132387/",
+    "sourceOVR": 78
+  },
+  "s132524": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Angelo Stiller",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/angelo-stiller/efootball-2022/player/132524/",
+    "sourceOVR": 82
+  },
+  "s132767": {
+    "checked": "2026-11-27",
+    "gp": 4700,
+    "name": "Charlie Reilly",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/charlie-reilly/efootball-2022/player/132767/",
+    "sourceOVR": 71
+  },
+  "s133157": {
+    "checked": "2026-11-27",
+    "gp": 280000,
+    "name": "Pedri",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/pedri/efootball-2022/player/133157/",
+    "sourceOVR": 87
+  },
+  "s133543": {
+    "checked": "2026-11-27",
+    "gp": 450000,
+    "name": "Erling Haaland",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/erling-haaland/efootball-2022/player/133543/",
+    "sourceOVR": 89
+  },
+  "s134733": {
+    "checked": "2026-11-27",
+    "gp": 5600,
+    "name": "Pepe Sánchez",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/pepe-sanchez/efootball-2022/player/134733/",
+    "sourceOVR": 72
+  },
+  "s134918": {
+    "checked": "2026-11-27",
+    "gp": 5900,
+    "name": "Felipe Villagrán",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/felipe-villagran/efootball-2022/player/134918/",
+    "sourceOVR": 73
+  },
+  "s136044": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Malick Thiaw",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/malick-thiaw/efootball-2022/player/136044/",
+    "sourceOVR": 82
+  },
+  "s136952": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Pietro Cianci",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/pietro-cianci/efootball-2022/player/136952/",
+    "sourceOVR": 74
+  },
+  "s137000": {
+    "checked": "2026-11-27",
+    "gp": 100000,
+    "name": "Xavi Simons",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/xavi-simons/efootball-2022/player/137000/",
+    "sourceOVR": 83
+  },
+  "s137172": {
+    "checked": "2026-11-27",
+    "gp": 4500,
+    "name": "Matty Todd",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/matty-todd/efootball-2022/player/137172/",
+    "sourceOVR": 70
+  },
+  "s137600": {
+    "checked": "2026-11-27",
+    "gp": 9800,
+    "name": "Amine El Ouazzani",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/amine-el-ouazzani/efootball-2022/player/137600/",
+    "sourceOVR": 75
+  },
+  "s138488": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Luiz Henrique",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/luiz-henrique/efootball-2022/player/138488/",
+    "sourceOVR": 82
+  },
+  "s138601": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Arthur Theate",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/arthur-theate/efootball-2022/player/138601/",
+    "sourceOVR": 82
+  },
+  "s138699": {
+    "checked": "2026-11-27",
+    "gp": 43000,
+    "name": "Raphael Onyedika",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/raphael-onyedika/efootball-2022/player/138699/",
+    "sourceOVR": 80
+  },
+  "s139908": {
+    "checked": "2026-11-27",
+    "gp": 9800,
+    "name": "Mario Mitaj",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/mario-mitaj/efootball-2022/player/139908/",
+    "sourceOVR": 75
+  },
+  "s139957": {
+    "checked": "2026-11-27",
+    "gp": 29000,
+    "name": "Jayden Oosterwolde",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/jayden-oosterwolde/efootball-2022/player/139957/",
+    "sourceOVR": 79
+  },
+  "s140565": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Destiny Udogie",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/destiny-udogie/efootball-2022/player/140565/",
+    "sourceOVR": 82
+  },
+  "s140961": {
+    "checked": "2026-11-27",
+    "gp": 9000,
+    "name": "Nicholas Bonfanti",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/nicholas-bonfanti/efootball-2022/player/140961/",
+    "sourceOVR": 74
+  },
+  "s141075": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Thiago Andrade",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/thiago-andrade/efootball-2022/player/141075/",
+    "sourceOVR": 76
+  },
+  "s141487": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Erison",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/erison/efootball-2022/player/141487/",
+    "sourceOVR": 76
+  },
+  "s141578": {
+    "checked": "2026-11-27",
+    "gp": 100000,
+    "name": "Arda Güler",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/arda-guler/efootball-2022/player/141578/",
+    "sourceOVR": 83
+  },
+  "s142063": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Waldemar Anton",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/waldemar-anton/efootball-2022/player/142063/",
+    "sourceOVR": 82
+  },
+  "s142088": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Omar Marmoush",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/omar-marmoush/efootball-2022/player/142088/",
+    "sourceOVR": 83
+  },
+  "s144208": {
+    "checked": "2026-11-27",
+    "gp": 15000,
+    "name": "Eros Mancuso",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/eros-mancuso/efootball-2022/player/144208/",
+    "sourceOVR": 78
+  },
+  "s145442": {
+    "checked": "2026-11-27",
+    "gp": 3600,
+    "name": "Danial Amier",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/danial-amier/efootball-2022/player/145442/",
+    "sourceOVR": 68
+  },
+  "s145787": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Sergi Cardona",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/sergi-cardona/efootball-2022/player/145787/",
+    "sourceOVR": 82
+  },
+  "s145957": {
+    "checked": "2026-11-27",
+    "gp": 9800,
+    "name": "Jon Karrikaburu",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/jon-karrikaburu/efootball-2022/player/145957/",
+    "sourceOVR": 75
+  },
+  "s146716": {
+    "checked": "2026-11-27",
+    "gp": 4500,
+    "name": "Thierno Baldé",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/thierno-balde/efootball-2022/player/146716/",
+    "sourceOVR": 70
+  },
+  "s147020": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Levi Colwill",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/levi-colwill/efootball-2022/player/147020/",
+    "sourceOVR": 82
+  },
+  "s147706": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Jakub Kiwior",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/jakub-kiwior/efootball-2022/player/147706/",
+    "sourceOVR": 82
+  },
+  "s147955": {
+    "checked": "2026-11-27",
+    "gp": 110000,
+    "name": "Bradley Barcola",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/bradley-barcola/efootball-2022/player/147955/",
+    "sourceOVR": 84
+  },
+  "s148009": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Cristhian Mosquera",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/cristhian-mosquera/efootball-2022/player/148009/",
+    "sourceOVR": 82
+  },
+  "s148834": {
+    "checked": "2026-11-27",
+    "gp": 15000,
+    "name": "Jackson Ragen",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/jackson-ragen/efootball-2022/player/148834/",
+    "sourceOVR": 78
+  },
+  "s148986": {
+    "checked": "2026-11-27",
+    "gp": 5600,
+    "name": "Daniel Oyegoke",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/daniel-oyegoke/efootball-2022/player/148986/",
+    "sourceOVR": 72
+  },
+  "s151862": {
+    "checked": "2026-11-27",
+    "gp": 5300,
+    "name": "Nils Rossen",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/nils-rossen/efootball-2022/player/151862/",
+    "sourceOVR": 71
+  },
+  "s152242": {
+    "checked": "2026-11-27",
+    "gp": 13000,
+    "name": "Jacopo Fazzini",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/jacopo-fazzini/efootball-2022/player/152242/",
+    "sourceOVR": 76
+  },
+  "s152478": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Juan Pablo Pignani",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/juan-pablo-pignani/efootball-2022/player/152478/",
+    "sourceOVR": 74
+  },
+  "s152928": {
+    "checked": "2026-11-27",
+    "gp": 170000,
+    "name": "Désiré Doué",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/desire-doue/efootball-2022/player/152928/",
+    "sourceOVR": 85
+  },
+  "s153141": {
+    "checked": "2026-11-27",
+    "gp": 9800,
+    "name": "Martim Neto",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/martim-neto/efootball-2022/player/153141/",
+    "sourceOVR": 75
+  },
+  "s153154": {
+    "checked": "2026-11-27",
+    "gp": 4500,
+    "name": "Luís Semedo",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/luis-semedo/efootball-2022/player/153154/",
+    "sourceOVR": 70
+  },
+  "s153157": {
+    "checked": "2026-11-27",
+    "gp": 5600,
+    "name": "Kleis Bozhanaj",
+    "position": "SS",
+    "source": "https://www.pesmaster.com/kleis-bozhanaj/efootball-2022/player/153157/",
+    "sourceOVR": 72
+  },
+  "s153413": {
+    "checked": "2026-11-27",
+    "gp": 9800,
+    "name": "Franco Saavedra",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/franco-saavedra/efootball-2022/player/153413/",
+    "sourceOVR": 75
+  },
+  "s154109": {
+    "checked": "2026-11-27",
+    "gp": 14000,
+    "name": "Mohanad Lasheen",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/mohanad-lasheen/efootball-2022/player/154109/",
+    "sourceOVR": 77
+  },
+  "s157245": {
+    "checked": "2026-11-27",
+    "gp": 3500,
+    "name": "Mannou Berger",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/mannou-berger/efootball-2022/player/157245/",
+    "sourceOVR": 67
+  },
+  "s157468": {
+    "checked": "2026-11-27",
+    "gp": 4500,
+    "name": "Isak Hansen-Aarøen",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/isak-hansenaaroen/efootball-2022/player/157468/",
+    "sourceOVR": 70
+  },
+  "s157712": {
+    "checked": "2026-11-27",
+    "gp": 5600,
+    "name": "Roko Jureškin",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/roko-jureskin/efootball-2022/player/157712/",
+    "sourceOVR": 72
+  },
+  "s157836": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Victor Boniface",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/victor-boniface/efootball-2022/player/157836/",
+    "sourceOVR": 82
+  },
+  "s157949": {
+    "checked": "2026-11-27",
+    "gp": 5600,
+    "name": "Cameron Peupion",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/cameron-peupion/efootball-2022/player/157949/",
+    "sourceOVR": 72
+  },
+  "s159586": {
+    "checked": "2026-11-27",
+    "gp": 100000,
+    "name": "Dean Huijsen",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/dean-huijsen/efootball-2022/player/159586/",
+    "sourceOVR": 83
+  },
+  "s160463": {
+    "checked": "2026-11-27",
+    "gp": 4000,
+    "name": "David Retamal",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/david-retamal/efootball-2022/player/160463/",
+    "sourceOVR": 69
+  },
+  "s160798": {
+    "checked": "2026-11-27",
+    "gp": 4900,
+    "name": "Ángel Chávez",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/angel-chavez/efootball-2022/player/160798/",
+    "sourceOVR": 70
+  },
+  "s161138": {
+    "checked": "2026-11-27",
+    "gp": 5600,
+    "name": "Roshan Singh",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/roshan-singh/efootball-2022/player/161138/",
+    "sourceOVR": 72
+  },
+  "s161833": {
+    "checked": "2026-11-27",
+    "gp": 7000,
+    "name": "Ryan Fosso",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/ryan-fosso/efootball-2022/player/161833/",
+    "sourceOVR": 73
+  },
+  "s162849": {
+    "checked": "2026-11-27",
+    "gp": 8000,
+    "name": "Gustav Ludwigson",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/gustav-ludwigson/efootball-2022/player/162849/",
+    "sourceOVR": 75
+  },
+  "s16530": {
+    "checked": "2026-11-27",
+    "gp": 5900,
+    "name": "Nakama Hayato",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/nakama-hayato/efootball-2022/player/16530/",
+    "sourceOVR": 73
+  },
+  "s167155": {
+    "checked": "2026-11-27",
+    "gp": 3800,
+    "name": "Oumar Pona",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/oumar-pona/efootball-2022/player/167155/",
+    "sourceOVR": 68
+  },
+  "s167432": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Joe Gauci",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/joe-gauci/efootball-2022/player/167432/",
+    "sourceOVR": 76
+  },
+  "s16781738": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Cristiano Ronaldo",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/cristiano-ronaldo/efootball-2022/player/16781738/",
+    "sourceOVR": 84
+  },
+  "s16792": {
+    "checked": "2026-11-27",
+    "gp": 8000,
+    "name": "Kida Takuya",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/kida-takuya/efootball-2022/player/16792/",
+    "sourceOVR": 75
+  },
+  "s168214": {
+    "checked": "2026-11-27",
+    "gp": 13000,
+    "name": "Michael Collodi",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/michael-collodi/efootball-2022/player/168214/",
+    "sourceOVR": 76
+  },
+  "s16823948": {
+    "checked": "2026-11-27",
+    "gp": 5900,
+    "name": "Nazmi Faiz",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/nazmi-faiz/efootball-2022/player/16823948/",
+    "sourceOVR": 73
+  },
+  "s168276": {
+    "checked": "2026-11-27",
+    "gp": 4100,
+    "name": "Aida Yuki",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/aida-yuki/efootball-2022/player/168276/",
+    "sourceOVR": 70
+  },
+  "s16835725": {
+    "checked": "2026-11-27",
+    "gp": 5900,
+    "name": "Mitchell Duke",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/mitchell-duke/efootball-2022/player/16835725/",
+    "sourceOVR": 73
+  },
+  "s16837662": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Kingsley Coman",
+    "position": "RMF",
+    "source": "https://www.pesmaster.com/kingsley-coman/efootball-2022/player/16837662/",
+    "sourceOVR": 83
+  },
+  "s16838918": {
+    "checked": "2026-11-27",
+    "gp": 14000,
+    "name": "Sardar Azmoun",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/sardar-azmoun/efootball-2022/player/16838918/",
+    "sourceOVR": 77
+  },
+  "s16879973": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Kalidou Koulibaly",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/kalidou-koulibaly/efootball-2022/player/16879973/",
+    "sourceOVR": 82
+  },
+  "s16886580": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Ivan Toney",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/ivan-toney/efootball-2022/player/16886580/",
+    "sourceOVR": 82
+  },
+  "s168950": {
+    "checked": "2026-11-27",
+    "gp": 4000,
+    "name": "Nilzo Ramírez",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/nilzo-ramirez/efootball-2022/player/168950/",
+    "sourceOVR": 69
+  },
+  "s16899678": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Song Bum-Keun",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/song-bumkeun/efootball-2022/player/16899678/",
+    "sourceOVR": 74
+  },
+  "s16912727": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Xue Qinghao",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/xue-qinghao/efootball-2022/player/16912727/",
+    "sourceOVR": 74
+  },
+  "s16943522": {
+    "checked": "2026-11-27",
+    "gp": 3100,
+    "name": "Lim Jun-Sub",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/lim-junsub/efootball-2022/player/16943522/",
+    "sourceOVR": 65
+  },
+  "s16948266": {
+    "checked": "2026-11-27",
+    "gp": 3100,
+    "name": "Soheil Sahraei",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/soheil-sahraei/efootball-2022/player/16948266/",
+    "sourceOVR": 65
+  },
+  "s16948403": {
+    "checked": "2026-11-27",
+    "gp": 3800,
+    "name": "Awad Aman",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/awad-aman/efootball-2022/player/16948403/",
+    "sourceOVR": 68
+  },
+  "s16953045": {
+    "checked": "2026-11-27",
+    "gp": 6500,
+    "name": "Kuai Jiwen",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/kuai-jiwen/efootball-2022/player/16953045/",
+    "sourceOVR": 72
+  },
+  "s16962628": {
+    "checked": "2026-11-27",
+    "gp": 7000,
+    "name": "Houssine Rahimi",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/houssine-rahimi/efootball-2022/player/16962628/",
+    "sourceOVR": 73
+  },
+  "s171953": {
+    "checked": "2026-11-27",
+    "gp": 3300,
+    "name": "Ahmet Doğan Yıldırım",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/ahmet-dogan-yildirim/efootball-2022/player/171953/",
+    "sourceOVR": 66
+  },
+  "s172401": {
+    "checked": "2026-11-27",
+    "gp": 8000,
+    "name": "J.Widell Zetterström",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/jwidell-zetterstrom/efootball-2022/player/172401/",
+    "sourceOVR": 75
+  },
+  "s173008": {
+    "checked": "2026-11-27",
+    "gp": 15000,
+    "name": "Orlando Gill",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/orlando-gill/efootball-2022/player/173008/",
+    "sourceOVR": 78
+  },
+  "s174660": {
+    "checked": "2026-11-27",
+    "gp": 3500,
+    "name": "Juan Rosa",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/juan-rosa/efootball-2022/player/174660/",
+    "sourceOVR": 67
+  },
+  "s174674": {
+    "checked": "2026-11-27",
+    "gp": 3200,
+    "name": "Iesaka Yoko",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/iesaka-yoko/efootball-2022/player/174674/",
+    "sourceOVR": 66
+  },
+  "s176615": {
+    "checked": "2026-11-27",
+    "gp": 6500,
+    "name": "Cyrill May",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/cyrill-may/efootball-2022/player/176615/",
+    "sourceOVR": 72
+  },
+  "s177874": {
+    "checked": "2026-11-27",
+    "gp": 12000,
+    "name": "Jerónimo Mattar",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/jeronimo-mattar/efootball-2022/player/177874/",
+    "sourceOVR": 75
+  },
+  "s178563": {
+    "checked": "2026-11-27",
+    "gp": 4000,
+    "name": "Ethan Clavreul",
+    "position": "LMF",
+    "source": "https://www.pesmaster.com/ethan-clavreul/efootball-2022/player/178563/",
+    "sourceOVR": 69
+  },
+  "s181282": {
+    "checked": "2026-11-27",
+    "gp": 3200,
+    "name": "Bruno Rubio",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/bruno-rubio/efootball-2022/player/181282/",
+    "sourceOVR": 65
+  },
+  "s181358": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Felipe Santos",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/felipe-santos/efootball-2022/player/181358/",
+    "sourceOVR": 76
+  },
+  "s181823": {
+    "checked": "2026-11-27",
+    "gp": 3800,
+    "name": "Jocelin Ta Bi",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/jocelin-ta-bi/efootball-2022/player/181823/",
+    "sourceOVR": 68
+  },
+  "s181878": {
+    "checked": "2026-11-27",
+    "gp": 3800,
+    "name": "Miguel Caldas",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/miguel-caldas/efootball-2022/player/181878/",
+    "sourceOVR": 68
+  },
+  "s182532": {
+    "checked": "2026-11-27",
+    "gp": 3500,
+    "name": "Nicolás Montiel",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/nicolas-montiel/efootball-2022/player/182532/",
+    "sourceOVR": 67
+  },
+  "s182698": {
+    "checked": "2026-11-27",
+    "gp": 3200,
+    "name": "Alvaro Cardenas",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/alvaro-cardenas/efootball-2022/player/182698/",
+    "sourceOVR": 65
+  },
+  "s182705": {
+    "checked": "2026-11-27",
+    "gp": 3500,
+    "name": "Jairon Grueso",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/jairon-grueso/efootball-2022/player/182705/",
+    "sourceOVR": 67
+  },
+  "s183024": {
+    "checked": "2026-11-27",
+    "gp": 4900,
+    "name": "Badreddine Abyir",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/badreddine-abyir/efootball-2022/player/183024/",
+    "sourceOVR": 72
+  },
+  "s183348": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Yazid Faffa",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/yazid-faffa/efootball-2022/player/183348/",
+    "sourceOVR": 74
+  },
+  "s184091": {
+    "checked": "2026-11-27",
+    "gp": 6500,
+    "name": "Freddie Draper",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/freddie-draper/efootball-2022/player/184091/",
+    "sourceOVR": 72
+  },
+  "s184265": {
+    "checked": "2026-11-27",
+    "gp": 3100,
+    "name": "César Díaz",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/cesar-diaz/efootball-2022/player/184265/",
+    "sourceOVR": 64
+  },
+  "s184429": {
+    "checked": "2026-11-27",
+    "gp": 3700,
+    "name": "Adnane Ghailan",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/adnane-ghailan/efootball-2022/player/184429/",
+    "sourceOVR": 69
+  },
+  "s184551": {
+    "checked": "2026-11-27",
+    "gp": 3300,
+    "name": "Diego Bermúdez",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/diego-bermudez/efootball-2022/player/184551/",
+    "sourceOVR": 66
+  },
+  "s185815": {
+    "checked": "2026-11-27",
+    "gp": 3500,
+    "name": "Pape Yatma Diop",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/pape-yatma-diop/efootball-2022/player/185815/",
+    "sourceOVR": 67
+  },
+  "s186286": {
+    "checked": "2026-11-27",
+    "gp": 3000,
+    "name": "Juzaerul Jasmi",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/juzaerul-jasmi/efootball-2022/player/186286/",
+    "sourceOVR": 60
+  },
+  "s187311": {
+    "checked": "2026-11-27",
+    "gp": 4700,
+    "name": "Abdellah Cherrad",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/abdellah-cherrad/efootball-2022/player/187311/",
+    "sourceOVR": 71
+  },
+  "s187381": {
+    "checked": "2026-11-27",
+    "gp": 3300,
+    "name": "Filippo Bignamini",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/filippo-bignamini/efootball-2022/player/187381/",
+    "sourceOVR": 66
+  },
+  "s187769": {
+    "checked": "2026-11-27",
+    "gp": 3500,
+    "name": "Grégory Hoareau",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/gregory-hoareau/efootball-2022/player/187769/",
+    "sourceOVR": 67
+  },
+  "s38352": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Danny Welbeck",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/danny-welbeck/efootball-2022/player/38352/",
+    "sourceOVR": 83
+  },
+  "s39773": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Celso Borges",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/celso-borges/efootball-2022/player/39773/",
+    "sourceOVR": 74
+  },
+  "s40352": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Neymar Jr",
+    "position": "SS",
+    "source": "https://www.pesmaster.com/neymar-jr/efootball-2022/player/40352/",
+    "sourceOVR": 82
+  },
+  "s43063": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Son Heung-Min",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/son-heungmin/efootball-2022/player/43063/",
+    "sourceOVR": 82
+  },
+  "s43135": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Mateo Kovačić",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/mateo-kovacic/efootball-2022/player/43135/",
+    "sourceOVR": 82
+  },
+  "s44379": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Kevin De Bruyne",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/kevin-de-bruyne/efootball-2022/player/44379/",
+    "sourceOVR": 83
+  },
+  "s4522": {
+    "checked": "2026-11-27",
+    "gp": 82000,
+    "name": "Cristiano Ronaldo",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/cristiano-ronaldo/efootball-2022/player/4522/",
+    "sourceOVR": 84
+  },
+  "s47179": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "Paulo Dybala",
+    "position": "SS",
+    "source": "https://www.pesmaster.com/paulo-dybala/efootball-2022/player/47179/",
+    "sourceOVR": 83
+  },
+  "s47287": {
+    "checked": "2026-11-27",
+    "gp": 300000,
+    "name": "Harry Kane",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/harry-kane/efootball-2022/player/47287/",
+    "sourceOVR": 88
+  },
+  "s47727": {
+    "checked": "2026-11-27",
+    "gp": 32000,
+    "name": "Alex Telles",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/alex-telles/efootball-2022/player/47727/",
+    "sourceOVR": 80
+  },
+  "s47785": {
+    "checked": "2026-11-27",
+    "gp": 76000,
+    "name": "John Stones",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/john-stones/efootball-2022/player/47785/",
+    "sourceOVR": 83
+  },
+  "s50348122": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Endo Wataru",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/endo-wataru/efootball-2022/player/50348122/",
+    "sourceOVR": 82
+  },
+  "s50374711": {
+    "checked": "2026-11-27",
+    "gp": 200000,
+    "name": "Son Heung-Min",
+    "position": "LWF",
+    "source": "https://www.pesmaster.com/son-heungmin/efootball-2022/player/50374711/",
+    "sourceOVR": 87
+  },
+  "s50447290": {
+    "checked": "2026-11-27",
+    "gp": 4700,
+    "name": "Khaled Ebraheim",
+    "position": "RB",
+    "source": "https://www.pesmaster.com/khaled-ebraheim/efootball-2022/player/50447290/",
+    "sourceOVR": 71
+  },
+  "s50447721": {
+    "checked": "2026-11-27",
+    "gp": 5900,
+    "name": "Ibrahim Al Mukhaini",
+    "position": "GK",
+    "source": "https://www.pesmaster.com/ibrahim-al-mukhaini/efootball-2022/player/50447721/",
+    "sourceOVR": 73
+  },
+  "s50458613": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Kamada Daichi",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/kamada-daichi/efootball-2022/player/50458613/",
+    "sourceOVR": 82
+  },
+  "s57123": {
+    "checked": "2026-11-27",
+    "gp": 120000,
+    "name": "Mohamed Salah",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/mohamed-salah/efootball-2022/player/57123/",
+    "sourceOVR": 85
+  },
+  "s59481": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "Domenico Berardi",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/domenico-berardi/efootball-2022/player/59481/",
+    "sourceOVR": 81
+  },
+  "s59801": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "Youri Tielemans",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/youri-tielemans/efootball-2022/player/59801/",
+    "sourceOVR": 82
+  },
+  "s60391": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "Rafa Silva",
+    "position": "SS",
+    "source": "https://www.pesmaster.com/rafa-silva/efootball-2022/player/60391/",
+    "sourceOVR": 81
+  },
+  "s60711": {
+    "checked": "2026-11-27",
+    "gp": 7500,
+    "name": "Marcos Bolados",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/marcos-bolados/efootball-2022/player/60711/",
+    "sourceOVR": 74
+  },
+  "s60876": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "Jhon Córdoba",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/jhon-cordoba/efootball-2022/player/60876/",
+    "sourceOVR": 81
+  },
+  "s60939": {
+    "checked": "2026-11-27",
+    "gp": 14000,
+    "name": "Zé Roberto",
+    "position": "CF",
+    "source": "https://www.pesmaster.com/ze-roberto/efootball-2022/player/60939/",
+    "sourceOVR": 77
+  },
+  "s61525": {
+    "checked": "2026-11-27",
+    "gp": 51000,
+    "name": "G. de Arrascaeta",
+    "position": "AMF",
+    "source": "https://www.pesmaster.com/g-de-arrascaeta/efootball-2022/player/61525/",
+    "sourceOVR": 82
+  },
+  "s7511": {
+    "checked": "2026-11-27",
+    "gp": 200000,
+    "name": "Lionel Messi",
+    "position": "SS",
+    "source": "https://www.pesmaster.com/lionel-messi/efootball-2022/player/7511/",
+    "sourceOVR": 87
+  },
+  "s83943203": {
+    "checked": "2026-11-27",
+    "gp": 200000,
+    "name": "Mohamed Salah",
+    "position": "RWF",
+    "source": "https://www.pesmaster.com/mohamed-salah/efootball-2022/player/83943203/",
+    "sourceOVR": 87
+  },
+  "s83989250": {
+    "checked": "2026-11-27",
+    "gp": 10000,
+    "name": "Rami Rabia",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/rami-rabia/efootball-2022/player/83989250/",
+    "sourceOVR": 76
+  },
+  "s83994772": {
+    "checked": "2026-11-27",
+    "gp": 34000,
+    "name": "Ramy Bensebaïni",
+    "position": "CB",
+    "source": "https://www.pesmaster.com/ramy-bensebaini/efootball-2022/player/83994772/",
+    "sourceOVR": 81
+  },
+  "s84026729": {
+    "checked": "2026-11-27",
+    "gp": 70000,
+    "name": "Pape Matar Sarr",
+    "position": "CMF",
+    "source": "https://www.pesmaster.com/pape-matar-sarr/efootball-2022/player/84026729/",
+    "sourceOVR": 82
+  },
+  "s84028302": {
+    "checked": "2026-11-27",
+    "gp": 15000,
+    "name": "Ismail Jakobs",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/ismail-jakobs/efootball-2022/player/84028302/",
+    "sourceOVR": 78
+  },
+  "s84042867": {
+    "checked": "2026-11-27",
+    "gp": 5300,
+    "name": "Miguel Chaiwa",
+    "position": "DMF",
+    "source": "https://www.pesmaster.com/miguel-chaiwa/efootball-2022/player/84042867/",
+    "sourceOVR": 71
+  },
+  "s84064888": {
+    "checked": "2026-11-27",
+    "gp": 5600,
+    "name": "Basilio Ndong",
+    "position": "LB",
+    "source": "https://www.pesmaster.com/basilio-ndong/efootball-2022/player/84064888/",
+    "sourceOVR": 72
+  }
+}

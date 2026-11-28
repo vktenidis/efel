@@ -62,3 +62,21 @@ There are now 337 verified MAX ratings, previously ten. New records use the orig
 Playwright passed 12 manager routes at 360, 390, 430, 768, 1024, 1440 and 1920 px. The browser measured a positive gap between the numeral and suffix at each width. It decoded an added local photograph, displayed 65,000 GP as €39m, updated the preview to €36m for 60,000 GP and asserted that the transfer requested 60,000 GP. Other isolated flows include bids, scores, scheduling, private messages and admin gating. JavaScript syntax, economy scenarios, catalogue reconciliation and image decoding also passed. Screenshots use test clubs and budgets.
 
 [Mobile office](docs/matchday/home-390.webp) · [Desktop office](docs/matchday/home-1440.webp) · [Mobile player details](docs/matchday/player-390.webp)
+
+## Euro transactions and navigation · 27 November 2026
+
+Baseline b4e3873. Audit manager-facing currency entry, confirmation and settlement. Introduce exact euro entry with validation against the league's existing settlement precision, review navigation groups and mobile access, expand licensed portraits, test financial requests on fixtures and check the published build.
+
+### Release efel-prod09
+
+Managers enter euros for sealed bids, transfer proposals and counters. The confirmation, offer history, fees, balances, admin budgets, prizes and friendly payouts use the league's euro denomination. Market price filters take millions of euros. One historical accounting unit settles exactly €600. This rate is fixed independently of the card-pricing configuration. With the existing integer ledger, €600 is the smallest settlement step. Unsupported amounts are rejected before submission and in the euro RPCs. Existing clients, pending bids, rosters, balances and audit records keep their original accounting units.
+
+The additive euro_transactions migration adds three caller-privilege euro RPCs and a checked numeric conversion. It delegates settlement, locks, permissions and competition checks to the existing routines. Its production verification checked the four functions, denied anonymous execute, authenticated grants and the exact read-only conversion of €39,000,600 to 65,001 units. The security advisor returned no entry naming the new functions. No production transaction or balance change was used for QA.
+
+The phone navigation has five primary destinations. The Menu groups club operations, competition and account actions, with direct access to the formation, finances, messages and role-gated administration. Desktop users can use the same directory. The office allows long club names to wrap. Local photography increased from 129 to 144 mapped card IDs and from 114 to 128 identified players. Fourteen additional optimized, attributed photographs include Haaland, Kane, Vinícius Júnior and Neuer. One rear-view image was excluded from this and future imports of that photograph.
+
+Player details show the league price in euros and the current Standard GP price from PES Master where available. The price review checked the player's card ID, name, position, Standard category, GP field and visible price. There are 210 sourced current prices, including all 199 cards in the manager-league roster snapshot. The source reports a different base rating for all 210. Details distinguish the source OVR from the catalogue OVR and link to the dated quote. The other 19,044 cards use a labeled base-OVR estimate when configured. Neither verified MAX records nor league prices were derived from these quotes. The matching CSV distinguishes a current Standard quote from an exact historical quote. Run tools/review-standard-prices.py with explicit card IDs to refresh selected records.
+
+The isolated database test covers an actual euro bid, proposal, counter, acceptance, both wallet deltas and ownership. It rejects fractional, out-of-step, negative, null and overflowing amounts, and denies anonymous access. PostgreSQL 17 also passed the existing 40-reader and reciprocal-invitation tests. Browser QA uses fixtures at 360, 390, 430, 768, 1024, 1440 and 1920 px. Production smoke tests are signed out.
+
+[Mobile menu](docs/euro/menu-390.webp) · [Desktop menu](docs/euro/menu-1440.webp) · [Player details and sourced GP](docs/euro/player-390.webp) · [Updated card-ID handoff](docs/catalogue/standard-review.csv.gz)

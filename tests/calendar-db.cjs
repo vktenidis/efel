@@ -23,13 +23,42 @@ async function test(){
       const sql=fs.readFileSync(path.join(sqlDir,file),'utf8').replace('create extension if not exists pgcrypto;','');
       try{await db.exec(sql)}catch(error){throw Error(file+': '+error.message)}
     }
-    await db.exec(fs.readFileSync(path.join(sqlDir,'migrations/20261127103836_calendar_club_activity.sql'),'utf8'));
+    for(const migration of fs.readdirSync(path.join(sqlDir,'migrations')).filter(f=>f.endsWith('.sql')).sort())
+      await db.exec(fs.readFileSync(path.join(sqlDir,'migrations',migration),'utf8'));
     await db.exec("insert into leagues(id,name,kind) values(1,'Test league','human')");
     for(const [index,id] of ids.entries()){
       await query("insert into auth.users values($1,'qa@example.invalid','{}')",[id]);
       await query("insert into clubs(id,name,league_id) values($1,'QA',1)",[index+1]);
       await query("insert into club_managers(club_id,user_id) values($1,$2)",[index+1,id]);
     }
+    // Settle a negotiated euro price using real league functions in a disposable database.
+    await db.exec(`update clubs set budget=1000000;
+      insert into players(id,name,pos,ovr) values(70001,'QA forward','CF',70),(70002,'QA keeper','GK',69);
+      insert into players(id,name,pos,ovr) select n,'QA roster',case when (n-1)%15<2 then 'GK'
+        when (n-1)%15<7 then 'CB' when (n-1)%15<12 then 'CMF' else 'CF' end,65 from generate_series(1,30) n;
+      insert into roster(player_id,club_id) select n,case when n<=15 then 1 else 2 end from generate_series(1,30) n;
+      insert into roster(player_id,club_id) values(70001,2);
+      insert into bid_rounds(no,season_no) values(1,1);
+      update config set value='"season"' where key='phase';
+      update config set value='true' where key='window_open';`);
+    await db.exec('set role anon');
+    await assert.rejects(query('select efel_place_bid_eur(70002,36000000)'),/permission denied/);
+    await as(1);
+    for(const v of [null,-600,600.1,36000001,1288490188800]){
+      await assert.rejects(query('select efel_make_offer_eur(70001,$1,null)',[v]),/600 €/);
+    }
+    await query('select efel_place_bid_eur(70002,36000000)');
+    assert.equal((await query('select amount from bids where player_id=70002')).rows[0].amount,60000);
+    const offer=(await query('select efel_make_offer_eur(70001,36000000,null) as id')).rows[0].id;
+    await as(2);
+    await query("select efel_counter_offer_eur($1,39000600,null,'QA')",[offer]);
+    await as(1);
+    await query('select efel_respond_offer($1,true,true)',[offer]);
+    await db.exec('reset role');
+    assert.equal(Number((await query('select budget from clubs where id=1')).rows[0].budget),1000000-65001);
+    assert.equal(Number((await query('select budget from clubs where id=2')).rows[0].budget),1000000+65001);
+    assert.equal((await query('select club_id from roster where player_id=70001')).rows[0].club_id,1);
+    console.log('Verified euro bid, counter, exact settlement, invalid amounts and anonymous restrictions.');
     await db.exec('insert into matches(id,home,away,season_no,md,league_id) values(1,1,2,1,1,1)');
     await as(1);
     await db.exec("insert into manager_availability(club_id,starts_at,ends_at) values(1,now()+interval '1 day',now()+interval '25 hours')");
