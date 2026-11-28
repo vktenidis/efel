@@ -112,6 +112,12 @@ async function test() {
         await page.evaluate(route=>{location.hash=route},route);
         await page.waitForSelector('#view[data-route="'+route+'"]');
         await page.waitForFunction(()=>!document.querySelector('.signin')&&document.querySelector('main').innerText.length>60);
+        if(route==='squad'){
+          await page.locator('#fsel').selectOption('4-3-3');
+          assert.equal(await page.locator('#fsel').inputValue(),'4-3-3');
+          await page.locator('[data-act=autoLU]').click();
+          assert.equal(await page.locator('[data-act=saveLU]').isEnabled(),true);
+        }
         if(route==='club'){
           for(const tab of ['roster','contracts','finance','history','stats','info','xi']){
             const button=page.locator('.seg.club [data-id="'+tab+'"]');
@@ -388,6 +394,7 @@ async function test() {
         await trigger.click({position:{x:12,y:(await trigger.boundingBox()).height-12}});
         await dialog.waitFor();
         assert.ok((await dialog.textContent()).includes(title),title);
+        assert.equal(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
         await page.keyboard.press('Escape');
         await trigger.focus();await page.keyboard.press('Enter');await dialog.waitFor();
         await page.keyboard.press('Escape');

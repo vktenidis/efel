@@ -150,3 +150,7 @@ Starting from 5d6c207, refined player detail and transaction confirmation surfac
 ## Match and notification dialogs · efel-prod23
 
 Starting from fbdd554, refined match and notification dialog surfaces, team-name wrapping, score presentation, touch targets and keyboard focus. Playwright passed twelve routes at seven widths, opening notifications and a match dialog without horizontal overflow. The existing scheduling, friendly and result fixture flows passed. No database changes.
+
+## Budget and lineup editor refinement · efel-prod24
+
+Starting from b9f489a, refined budget analysis surfaces, amount wrapping, lineup rows, empty slots and keyboard focus. Browser tests passed twelve routes at seven widths, changed formation and invoked automatic lineup using fixtures, and checked the budget dialog for overflow. No database changes.
