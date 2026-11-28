@@ -80,3 +80,7 @@ Player details show the league price in euros and the current Standard GP price 
 The isolated database test covers an actual euro bid, proposal, counter, acceptance, both wallet deltas and ownership. It rejects fractional, out-of-step, negative, null and overflowing amounts, and denies anonymous access. PostgreSQL 17 also passed the existing 40-reader and reciprocal-invitation tests. Browser QA uses fixtures at 360, 390, 430, 768, 1024, 1440 and 1920 px. Production smoke tests are signed out.
 
 [Mobile menu](docs/euro/menu-390.webp) · [Desktop menu](docs/euro/menu-1440.webp) · [Player details and sourced GP](docs/euro/player-390.webp) · [Updated card-ID handoff](docs/catalogue/standard-review.csv.gz)
+
+## Manager office and club match history · 28 November 2026
+
+Baseline 19ab084. Compress office alerts into actionable symbols and short labels, make the week and budget tiles fully clickable, improve supporter contrast and friendly help, and show top squad market values plus dated, crested scorelines. Verify at phone and desktop widths before publication.
