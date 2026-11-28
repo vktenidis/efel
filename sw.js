@@ -1,7 +1,7 @@
-const CACHE = 'efel-prod36';
+const CACHE = 'efel-prod37';
 const ROOT = new URL(self.registration.scope).pathname;
 const CORE = ['./', 'index.html', 'config.js', 'logo.jpg', 'icon-192.png',
-  'app.js?v=efel-prod36', 'assets/ui/economy-model.js?v=efel-prod36', 'assets/ui/league.css?v=efel-prod36', 'assets/ui/v5.css?v=efel-prod36'];
+  'app.js?v=efel-prod37', 'assets/ui/economy-model.js?v=efel-prod37', 'assets/ui/league.css?v=efel-prod37', 'assets/ui/v5.css?v=efel-prod37'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
 });

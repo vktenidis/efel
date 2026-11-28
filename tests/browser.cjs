@@ -128,6 +128,20 @@ async function test() {
             await page.locator('.match-hub a[href="#calendar"]').click();await page.locator('#view[data-route=calendar]').waitFor();
           }
         }
+        if(route==='market'||route==='transfers'){
+          const hub=page.locator('.market-hub');
+          assert.equal(await hub.getByRole('heading',{name:'Αγορά & μεταγραφές'}).count(),1);
+          assert.equal(await hub.locator('a[aria-current=page]').getAttribute('href'),'#'+route);
+          assert.equal(await page.locator('#nav a[href="#market"]').getAttribute('aria-current'),'page');
+          assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+          if(screenshots&&width===390)await hub.screenshot({path:screenshots+'/market-hub-'+route+'.png'});
+          if(route==='market'&&width===390){
+            await hub.locator('a[href="#transfers"]').click();await page.locator('#view[data-route=transfers]').waitFor();
+            assert.equal(await page.locator('.scout-drawer').evaluate(el=>el.open),false);
+            await page.locator('[data-act=scout]').click();assert.equal(await page.locator('.scout-drawer').evaluate(el=>el.open),true);
+            await page.locator('.market-hub a[href="#market"]').click();await page.locator('#view[data-route=market]').waitFor();
+          }
+        }
         if(route==='squad'){
           await page.locator('#fsel').selectOption('4-3-3');
           assert.equal(await page.locator('#fsel').inputValue(),'4-3-3');
@@ -179,6 +193,12 @@ async function test() {
           await page.keyboard.press('Escape');
         }
         if(route==='teams'){
+          assert.equal(await page.locator('.team-directory-intro h1').innerText(),'Ομάδες');
+          const teamDetails=page.locator('.tcard details').first();
+          assert.equal(await teamDetails.evaluate(el=>el.open),false);
+          await teamDetails.locator('summary').click();assert.equal(await teamDetails.evaluate(el=>el.open),true);
+          await teamDetails.locator('summary').click();assert.equal(await teamDetails.evaluate(el=>el.open),false);
+          if(screenshots&&width===390)await page.locator('.teams').screenshot({path:screenshots+'/teams-directory-390.png'});
           await page.locator('.tcard [data-act=tinfo]').first().click();
           await page.getByRole('dialog').locator('.tbox').waitFor();
           await page.keyboard.press('Escape');
@@ -236,6 +256,8 @@ async function test() {
           assert.equal(await menu.locator('a[href="#club"]').count(),1);
           assert.equal(await menu.locator('a[href="#calendar"]').count(),1);
           assert.equal(await menu.locator('a[href="#matches"]').count(),0);
+          assert.equal(await menu.locator('a[href="#market"]').count(),1);
+          assert.equal(await menu.locator('a[href="#transfers"]').count(),0);
           assert.equal(await menu.locator('a[href="#admin"]').count(),0);
           await menu.locator('[data-act=inbox]').waitFor();
           await menu.locator('[data-act=mgr]').click();
@@ -368,6 +390,7 @@ async function test() {
     await transfer.locator('#cgp').fill('39000600');
     await transfer.locator('[data-act=sendCounter]').click();
     await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_counter_offer_eur'&&args.p_offer===42&&args.p_eur===39000600));
+    await transfer.locator('.scout-drawer summary').click();
     await transfer.locator('#sav').selectOption('all');
     await transfer.locator('#sq').fill('Harry Kane');
     await transfer.locator('[data-act=offerM][data-id=s47287]').first().click();

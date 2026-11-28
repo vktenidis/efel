@@ -1146,3 +1146,15 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
 .match-hub{margin:0 0 14px;padding:16px;border:1px solid #405970;border-radius:12px;background:linear-gradient(125deg,#1b344b,#101f32)}
 .match-hub h1{margin:0 0 12px;color:#f3f7fb;font:800 20px/1.2 "Fira Sans",system-ui,sans-serif}
 .match-hub nav{display:flex;gap:8px;flex-wrap:wrap}.match-hub nav a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 14px;border:1px solid #587589;border-radius:9px;color:#d7e7f0;text-decoration:none;font:700 14px "Fira Sans",system-ui,sans-serif}.match-hub nav a[aria-current=page]{background:#f5ce72;color:#172739;border-color:#ffdd90}.match-hub nav a:focus-visible{outline:3px solid #ffdd85;outline-offset:2px}
+
+.market-hub .hub-count{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:6px;padding:0 5px;border-radius:999px;background:#b44a32;color:#fff;font-size:12px}
+.team-directory-intro{margin:0 0 14px;padding:16px;border:1px solid #405970;border-radius:12px;background:linear-gradient(125deg,#1b344b,#101f32)}
+.team-directory-intro h1{margin:0 0 5px;color:#f3f7fb;font:800 20px/1.2 "Fira Sans",system-ui,sans-serif}.team-directory-intro p{margin:0;color:#b9cedd;font-size:14px}
+#view[data-route=teams] .team-manager{display:flex;align-items:center;gap:7px;min-height:42px;margin:5px 0 10px;color:#c4d4e0;font-size:13px;flex-wrap:wrap}
+#view[data-route=teams] .tcard details>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:8px 10px;border:1px solid #405970;border-radius:8px;color:#e2edf4;cursor:pointer;list-style:none}
+#view[data-route=teams] .tcard details>summary::-webkit-details-marker{display:none}#view[data-route=teams] .tcard details>summary:after{content:'+';color:#ffdb87;font-size:20px}#view[data-route=teams] .tcard details[open]>summary:after{content:'−'}
+#view[data-route=teams] .tcard details>summary span{margin-left:auto;color:#aac0d0;font-size:12px}#view[data-route=teams] .tcard details>summary:focus-visible{outline:3px solid #ffdd85;outline-offset:2px}
+
+.scout-drawer{margin-top:12px}.scout-drawer>summary{min-height:44px;display:flex;align-items:center;padding:10px 14px;border:1px solid #405970;border-radius:9px;color:#e6f0f6;font-weight:700;cursor:pointer;list-style:none}.scout-drawer>summary::-webkit-details-marker{display:none}.scout-drawer>summary:after{content:'+';margin-left:auto;color:#ffdb87;font-size:21px}.scout-drawer[open]>summary:after{content:'−'}.scout-drawer>summary:focus-visible{outline:3px solid #ffdd85;outline-offset:2px}.scout-drawer[open]>.scout{margin-top:10px}
+
+#view[data-route=teams] .team-manager{min-height:32px;margin:3px 0 7px}#view[data-route=teams] .tcard .stat{gap:6px;margin-bottom:8px}#view[data-route=teams] .tcard .stat>div{padding:6px 8px}#view[data-route=teams] .tcard .stat b{font-size:16px}

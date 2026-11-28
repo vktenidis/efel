@@ -242,3 +242,14 @@ Playwright verified pitch-to-bench swaps with emulated touch and automatic scrol
 Backlog item 3: the main navigation and menu now use one calendar entry for the combined matches/calendar destination. Both calendar and matches pages show a shared heading and clear links to switch between the calendar and matches/friendlies. Existing #calendar and #matches URLs remain valid, including links from alerts and existing match actions. The main navigation identifies either view as the same destination. Existing match, friendly and calendar behavior is unchanged.
 
 Playwright checked both direct links, navigation between views, active state, one menu entry, no horizontal overflow, existing invitations/results flows and twelve routes at 360–1920 px. Inspected both hub states at 390 px. No database changes.
+
+
+## Market and transfer navigation · efel-prod37
+
+Backlog item 2: the main navigation and menu now use the single market entry for the player catalogue and transfers. Both existing #market and #transfers routes remain valid and show a shared switcher; incoming-offer counts appear on the market entry and transfers tab. Transfer scouting is collapsed by default and can be opened from its heading or the New Proposal button; search and offer functions remain available.
+
+## Club directory clarity · efel-prod37
+
+Backlog item 4: added an introductory heading, simplified manager status, compacted club statistics and made all roster panels initially collapsed with a visible player count. Club profiles, roster details and eligible claim/release actions remain available.
+
+Browser QA verified direct links and switching, active navigation, one market menu entry, collapsed scouting and the New Proposal shortcut, transfer search/counter-offer/new-offer flows, club profile and roster expansion, and twelve routes at widths 360–1920 px. The 390 px market header and club cards were visually inspected with synthetic data. No database changes.
