@@ -106,3 +106,7 @@ Starting from c2db00f, refined the full menu with clearer group headings, higher
 ## Club workspace refinement · efel-prod12
 
 Starting from 37a2f36, refreshed the club header, surfaces, squad rows and seven-section navigation. Selected tabs now expose their state to assistive technology. On narrow screens, financial statistics and tab buttons use two columns for readability. Playwright traversed all seven tabs at 360, 390, 430, 768, 1024, 1440 and 1920 px and checked selection and horizontal overflow. The broader twelve-route suite and existing action tests passed. No database changes.
+
+## Market workspace refinement · efel-prod13
+
+Starting from ad8226d, refined the catalogue surface, search controls, filters, result rows and card-view selection. Empty searches now explain how to clear filters. View toggles expose their pressed state and keyboard focus is visible. Playwright passed twelve routes at 360–1920 px and verified search, empty results, reset, card/list switching, player details, pagination and an isolated bid. No database changes.
