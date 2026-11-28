@@ -221,3 +221,10 @@ The squad editor now debounces changes and saves the current formation, starters
 Each roster row has a drag grip for moving a player onto another roster row or pitch position using pointer or touch input; existing tap/keyboard selection remains available. The rest of the row retains normal touch scrolling. Browser fixtures tested an unsuccessful save and retry, sequential changes during a delayed save, navigation while saving, mouse dragging, emulated touchscreen dragging, and twelve routes across 360–1920 px. No database schema or production squad data was changed.
 
 Limits: drafts are retained in the current page session, not across forced tab termination; the browser warning cannot guarantee delivery when the page is forcibly closed. Legacy separate save endpoints remain available to older clients as documented in prod32.
+
+
+## Squad drag layout and feedback correction · efel-prod34
+
+The owner reported that prod33's new grip broke the squad row layout and gave no visible indication of dragging. Restored a compact three-column row for grip, player and card at mobile and desktop widths. Dragging now shows a floating player label, dims the source, highlights the drop target, and scrolls at viewport edges. Existing selection and autosave remain available.
+
+Browser QA checked row geometry and horizontal overflow at 360, 390, 430 and 1440 px; inspected the 390 px row and an active drag screenshot; tested visible feedback, drop and cleanup using mouse and emulated touch; and passed the twelve-route suite at 360–1920 px. No production squad data or database schema was changed.

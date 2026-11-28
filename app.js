@@ -1368,10 +1368,14 @@ async function saveSquad(L){if(!L||!L.dirty||L.saving||S.lu!==L)return;clearTime
   finally{L.saving=false;if(S.lu===L){render(true);if(L.dirty&&squadSnapshot(L)!==L.failedSnapshot)scheduleSquadSave();}if(!L.dirty)loadAll()}}
 addEventListener('beforeunload',e=>{if(S.lu&&(S.lu.dirty||S.lu.saving)){e.preventDefault();e.returnValue=''}});
 let squadDrag=null;
-document.addEventListener('pointerdown',e=>{const h=e.target.closest('[data-drag-pid]');if(!h||e.button!==0)return;squadDrag={id:e.pointerId,pid:h.dataset.dragPid,x:e.clientX,y:e.clientY,moved:false};h.setPointerCapture(e.pointerId)});
-document.addEventListener('pointermove',e=>{if(!squadDrag||e.pointerId!==squadDrag.id)return;if(Math.hypot(e.clientX-squadDrag.x,e.clientY-squadDrag.y)>8)squadDrag.moved=true;if(squadDrag.moved)e.preventDefault()});
-document.addEventListener('pointerup',e=>{if(!squadDrag||e.pointerId!==squadDrag.id)return;const drag=squadDrag;squadDrag=null;if(!drag.moved)return;const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-act="slot"],[data-act="bench"]');if(!target)return;e.preventDefault();S.sel=null;A.bench(drag.pid);if(target.dataset.act==='slot')A.slot(target.dataset.id);else A.bench(target.dataset.id)});
-document.addEventListener('pointercancel',()=>{squadDrag=null});
+function squadDragTarget(x,y){return document.elementFromPoint(x,y)?.closest('[data-act="slot"],[data-act="bench"]')||null}
+function clearSquadDrag(){const d=squadDrag;squadDrag=null;if(!d)return;d.source?.classList.remove('squad-drag-source');d.target?.classList.remove('squad-drop-target');d.ghost?.remove();if(d.scrollFrame)cancelAnimationFrame(d.scrollFrame)}
+function paintSquadDrag(d){if(!d.ghost)return;d.ghost.style.transform=`translate3d(${d.cx+12}px,${d.cy+12}px,0)`;const target=squadDragTarget(d.cx,d.cy);if(target!==d.target){d.target?.classList.remove('squad-drop-target');d.target=target;d.target?.classList.add('squad-drop-target')}}
+function scrollSquadDrag(){const d=squadDrag;if(!d||!d.moved)return;const edge=70,dy=d.cy<edge?-12:d.cy>innerHeight-edge?12:0;if(dy){window.scrollBy(0,dy);paintSquadDrag(d)}d.scrollFrame=requestAnimationFrame(scrollSquadDrag)}
+document.addEventListener('pointerdown',e=>{const h=e.target.closest('[data-drag-pid]');if(!h||e.button!==0)return;clearSquadDrag();const row=h.closest('.sqr');squadDrag={id:e.pointerId,pid:h.dataset.dragPid,x:e.clientX,y:e.clientY,cx:e.clientX,cy:e.clientY,moved:false,source:row,name:row?.querySelector('.sqm')?.textContent||'Παίκτης'};h.setPointerCapture(e.pointerId)});
+document.addEventListener('pointermove',e=>{const d=squadDrag;if(!d||e.pointerId!==d.id)return;d.cx=e.clientX;d.cy=e.clientY;if(!d.moved&&Math.hypot(d.cx-d.x,d.cy-d.y)>8){d.moved=true;d.source?.classList.add('squad-drag-source');d.ghost=document.createElement('div');d.ghost.className='squad-drag-ghost';d.ghost.textContent=d.name;document.body.appendChild(d.ghost);d.scrollFrame=requestAnimationFrame(scrollSquadDrag)}if(d.moved){e.preventDefault();paintSquadDrag(d)}});
+document.addEventListener('pointerup',e=>{const d=squadDrag;if(!d||e.pointerId!==d.id)return;const target=d.moved?squadDragTarget(e.clientX,e.clientY):null,pid=d.pid;clearSquadDrag();if(!target)return;e.preventDefault();const act=target.dataset.act,id=target.dataset.id;S.sel=null;A.bench(pid);if(act==='slot')A.slot(id);else A.bench(id)});
+document.addEventListener('pointercancel',clearSquadDrag);
 /* πάγκος 12 + ρεζέρβες + κενές θέσεις ως τις MAXR */
 function benchInit(mt){const xi=new Set(S.lu.xi.filter(Boolean)),ids=(mt.roster||[]).map(r=>r.pid).filter(id=>!xi.has(id));
   const saved=(mt.lineup?.bench||[]).map(String).filter(id=>ids.includes(id));

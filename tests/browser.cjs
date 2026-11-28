@@ -413,6 +413,18 @@ async function test() {
     fixture.club_managers=fixture.club_managers.slice(0,1);
     fixture.clubs[0].lineup={f:'4-4-2',xi:[110718,...ids.slice(0,10)]};
     fixture.efel_friendly_relationships=[{club_a:1,club_b:2,played:5,paid_a_week:2,paid_b_week:2}];
+    for(const width of [360,390,430,1440]){
+      const {page,errors}=await setup(browser,'manager',width);
+      await page.evaluate(()=>{location.hash='squad'});
+      const row=page.locator('.sqh:has-text("Βασικοί") + .sql .sqr').first();await row.waitFor();
+      const geometry=await row.evaluate(el=>{const a=[el.querySelector('.squad-drag'),el.querySelector('.sqb'),el.querySelector('[data-act=pinfo]')].map(x=>x.getBoundingClientRect());return {a:a.map(x=>({top:x.top,bottom:x.bottom,left:x.left,right:x.right,width:x.width})),overflow:document.documentElement.scrollWidth>innerWidth}});
+      assert.equal(geometry.overflow,false);assert.ok(geometry.a[0].width<=40);
+      assert.ok(Math.max(...geometry.a.map(x=>x.top))-Math.min(...geometry.a.map(x=>x.top))<10,'controls must share one row');
+      assert.ok(geometry.a[0].right<=geometry.a[1].left+1&&geometry.a[1].right<=geometry.a[2].left+1);
+      if(screenshots&&[390,1440].includes(width))await row.screenshot({path:screenshots+'/squad-row-'+width+'.png'});
+      assert.deepEqual(errors,[]);await page.close();
+    }
+
     {
       const {page,errors}=await setup(browser,'manager',390);
       await page.evaluate(()=>{location.hash='squad'});
@@ -450,7 +462,12 @@ async function test() {
       await grip.scrollIntoViewIfNeeded();
       const from=await grip.boundingBox(),to=await destination.boundingBox();
       await page.mouse.move(from.x+from.width/2,from.y+from.height/2);await page.mouse.down();
-      await page.mouse.move(to.x+to.width/2,to.y+to.height/2,{steps:6});await page.mouse.up();
+      await page.mouse.move(to.x+to.width/2,to.y+to.height/2,{steps:6});
+      assert.equal(await page.locator('.squad-drag-ghost').isVisible(),true);
+      assert.equal(await destination.evaluate(el=>el.classList.contains('squad-drop-target')),true);
+      if(screenshots)await page.screenshot({path:screenshots+'/squad-drag-390.png'});
+      await page.mouse.up();
+      assert.equal(await page.locator('.squad-drag-ghost').count(),0);
       assert.equal(await starters.nth(1).getAttribute('data-id'),draggedId);
       await page.getByText('Δεν υπάρχουν εκκρεμείς αλλαγές.').waitFor();
       assert.ok((await page.evaluate(()=>window.qaRequests.filter(r=>r[0]==='efel_save_squad'))).length>=3);
@@ -477,6 +494,7 @@ async function test() {
       const point=(box)=>({x:Math.round(box.x+box.width/2),y:Math.round(box.y+box.height/2)});
       await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point(touchFrom)]});
       await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[point(touchTo)]});
+      assert.equal(await page.locator('.squad-drag-ghost').isVisible(),true);
       await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
       assert.equal(await mobileStarters.nth(1).getAttribute('data-id'),mobileId);
       await page.getByText('Δεν υπάρχουν εκκρεμείς αλλαγές.').waitFor();
