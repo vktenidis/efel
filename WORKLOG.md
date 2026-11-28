@@ -114,3 +114,7 @@ Starting from ad8226d, refined the catalogue surface, search controls, filters, 
 ## Calendar and matchday refinement · efel-prod14
 
 Starting from 6d97981, refreshed calendar days, month navigation, matchday selector, match rows and friendly panels. Added accessible names to month navigation and visible keyboard focus. The browser suite passed at 360, 390, 430, 768, 1024, 1440 and 1920 px. It checked next/previous month, calendar invitations, friendly invitations, match result submission and the existing twelve manager routes with fixtures. No database changes.
+
+## Standings and club directory refinement · efel-prod15
+
+Starting from 2b8ac8d, refined the standings table and club directory surfaces, row contrast, club-colour headers and keyboard focus. The horizontally scrollable standings region now has an accessible name and can receive keyboard focus. Playwright passed twelve routes at seven widths from 360 to 1920 px and opened club profiles from both standings and the club directory. No database changes.

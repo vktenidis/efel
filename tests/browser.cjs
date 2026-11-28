@@ -130,6 +130,18 @@ async function test() {
           assert.equal(await page.locator('.calwrap h2').first().innerText(),month);
           assert.ok(await page.locator('.calg .cday').count()>=28);
         }
+        if(route==='table'){
+          const region=page.getByRole('region',{name:/Πίνακας βαθμολογίας/});
+          await region.waitFor();
+          await region.locator('[data-act=tinfo]').first().click();
+          await page.getByRole('dialog').locator('.tbox').waitFor();
+          await page.keyboard.press('Escape');
+        }
+        if(route==='teams'){
+          await page.locator('.tcard [data-act=tinfo]').first().click();
+          await page.getByRole('dialog').locator('.tbox').waitFor();
+          await page.keyboard.press('Escape');
+        }
         if(route==='home'){
           const rank=page.locator('.skp>b');
           assert.equal(await rank.textContent(),'8η');
