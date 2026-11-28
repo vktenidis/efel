@@ -165,6 +165,13 @@ async function test() {
           await page.locator('.xic [data-act=pstyle][data-id=pes]').click();
           await page.locator('.xic .pes-field').waitFor();
         }
+        if(route==='rules'){
+          await page.locator('#rq').fill('συμβόλαι');
+          assert.ok(await page.locator('.rules section.card:visible').count()>0);
+          assert.ok(await page.locator('.rules section.card[hidden]').count()>0);
+          await page.locator('#rq').fill('');
+          assert.equal(await page.locator('.rules section.card[hidden]').count(),0);
+        }
         if(route==='home'){
           const rank=page.locator('.skp>b');
           assert.equal(await rank.textContent(),'8η');
@@ -337,6 +344,7 @@ async function test() {
       const dialog=page.getByRole('dialog');
       await page.evaluate(()=>{location.hash='paper'});
       await page.locator('.paper .headline').waitFor();
+      if(screenshots)await page.screenshot({path:screenshots+'/paper-'+width+'.png',fullPage:true});
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
       await page.locator('.paper .pclose').click();
       await page.locator('#view[data-route=home]').waitFor();
