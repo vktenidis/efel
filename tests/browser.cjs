@@ -335,6 +335,11 @@ async function test() {
     for(const width of [390,1440]){
       const {page,errors}=await setup(browser,'manager',width);
       const dialog=page.getByRole('dialog');
+      await page.evaluate(()=>{location.hash='paper'});
+      await page.locator('.paper .headline').waitFor();
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+      await page.locator('.paper .pclose').click();
+      await page.locator('#view[data-route=home]').waitFor();
       if(width===390){
         const value=page.locator('.wkc .wt b').last();
         await value.evaluate(el=>{el.textContent='+1.234,56 εκατ. €'});

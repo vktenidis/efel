@@ -126,3 +126,7 @@ Starting from 7c6a36c, aligned each club crest with its name and restored all st
 ## Mobile office fitting · efel-prod17
 
 Starting from d34bb30, the weekly summary and lineup each occupy a full mobile row. Weekly amounts can wrap within their tile, and the PES and portrait lineup views have more room. Browser QA checked widths 360, 390 and 430 px, both pitch modes, an eleven-player fixture and a long monetary value. The twelve-route suite passed through 1920 px. No database changes.
+
+## Transfer desk and league paper refinement · efel-prod18
+
+Starting from f747f96, refined transfer scouting rows, offer surfaces, window status and input focus. Adjusted the newspaper header and close control for mobile. Playwright passed twelve routes at seven widths, including transfer search, offer and counter-offer fixtures. A populated newspaper fixture was opened and closed at 390 and 1440 px with no document overflow. No database changes.
