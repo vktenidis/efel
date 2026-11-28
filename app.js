@@ -470,6 +470,7 @@ function vRules(){const c=cfg(),B=c.budget||ECON.budget,T=S.all.length||24,pz=c.
 /* ---------- render ---------- */
 function route(){return (location.hash||'#home').slice(1)}
 function render(force){
+  scheduleSquadSave();
   const ae=document.activeElement;
   if(!force&&ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)&&ae.id!=='fq'&&$('#view').contains(ae)){S.dirty=true;return}
   S.dirty=false;
@@ -827,7 +828,7 @@ document.addEventListener('change',e=>{if(e.target.id==='simHuman')S.simHuman=e.
 document.addEventListener('toggle',event=>{if(event.target.matches('.market-filters'))S.mf.filters=event.target.open},true);
 document.addEventListener('focusout',()=>setTimeout(()=>{if(S.dirty)render()},0));
 addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('.office-bubble:popover-open')&&!$('#ov').hidden)closeM()});
-addEventListener('hashchange',()=>{S.lu=null;S.sel=null;closeM();S.offerFor=S._keep||null;S._keep=null;render(true);scrollTo(0,0)});
+addEventListener('hashchange',()=>{if(S.lu&&!S.lu.dirty&&!S.lu.saving)S.lu=null;S.sel=null;closeM();S.offerFor=S._keep||null;S._keep=null;render(true);scrollTo(0,0)});
 /* ================= ΕΜΠΕΙΡΙΑ: εφημερίδα, στιγμές, shortlist, ιστορία ================= */
 const LS={get(k,d){try{const v=localStorage.getItem('efel_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('efel_'+k,JSON.stringify(v))}catch(e){}}};
 function toastAct(m,label,fn){const t=$('#toast');t.innerHTML=`<span>${esc(m)}</span> <button class="ghost sm" id="toastBtn">${esc(label)}</button>`;t.classList.add('on');clearTimeout(tt);
@@ -1356,6 +1357,21 @@ function pitchToggle(){const s=pitchStyle();return `<span class="ptog" role="gro
 xiCard=function(mt){return `<section class="pnl xic"><div class="ph">${ico('shirt','gold')}<b>Ενδεκάδα</b><a class="fmt" href="#club">${esc(getLU(mt).f)}</a></div><div class="xiw">${pitchStyle()==='pes'?pesPitch(mt,false):lineup(mt)}${pitchToggle()}</div></section>`};
 const squadPitch0=squadPitch;
 squadPitch=function(mt){const html=squadPitch0(mt);if(!S.lu.bench)S.lu.bench=benchInit(mt);return pitchStyle()==='pes'?`${pesPitch(mt,true)}${pesLegend()}`:html};
+let squadSaveTimer;
+const squadSnapshot=L=>JSON.stringify([L.f,L.xi,L.bench||[]]);
+function scheduleSquadSave(){const L=S.lu;if(!L||!L.dirty||L.saving)return;const snapshot=squadSnapshot(L);if(L.failedSnapshot===snapshot)return;
+  clearTimeout(squadSaveTimer);squadSaveTimer=setTimeout(()=>saveSquad(L),900)}
+async function saveSquad(L){if(!L||!L.dirty||L.saving||S.lu!==L)return;clearTimeout(squadSaveTimer);const snapshot=squadSnapshot(L),[f,xi,bench]=JSON.parse(snapshot);
+  L.saving=true;L.saveError='';if(S.lu===L)render(true);
+  try{await rpc('efel_save_squad',{p_f:f,p_xi:xi.map(npid),p_bench:bench.map(npid)});const team=S.all.find(t=>t.id===L.t);if(team)team.lineup={...team.lineup,f,xi,bench};L.failedSnapshot='';if(squadSnapshot(L)===snapshot)L.dirty=0;}
+  catch(e){L.failedSnapshot=snapshot;L.saveError=e?.message||'Δοκίμασε ξανά.';}
+  finally{L.saving=false;if(S.lu===L){render(true);if(L.dirty&&squadSnapshot(L)!==L.failedSnapshot)scheduleSquadSave();}if(!L.dirty)loadAll()}}
+addEventListener('beforeunload',e=>{if(S.lu&&(S.lu.dirty||S.lu.saving)){e.preventDefault();e.returnValue=''}});
+let squadDrag=null;
+document.addEventListener('pointerdown',e=>{const h=e.target.closest('[data-drag-pid]');if(!h||e.button!==0)return;squadDrag={id:e.pointerId,pid:h.dataset.dragPid,x:e.clientX,y:e.clientY,moved:false};h.setPointerCapture(e.pointerId)});
+document.addEventListener('pointermove',e=>{if(!squadDrag||e.pointerId!==squadDrag.id)return;if(Math.hypot(e.clientX-squadDrag.x,e.clientY-squadDrag.y)>8)squadDrag.moved=true;if(squadDrag.moved)e.preventDefault()});
+document.addEventListener('pointerup',e=>{if(!squadDrag||e.pointerId!==squadDrag.id)return;const drag=squadDrag;squadDrag=null;if(!drag.moved)return;const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-act="slot"],[data-act="bench"]');if(!target)return;e.preventDefault();S.sel=null;A.bench(drag.pid);if(target.dataset.act==='slot')A.slot(target.dataset.id);else A.bench(target.dataset.id)});
+document.addEventListener('pointercancel',()=>{squadDrag=null});
 /* πάγκος 12 + ρεζέρβες + κενές θέσεις ως τις MAXR */
 function benchInit(mt){const xi=new Set(S.lu.xi.filter(Boolean)),ids=(mt.roster||[]).map(r=>r.pid).filter(id=>!xi.has(id));
   const saved=(mt.lineup?.bench||[]).map(String).filter(id=>ids.includes(id));
@@ -1365,14 +1381,14 @@ function benchInit(mt){const xi=new Set(S.lu.xi.filter(Boolean)),ids=(mt.roster|
   return order.slice(0,12)}
 function benchSync(mt){const L=S.lu,xi=new Set(L.xi.filter(Boolean)),ids=new Set((mt.roster||[]).map(r=>r.pid));L.bench=(L.bench||[]).filter(id=>ids.has(id)&&!xi.has(id)).slice(0,12)}
 function squadRow(mt,p,num,kind){const r=rosterRow(mt,p.id),z=grp(p.pos),sel=S.sel&&S.sel.k==='b'&&S.sel.pid===p.id;
-  return `<div class="sqr ${sel?'sel':''}"><button class="sqb" data-act="bench" data-id="${esc(p.id)}"><span class="sqn" style="--zc:${ZC[z]}">${num}</span><span class="sqp">${esc(p.pos)}</span><span class="sqm">${esc(p.name)}</span><span class="sqo">${p.ovr}</span>${condArrow(r)}</button><button class="sbtn sm" data-act="pinfo" data-id="${esc(p.id)}" aria-label="Κάρτα ${esc(p.name)}">Κάρτα</button></div>`}
+  return `<div class="sqr ${sel?'sel':''}"><button class="squad-drag" data-drag-pid="${esc(p.id)}" aria-label="Σύρε τον παίκτη ${esc(p.name)}" title="Σύρε για αλλαγή θέσης">⋮⋮</button><button class="sqb" data-act="bench" data-id="${esc(p.id)}"><span class="sqn" style="--zc:${ZC[z]}">${num}</span><span class="sqp">${esc(p.pos)}</span><span class="sqm">${esc(p.name)}</span><span class="sqo">${p.ovr}</span>${condArrow(r)}</button><button class="sbtn sm" data-act="pinfo" data-id="${esc(p.id)}" aria-label="Κάρτα ${esc(p.name)}">Κάρτα</button></div>`}
 squadBench=function(mt){const L=S.lu;if(!L.bench)L.bench=benchInit(mt);benchSync(mt);
   const xi=L.xi.map((id,i)=>id?{p:pl(id),i}:null).filter(Boolean),inXI=new Set(L.xi.filter(Boolean)),bench=L.bench.map(pl);
   const res=(mt.roster||[]).map(r=>r.pid).filter(id=>!inXI.has(id)&&!L.bench.includes(id)).map(pl).sort((a,b)=>b.ovr-a.ovr);
   const n=(mt.roster||[]).length,empty=Math.max(0,MAXR-n);
-  return `<div class="row" style="margin-bottom:10px"><label class="small">Σχηματισμός <select id="fsel" aria-label="Σχηματισμός">${Object.keys(FORM).map(f=>`<option ${f===L.f?'selected':''}>${f}</option>`).join('')}</select></label><button class="ghost" data-act="autoLU">Αυτόματη</button><button data-act="saveLU" ${L.dirty?'':'disabled'}>Αποθήκευση</button><span class="small muted">Μ.Ο. OVR ${xiAvg({...mt,lineup:{f:L.f,xi:L.xi}})}</span></div>
-   ${L.dirty?'<p class="note small">Έχεις αλλαγές που δεν αποθηκεύτηκαν.</p>':''}
-   <p class="small muted">Πάτα μια βούλα στο γήπεδο και μετά έναν παίκτη της λίστας για να μπει στη θέση της. Μέσα στη λίστα, πάτα δύο παίκτες για να αλλάξουν θέση (π.χ. ρεζέρβα με αναπληρωματικό). Κόκκινο περίγραμμα: παίκτης εκτός θέσης.</p>
+  return `<div class="row" style="margin-bottom:10px"><label class="small">Σχηματισμός <select id="fsel" aria-label="Σχηματισμός">${Object.keys(FORM).map(f=>`<option ${f===L.f?'selected':''}>${f}</option>`).join('')}</select></label><button class="ghost" data-act="autoLU">Αυτόματη</button><button data-act="saveLU" ${L.dirty&&!L.saving?'':'disabled'}>Αποθήκευση τώρα</button><span class="small muted">Μ.Ο. OVR ${xiAvg({...mt,lineup:{f:L.f,xi:L.xi}})}</span></div>
+   <p class="note small" role="status">${L.saveError?'Δεν αποθηκεύτηκε: '+esc(L.saveError)+' · Πάτα Αποθήκευση τώρα για νέα προσπάθεια.':L.saving?'Αποθήκευση…':L.dirty?'Οι αλλαγές θα αποθηκευτούν αυτόματα.':'Δεν υπάρχουν εκκρεμείς αλλαγές.'}</p>
+   <p class="small muted">Σύρε το ⋮⋮ από τη λίστα ή πάτα μια βούλα στο γήπεδο και μετά έναν παίκτη της λίστας για να μπει στη θέση της. Μέσα στη λίστα, πάτα δύο παίκτες για να αλλάξουν θέση (π.χ. ρεζέρβα με αναπληρωματικό). Κόκκινο περίγραμμα: παίκτης εκτός θέσης.</p>
    <div class="sqh"><b>Βασικοί</b><span>${xi.length}/11</span></div><div class="sql">${xi.map(({p,i})=>squadRow(mt,p,i+1,'x')).join('')}</div>
    <div class="sqh"><b>Αναπληρωματικοί</b><span>${bench.length}/12</span></div><div class="sql">${bench.length?bench.map((p,k)=>squadRow(mt,p,12+k,'b')).join(''):'<p class="small muted">Κανένας.</p>'}</div>
    <div class="sqh"><b>Ρεζέρβες</b><span>${res.length}</span></div><div class="sql">${res.length?res.map(p=>squadRow(mt,p,'R','r')).join(''):'<p class="small muted">Καμία ρεζέρβα.</p>'}</div>
@@ -1390,8 +1406,8 @@ Object.assign(A,{
       if(a>=0&&b>=0){L.bench[a]=pid;L.bench[b]=s.pid}else if(a>=0)L.bench[a]=pid;else if(b>=0)L.bench[b]=s.pid;L.dirty=1;S.sel=null}
     else S.sel=s&&s.k==='b'&&s.pid===pid?null:{k:'b',pid};render(true)},
   slot2(i,pid){const L=S.lu,old=L.xi[i],j=L.bench.indexOf(pid),other=L.xi.indexOf(pid);S.sel=null;if(other===i){render(true);return}L.xi[i]=pid;if(other>=0)L.xi[other]=old;else if(j>=0){if(old)L.bench[j]=old;else L.bench.splice(j,1)}L.dirty=1;render(true)},
-  async saveLU(){const L=S.lu;if(!L||L.saving)return;const snapshot=JSON.stringify([L.f,L.xi,L.bench||[]]);L.saving=true;try{await w(async()=>{await rpc('efel_save_squad',{p_f:L.f,p_xi:L.xi.map(npid),p_bench:(L.bench||[]).map(npid)});if(JSON.stringify([L.f,L.xi,L.bench||[]])===snapshot)L.dirty=0},'Η ενδεκάδα και ο πάγκος αποθηκεύτηκαν')}finally{L.saving=false}},
-  autoLU(){const mt=myTeam();S.lu={f:S.lu.f,xi:autoXI(mt,S.lu.f),dirty:1,t:mt.id};S.lu.bench=benchInit(mt);S.sel=null;render(true)},
+  async saveLU(){clearTimeout(squadSaveTimer);if(S.lu){S.lu.saveError='';S.lu.failedSnapshot='';await saveSquad(S.lu)}},
+  autoLU(){const mt=myTeam(),L=S.lu;L.xi=autoXI({...mt,roster:(mt.roster||[]).filter(r=>r.activation==='active')},L.f);L.dirty=1;L.bench=benchInit(mt);S.sel=null;render(true)},
   /* ενεργοποίηση */
   actConfirm(pid){const p=pl(pid);openM(`<div class="box"><div class="bh">Ενεργοποίηση κάρτας</div>${pcardHTML(pid)}
     <label class="actchk"><span class="act-arrow" aria-hidden="true">➜</span><input type="checkbox" id="actTerms"><span class="act-box" aria-hidden="true"></span><span class="act-txt">Δηλώνω ότι έχω την κάρτα <b>${esc(p.name)}</b> (standard) στον λογαριασμό μου στο eFootball.</span></label>

@@ -1130,3 +1130,6 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
 .match-manager .mgrl .av { flex:none; }
 .match-manager .mgrl:focus-visible { outline:3px solid #ffdb87; outline-offset:2px; }
 @media(max-width:380px) { .match-manager { padding:7px; } }
+
+/* The grip reserves touch dragging while the rest of each row still scrolls. */
+.squad-drag{touch-action:none;cursor:grab;min-width:38px;min-height:42px;padding:4px 8px;user-select:none}.squad-drag:active{cursor:grabbing}

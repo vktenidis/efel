@@ -46,7 +46,9 @@ const client = (data, role) => {
       rpc: async (name,args) => {
         window.qaRequests ||= [];
         window.qaRequests.push([name,args]);
+        if(name==='efel_save_squad'&&window.qaDelaySave)await new Promise(r=>setTimeout(r,window.qaDelaySave));
         if(name==='efel_save_squad'&&window.qaFailSave)return {data:null,error:{message:'QA αποτυχία'}};
+        if(name==='efel_save_squad'){const c=data.clubs.find(c=>c.id===1);c.lineup={f:args.p_f,xi:args.p_xi,bench:args.p_bench}}
         return {data:name==='efel_finance'?{free:600000}:name==='efel_window_dates'?[]:null,error:null};
       },
       channel() { return {on(){return this},subscribe(){return this}} },
@@ -417,6 +419,7 @@ async function test() {
       await page.locator('#view[data-route=squad]').waitFor();
       const starters=page.locator('.sqh:has-text("Βασικοί") + .sql [data-act=bench]');
       await starters.first().waitFor();
+      await page.evaluate(()=>{window.qaFailSave=true});
       const first=await starters.nth(0).getAttribute('data-id');
       const second=await starters.nth(1).getAttribute('data-id');
       await starters.nth(0).click();
@@ -430,18 +433,55 @@ async function test() {
       await starters.first().click();
       assert.equal(await starters.first().getAttribute('data-id'),substitute);
       assert.ok((await bench.all()).length>0);
-      await page.evaluate(()=>{window.qaFailSave=true});
-      await page.locator('[data-act=saveLU]').click();
-      await page.getByText('QA αποτυχία').waitFor();
+      await page.getByText(/QA αποτυχία/).waitFor();
       assert.equal(await page.locator('[data-act=saveLU]').isEnabled(),true);
       await page.evaluate(()=>{window.qaFailSave=false});
       await page.locator('[data-act=saveLU]').click();
-      await page.getByText('Η ενδεκάδα και ο πάγκος αποθηκεύτηκαν').waitFor();
+      await page.getByText('Δεν υπάρχουν εκκρεμείς αλλαγές.').waitFor();
       const saved=await page.evaluate(()=>window.qaRequests.filter(r=>r[0]==='efel_save_squad'));
       assert.equal(saved.length,2);
       assert.equal(saved[1][1].p_xi.length,11);
       assert.ok(saved[1][1].p_bench.length>0);
       assert.equal(await page.evaluate(()=>window.qaRequests.some(r=>r[0]==='efel_save_lineup'||r[0]==='efel_save_bench')),false);
+      // Drag a starter onto another starter, then confirm automatic persistence.
+      const sourceRow=page.locator('.sqh:has-text("Βασικοί") + .sql .sqr').first();
+      const draggedId=await sourceRow.locator('[data-act=bench]').getAttribute('data-id');
+      const grip=sourceRow.locator('[data-drag-pid]'),destination=starters.nth(1);
+      await grip.scrollIntoViewIfNeeded();
+      const from=await grip.boundingBox(),to=await destination.boundingBox();
+      await page.mouse.move(from.x+from.width/2,from.y+from.height/2);await page.mouse.down();
+      await page.mouse.move(to.x+to.width/2,to.y+to.height/2,{steps:6});await page.mouse.up();
+      assert.equal(await starters.nth(1).getAttribute('data-id'),draggedId);
+      await page.getByText('Δεν υπάρχουν εκκρεμείς αλλαγές.').waitFor();
+      assert.ok((await page.evaluate(()=>window.qaRequests.filter(r=>r[0]==='efel_save_squad'))).length>=3);
+      // Edits made while a slow save is running are queued and survive navigation.
+      await page.evaluate(()=>{window.qaDelaySave=1400});
+      await page.locator('#fsel').selectOption('4-3-3');
+      await page.getByText('Αποθήκευση…').waitFor();
+      await page.locator('#fsel').selectOption('4-2-3-1');
+      await page.evaluate(()=>{location.hash='home'});
+      await page.waitForFunction(()=>window.qaRequests.filter(r=>r[0]==='efel_save_squad').some(r=>r[1].p_f==='4-2-3-1'),null,{timeout:8000});
+      await page.waitForTimeout(1600);
+      await page.evaluate(()=>{window.qaDelaySave=0;location.hash='squad'});
+      await page.locator('#view[data-route=squad]').waitFor();
+      await page.getByText('Δεν υπάρχουν εκκρεμείς αλλαγές.').waitFor();
+      assert.equal(await page.locator('#fsel').inputValue(),'4-2-3-1');
+      // Emulated touchscreen drag uses the dedicated grip without disabling page scrolling.
+      const mobileStarters=page.locator('.sqh:has-text("Βασικοί") + .sql [data-act=bench]');
+      const mobileRow=page.locator('.sqh:has-text("Βασικοί") + .sql .sqr').first();
+      const mobileId=await mobileRow.locator('[data-act=bench]').getAttribute('data-id');
+      const mobileGrip=mobileRow.locator('[data-drag-pid]');await mobileGrip.scrollIntoViewIfNeeded();
+      const touchFrom=await mobileGrip.boundingBox(),touchTo=await mobileStarters.nth(1).boundingBox();
+      const cdp=await page.context().newCDPSession(page);
+      await cdp.send('Emulation.setTouchEmulationEnabled',{enabled:true});
+      const point=(box)=>({x:Math.round(box.x+box.width/2),y:Math.round(box.y+box.height/2)});
+      await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point(touchFrom)]});
+      await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[point(touchTo)]});
+      await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      assert.equal(await mobileStarters.nth(1).getAttribute('data-id'),mobileId);
+      await page.getByText('Δεν υπάρχουν εκκρεμείς αλλαγές.').waitFor();
+      await cdp.detach();
+
       assert.deepEqual(errors,[]);
       await page.close();
     }
