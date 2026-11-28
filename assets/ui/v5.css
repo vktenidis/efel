@@ -356,3 +356,58 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   .menu-directory .morebtn { transition: none; }
 }
 .menu-directory button.morebtn { font-family: inherit; font-size: inherit; }
+
+/* Club workspace */
+.club4 .clubhead {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid #49647c;
+  background: linear-gradient(100deg,#101e30f2 0%,#14273ce8 52%,#0a1728ba 100%),url(club.webp) center / cover;
+  box-shadow: inset 0 1px #c2d9e833,0 6px 18px #02091270;
+}
+.club4 .clubhead h1 { overflow-wrap: anywhere; }
+.club4 .ch-k div {
+  background: linear-gradient(145deg,#29445a,#11243a);
+  border-color: #547087;
+  box-shadow: inset 0 1px #c6e0ec24,0 3px 6px #02091255;
+}
+.seg.club {
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid #3e566c;
+  border-radius: 11px;
+  background: #0c192b;
+}
+.seg.club button {
+  min-height: 44px;
+  border: 1px solid #31495e;
+  border-radius: 7px;
+  color: #d7e7f1;
+  background: linear-gradient(145deg,#203a50,#12263b);
+  box-shadow: inset 0 1px #bad6e21c,0 2px 3px #030b1455;
+}
+.seg.club button.on {
+  color: #192536;
+  border-color: #ffdc87;
+  background: linear-gradient(160deg,#ffe29b,#e5ae44);
+}
+.seg.club button:focus-visible,.club4 button:focus-visible,.club4 a:focus-visible {
+  outline: 3px solid #ffdd85;
+  outline-offset: 2px;
+}
+.club4 .box,.club4 .pnl,.club4 .card {
+  border-color: #405b73;
+  box-shadow: inset 0 1px #b8d7e21a,0 5px 14px #020a144a;
+}
+.club4 .sqr .sqb,.club4 .prow {
+  background: linear-gradient(110deg,#1b344b,#101f32);
+  border-color: #405970;
+}
+.club4 .sqr .sqb:hover { border-color: #9ec2d0; }
+@media (max-width:600px) {
+  .club4 .ch-k { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .seg.club { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .seg.club button { min-width:0; white-space:normal; line-height:1.15; }
+}
+.seg.club button { font-family:"Fira Sans",system-ui,sans-serif; font-weight:700; }

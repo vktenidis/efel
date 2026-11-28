@@ -112,6 +112,16 @@ async function test() {
         await page.evaluate(route=>{location.hash=route},route);
         await page.waitForSelector('#view[data-route="'+route+'"]');
         await page.waitForFunction(()=>!document.querySelector('.signin')&&document.querySelector('main').innerText.length>60);
+        if(route==='club'){
+          for(const tab of ['roster','contracts','finance','history','stats','info','xi']){
+            const button=page.locator('.seg.club [data-id="'+tab+'"]');
+            await button.click();
+            assert.equal(await button.getAttribute('aria-selected'),'true');
+            if(screenshots&&[390,1440].includes(width)&&['roster','contracts','xi'].includes(tab))await page.screenshot({path:screenshots+'/club-'+tab+'-'+width+'.png'});
+            assert.equal(await page.locator('.seg.club [aria-selected="true"]').count(),1);
+            assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'club '+tab+' overflows at '+width);
+          }
+        }
         if(route==='home'){
           const rank=page.locator('.skp>b');
           assert.equal(await rank.textContent(),'8η');

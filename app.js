@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod11').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod11').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod12').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod12').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod11').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod12').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -1036,7 +1036,7 @@ function vClub(){const mt=myTeam();if(!mt)return `<section class="card emptyst">
   else{const ms=S2.fin;body=clubHistory(mt.id)+careerHTML(mt.manager)+`<div class="small muted" style="margin:12px 0 4px">Αποτελέσματα σεζόν</div>${ms.length?`<div class="wkm">${ms.map(m=>{const hm=m.home===mt.id,f2=hm?m.hs:m.as,a=hm?m.as:m.hs;return `<button class="chipm ${f2>a?'W':f2<a?'L':'D'}" data-act="mcard" data-id="${m.id}">${m.md}η ${crest(team(hm?m.away:m.home),16)} ${f2}-${a}</button>`}).join('')}</div>`:'<p class="small muted">Κανένας αγώνας ακόμα.</p>'}`}
   return `<div class="club4"><h1 class="ptitle">${ico('shirt','gold')}<span>Η ομάδα μου</span><button class="fmt" data-act="clubGo" data-id="xi">${esc(S.lu.f)}</button></h1>
    <section class="pnl pitchwrap">${pitch}</section>
-   <div class="seg club" role="tablist">${tabs.map(([k,l,n])=>`<button role="tab" class="${tab===k?'on':''}" data-act="clubTab" data-id="${k}">${l}${n?`<b>${n}</b>`:''}</button>`).join('')}</div>
+   <div class="seg club" role="tablist" aria-label="Ενότητες συλλόγου">${tabs.map(([k,l,n])=>`<button role="tab" aria-selected="${tab===k}" class="${tab===k?'on':''}" data-act="clubTab" data-id="${k}">${l}${n?`<b>${n}</b>`:''}</button>`).join('')}</div>
    <section class="pnl">${body}</section></div>`}
 /* ---------- καρτέλα manager ---------- */
 function mgrStats(uid){const h=(S.mgrHist||[]).filter(x=>x.user_id===uid);let w=0,d=0,l=0,gf=0,ga=0,big=null;

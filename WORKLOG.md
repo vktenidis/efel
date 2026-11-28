@@ -102,3 +102,7 @@ Playwright passed 12 manager routes at seven widths from 360 to 1920 px. At 390 
 ## Navigation directory refinement · efel-prod11
 
 Starting from c2db00f, refined the full menu with clearer group headings, higher-contrast labels, subtle photographic backgrounds and raised touch surfaces. Added visible keyboard focus and reduced-motion support. Existing destinations, role checks and actions are retained. Playwright passed 12 manager routes at 360, 390, 430, 768, 1024, 1440 and 1920 px, including the menu-to-calendar transition, mobile navigation and admin gating. The font inheritance adjustment was inspected alongside the menu layout. Subsequent sections remain available for separate, complete upgrades.
+
+## Club workspace refinement · efel-prod12
+
+Starting from 37a2f36, refreshed the club header, surfaces, squad rows and seven-section navigation. Selected tabs now expose their state to assistive technology. On narrow screens, financial statistics and tab buttons use two columns for readability. Playwright traversed all seven tabs at 360, 390, 430, 768, 1024, 1440 and 1920 px and checked selection and horizontal overflow. The broader twelve-route suite and existing action tests passed. No database changes.
