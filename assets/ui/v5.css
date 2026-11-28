@@ -613,3 +613,38 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   #view[data-route="table"] .ft td,#view[data-route="table"] .ft th { padding:9px 6px; }
   #view[data-route="teams"] .tcard .stat b { overflow-wrap:anywhere; }
 }
+
+/* Keep each crest beside its club and make additional statistics discoverable. */
+.standings-team { display:inline-flex; align-items:center; gap:5px; min-width:0; }
+.standings-team > .media-wrap, .standings-team > svg { flex:none; }
+.standings-team > button { min-width:0; text-align:left; line-height:1.2; }
+.standings-scroll-hint { display:none; }
+@media(max-width:600px) {
+  #view[data-route="table"] .standings-scroll-hint {
+    display:block;
+    margin:0 0 7px;
+    color:#c5d8e6;
+    font-size:.8rem;
+  }
+  #view[data-route="table"] .standings-scroll {
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+  }
+  #view[data-route="table"] .ft { width:max-content; min-width:100%; }
+  #view[data-route="table"] .ft td:nth-child(2),
+  #view[data-route="table"] .ft th:nth-child(2) { min-width:145px; }
+  #view[data-route="table"] .ft td:nth-child(2) .lnk { white-space:normal; overflow-wrap:anywhere; }
+  #view[data-route="table"] .ft th:nth-child(7),
+  #view[data-route="table"] .ft td:nth-child(7) { display:table-cell; }
+}
+@media(max-width:600px) {
+  #view[data-route="table"] .ft { font-size:12px; }
+  #view[data-route="table"] .ft td,#view[data-route="table"] .ft th { padding:9px 3px; }
+  #view[data-route="table"] .ft td:nth-child(2),
+  #view[data-route="table"] .ft th:nth-child(2) { min-width:115px; }
+}
+@media(max-width:600px) {
+  #view[data-route="table"] .ft { min-width:420px; }
+}

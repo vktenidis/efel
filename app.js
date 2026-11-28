@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod15').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod15').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod16').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod16').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod15').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod16').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -491,7 +491,7 @@ function render(force){
 
 function tableHTML(full){
   const st=standings();if(!st.length)return '<p class="muted">Δεν υπάρχουν ομάδες ακόμα.</p>';
-  return `<div class="${full?'scroll':''}" ${full?'role="region" aria-label="Πίνακας βαθμολογίας, κύλιση οριζόντια" tabindex="0"':''}><table class="${full?'ft':''}"><thead><tr><th>#</th><th>Ομάδα</th><th class="num">Αγ</th>${full?'<th class="num">Ν</th><th class="num">Ι</th><th class="num">Η</th><th class="num">Γκολ</th>':''}<th class="num">ΔΓ</th><th class="num">Β</th>${full?'<th class="num" title="Βαθμοί ανά αγώνα">Β/Αγ</th><th>Φόρμα</th>':''}</tr></thead><tbody>${st.map((s,i)=>`<tr><td>${i+1}</td><td>${tdot(s.id)}${tlink(s.id)}</td><td class="num">${s.p}</td>${full?`<td class="num">${s.w}</td><td class="num">${s.d}</td><td class="num">${s.l}</td><td class="num">${s.gf}-${s.ga}</td>`:''}<td class="num">${s.gf-s.ga>0?'+':''}${s.gf-s.ga}</td><td class="num pts">${s.pts}${full?'':`<small class="ppg">/${s.p}</small>`}</td>${full?`<td class="num"><b>${s.p?(s.pts/s.p).toFixed(2):'—'}</b><div class="mbar"><i style="width:${s.p?s.pts/s.p/3*100:0}%"></i></div></td><td>${s.form.slice(-5).map(f=>`<span class="dot ${f}" title="${f==='W'?'Νίκη':f==='D'?'Ισοπαλία':'Ήττα'}"></span>`).join('')}</td>`:''}</tr>`).join('')}</tbody></table></div>`;
+  return `${full?'<p class="standings-scroll-hint">Σύρε τον πίνακα για όλα τα στατιστικά ↔</p>':''}<div class="${full?'scroll standings-scroll':''}" ${full?'role="region" aria-label="Πίνακας βαθμολογίας, κύλιση οριζόντια" tabindex="0"':''}><table class="${full?'ft':''}"><thead><tr><th>#</th><th>Ομάδα</th><th class="num">Αγ</th>${full?'<th class="num">Ν</th><th class="num">Ι</th><th class="num">Η</th><th class="num">Γκολ</th>':''}<th class="num">ΔΓ</th><th class="num">Β</th>${full?'<th class="num" title="Βαθμοί ανά αγώνα">Β/Αγ</th><th>Φόρμα</th>':''}</tr></thead><tbody>${st.map((s,i)=>`<tr><td>${i+1}</td><td><span class="standings-team">${tdot(s.id)}${tlink(s.id)}</span></td><td class="num">${s.p}</td>${full?`<td class="num">${s.w}</td><td class="num">${s.d}</td><td class="num">${s.l}</td><td class="num">${s.gf}-${s.ga}</td>`:''}<td class="num">${s.gf-s.ga>0?'+':''}${s.gf-s.ga}</td><td class="num pts">${s.pts}${full?'':`<small class="ppg">/${s.p}</small>`}</td>${full?`<td class="num"><b>${s.p?(s.pts/s.p).toFixed(2):'—'}</b><div class="mbar"><i style="width:${s.p?s.pts/s.p/3*100:0}%"></i></div></td><td>${s.form.slice(-5).map(f=>`<span class="dot ${f}" title="${f==='W'?'Νίκη':f==='D'?'Ισοπαλία':'Ήττα'}"></span>`).join('')}</td>`:''}</tr>`).join('')}</tbody></table></div>`;
 }
 
 function newsLine(n){const P=plink,T=tlink;

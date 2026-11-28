@@ -133,6 +133,17 @@ async function test() {
         if(route==='table'){
           const region=page.getByRole('region',{name:/Πίνακας βαθμολογίας/});
           await region.waitFor();
+          if(width<=430){
+            const table=region.locator('.ft');
+            const shape=await table.evaluate(el=>{const row=el.querySelector('tbody tr');const team=row.querySelector('.standings-team');const image=team.querySelector('.media-wrap,svg');const name=team.querySelector('button');const a=image.getBoundingClientRect(),b=name.getBoundingClientRect();return {gap:b.left-a.right,vertical:Math.abs((a.top+a.bottom-b.top-b.bottom)/2)}});
+            assert.ok(shape.gap>=0&&shape.vertical<20,'crest and name overlap at '+width);
+            await region.evaluate(el=>{el.scrollLeft=el.scrollWidth});
+            assert.ok(await region.evaluate(el=>el.scrollLeft>0),'statistics must scroll on mobile');
+            assert.ok(await page.locator('.standings-scroll-hint').isVisible());
+            await region.evaluate(el=>{el.scrollLeft=0});
+            if(screenshots)await page.screenshot({path:screenshots+'/standings-'+width+'.png'});
+          }
+
           await region.locator('[data-act=tinfo]').first().click();
           await page.getByRole('dialog').locator('.tbox').waitFor();
           await page.keyboard.press('Escape');
