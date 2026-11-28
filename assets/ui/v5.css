@@ -648,3 +648,19 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
 @media(max-width:600px) {
   #view[data-route="table"] .ft { min-width:420px; }
 }
+
+/* Give the weekly summary and lineup enough room on phones. */
+@media(max-width:600px) {
+  .home4 .pair:has(> .wkc),
+  .home4 .pair:has(> .xic) { grid-template-columns:minmax(0,1fr); align-items:start; }
+  .home4 .wkc,.home4 .xic { min-width:0; }
+  .home4 .wkc .wt { min-width:0; padding:10px 4px; }
+  .home4 .wkc .wt b { white-space:normal; overflow-wrap:anywhere; font-size:clamp(16px,5vw,22px); }
+  .home4 .wkc .wt span { white-space:normal; overflow-wrap:anywhere; }
+  .home4 .xic .pes { max-width:400px; margin-inline:auto; }
+  .home4 .xic .pes-field { aspect-ratio:100/118; }
+  .home4 .xic .pdot { max-width:23%; }
+  .home4 .xic .pdot .pn { max-width:100%; font-size:clamp(9px,2.6vw,11px); }
+  .home4 .xic .pitch.faces { max-width:400px; margin-inline:auto; }
+  .home4 .xic .pitch.faces .pf { width:clamp(46px,15vw,64px); }
+}

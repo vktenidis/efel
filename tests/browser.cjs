@@ -153,6 +153,18 @@ async function test() {
           await page.getByRole('dialog').locator('.tbox').waitFor();
           await page.keyboard.press('Escape');
         }
+        if(route==='home'&&width<=430){
+          for(const selector of ['.wkc','.xic']){
+            const dimensions=await page.locator(selector).evaluate(el=>{const box=el.getBoundingClientRect();const parent=el.parentElement.getBoundingClientRect();return {width:box.width,parent:parent.width}});
+            assert.ok(dimensions.width>=dimensions.parent-2,selector+' must span the mobile row');
+          }
+          assert.equal(await page.locator('.wkc .wt b').evaluateAll(nodes=>nodes.every(el=>el.scrollWidth<=el.clientWidth+1)),true);
+          const toggle=page.locator('.xic [data-act=pstyle][data-id=faces]');
+          await toggle.click();
+          await page.locator('.xic .pitch.faces').waitFor();
+          await page.locator('.xic [data-act=pstyle][data-id=pes]').click();
+          await page.locator('.xic .pes-field').waitFor();
+        }
         if(route==='home'){
           const rank=page.locator('.skp>b');
           assert.equal(await rank.textContent(),'8η');
@@ -318,10 +330,20 @@ async function test() {
       {id:22,league_id:1,season_no:1,md:9,home:2,away:1,hg:3,ag:2,status:'final',updated_at:new Date().toISOString()});
     // The next opponent is unassigned. Profile history includes an away result without an agreed kickoff.
     fixture.club_managers=fixture.club_managers.slice(0,1);
+    fixture.clubs[0].lineup={f:'4-4-2',xi:[110718,...ids.slice(0,10)]};
     fixture.efel_friendly_relationships=[{club_a:1,club_b:2,played:5,paid_a_week:2,paid_b_week:2}];
     for(const width of [390,1440]){
       const {page,errors}=await setup(browser,'manager',width);
       const dialog=page.getByRole('dialog');
+      if(width===390){
+        const value=page.locator('.wkc .wt b').last();
+        await value.evaluate(el=>{el.textContent='+1.234,56 εκατ. €'});
+        assert.equal(await value.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+        assert.equal(await page.locator('.xic .pdot[data-act=pinfo]').count(),11);
+        const field=page.locator('.xic .pes-field');
+        assert.equal(await field.evaluate(el=>[...el.querySelectorAll('.pdot .pn')].every(n=>{const a=n.getBoundingClientRect(),b=el.getBoundingClientRect();return a.left>=b.left-1&&a.right<=b.right+1})),true);
+        if(screenshots)await page.locator('.home4 .pair:has(.xic)').screenshot({path:screenshots+'/lineup-populated-390.png'});
+      }
       const todo=page.locator('.ros.todo');
       await todo.locator('[data-id=contracts] .symbol-count').getByText('13',{exact:true}).waitFor();
       await todo.locator('.office-alert').filter({hasText:'Χωρίς manager'}).locator('.club-media').waitFor();
