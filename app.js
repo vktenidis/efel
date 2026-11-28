@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod21').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod21').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod22').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod22').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod21').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod22').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -157,7 +157,7 @@ document.addEventListener('keydown',event=>{
   if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus()}
 });
 function ask(o){S.pend=o.run;const p=pl(o.pid);
-  openM(`<div class="box"><div class="bh">${o.title}</div>${pcardHTML(o.pid)}<p style="margin:0">${o.note||''}</p>
+  openM(`<div class="box transaction-confirm"><div class="bh">${o.title}</div>${pcardHTML(o.pid)}<p style="margin:0">${o.note||''}</p>
   <div class="flow"><div><span>${o.label||'Budget'} τώρα</span><b>${exactMoney(o.before)}</b></div><div class="ar">→</div><div><span>Μετά</span><b class="${o.after<o.before?'neg':''}">${exactMoney(o.after)}</b></div></div>
   <div class="row" style="justify-content:flex-end"><button class="ghost" data-act="closeM">Άκυρο</button><button class="${o.warn?'warn':''}" data-act="go">${o.ok}</button></div></div>`)}
 const SN={speed:'Speed',acceleration:'Acceleration',finishing:'Finishing',lowPass:'Low Pass',dribbling:'Dribbling',physicalContact:'Physical Contact',defensiveAwareness:'Defensive Awareness',stamina:'Stamina',gkAwareness:'GK Awareness',gkCatching:'GK Catching',gkParrying:'GK Parrying',gkReflexes:'GK Reflexes',gkReach:'GK Reach',jump:'Jump'};
@@ -171,7 +171,7 @@ function playerHTML(pid){const p=pl(pid),d=DET[p.name+'|'+p.ovr],o=ownerOf(pid),
   else if(mt&&cfg().phase!=='season'&&cfg().biddingOpen&&!o)act=`<span class="small muted">Κάνε κρυφή προσφορά από τη λίστα της Αγοράς.</span>`;
   else if(mt&&o&&o.id===mt.id){act=contractEnds(r)?`<button data-act="renew" data-id="${esc(pid)}|1">Ανανέωση 1 σεζόν</button><button class="ghost" data-act="renew" data-id="${esc(pid)}|2">2 σεζόν</button>`:'';
     act+=cfg().windowOpen?`<button class="ghost" data-act="release" data-id="${esc(pid)}">Αποδέσμευση (+50%)</button>`:`<span class="small muted">Αποδέσμευση: όταν ανοίξει η μεταγραφική (${windowText()}).</span>`}
-  return `<div class="box"><div class="bh">Στοιχεία παίκτη</div>${pcardHTML(pid)}${p.maxRating?`<p class="small">Βασικό OVR ${p.ovr} · <b>MAX OVR ${p.maxRating}</b>${p.ratingSource?` · <a href="${esc(p.ratingSource)}" target="_blank" rel="noopener">PESDB ↗</a>`:''}</p>`:''}${p.img?`<details class="original-art"><summary>Πρωτότυπη κάρτα eFootball</summary>${cardImg(p,180,'original-card')}</details>`:''}${mediaCredits(MEDIA.players?.[p.id])}${valueBox(p)}
+  return `<div class="box player-detail"><div class="bh">Στοιχεία παίκτη</div>${pcardHTML(pid)}${p.maxRating?`<p class="small">Βασικό OVR ${p.ovr} · <b>MAX OVR ${p.maxRating}</b>${p.ratingSource?` · <a href="${esc(p.ratingSource)}" target="_blank" rel="noopener">PESDB ↗</a>`:''}</p>`:''}${p.img?`<details class="original-art"><summary>Πρωτότυπη κάρτα eFootball</summary>${cardImg(p,180,'original-card')}</details>`:''}${mediaCredits(MEDIA.players?.[p.id])}${valueBox(p)}
   <div class="kv"><div>Ομάδα<b>${o?tlink(o.id)+(o.is_auto?' (αυτόματη)':''):'Ελεύθερος'}</b></div>${r&&r.activation!=='active'?`<div>Κατάσταση<b>${actLabel(r)}</b></div>`:''}${r?`<div>Κόστος απόκτησης<b>${exactMoney(r.paid)}</b></div><div>Συμβόλαιο<b>ως σεζόν ${r.cu??'—'}${contractEnds(r)?' · λήγει':''}</b></div>`:''}${d?`<div>Ύψος<b>${esc(d.h)} cm</b></div><div>Πόδι<b>${esc(d.f)}</b></div><div>Ηλικία<b>${d.a}</b></div><div>Weak foot<b>${esc(d.wf)}</b></div><div>Form<b>${esc(d.fm)}</b></div>`:''}</div>
   ${d?d.st.map(([k,v])=>`<div class="sbar"><span>${SN[k]||k}</span><div class="bar"><i style="width:${Math.min(100,v)}%;background:${v>=85?'var(--ok)':v>=75?'var(--sky)':'#9aa7b8'}"></i></div><b>${v}</b></div>`).join('')+`<div class="sks">${d.sk.map(s=>`<span>${esc(s)}</span>`).join('')}</div>`:'<p class="muted small">Δεν υπάρχουν αναλυτικά στοιχεία για αυτόν τον παίκτη.</p>'}
   <div class="row" style="margin-top:12px">${starBtn(pid)}<button class="ghost" data-act="cmp" data-id="${esc(pid)}">${S.cmpA&&S.cmpA!==pid?'Σύγκριση με '+esc(pl(S.cmpA).name):'⇄ Σύγκριση'}</button>${o?`<button class="ghost" data-act="tinfo" data-id="${esc(o.id)}">${crest(o,18)} ${esc(o.name)}</button>`:''}</div><div class="row" style="margin-top:12px;justify-content:space-between"><a href="https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query=${encodeURIComponent(p.name)}" target="_blank" rel="noopener">Προφίλ στο Transfermarkt ↗</a>${act}</div></div>`}

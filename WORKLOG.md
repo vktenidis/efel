@@ -142,3 +142,7 @@ Starting from c8451c2, refined contact rows, conversation messages, the message 
 ## Sign-in and organiser workspace refinement · efel-prod21
 
 Starting from cb0b041, refined the sign-in surface and organiser form contrast, touch targets and mobile sizing. Playwright passed twelve routes at seven widths, verified sign-in wiring and role-gated administration, and checked the admin screen at 390 px without document overflow. Configuration actions used isolated fixtures. No database changes.
+
+## Player and transaction dialogs · efel-prod22
+
+Starting from 5d6c207, refined player detail and transaction confirmation surfaces, keyboard focus, value wrapping and mobile amount fitting. Playwright passed twelve routes at seven widths, checked player values and a transfer confirmation using isolated fixtures. No database changes.

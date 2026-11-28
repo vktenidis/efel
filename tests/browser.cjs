@@ -230,6 +230,7 @@ async function test() {
         const dialog=page.getByRole('dialog');
         await dialog.waitFor();
         await dialog.getByText('39.000.000 €',{exact:true}).first().waitFor();
+        assert.equal(await dialog.locator('.player-detail .vals').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
         await dialog.locator('.v-efb').getByText('450.000 GP',{exact:true}).waitFor();
         assert.match(await dialog.locator('.v-efb').innerText(),/OVR πηγής 89, καταλόγου 85/);
         await dialog.getByText('39 εκατ. €',{exact:true}).first().waitFor();
@@ -313,6 +314,9 @@ async function test() {
     await transfer.locator('#ogp').fill('36000000');
     assert.equal(await transfer.locator('output[for=ogp]').innerText(),'36 εκατ. €');
     await transfer.locator('[data-act=sendOffer]').click();
+    const confirmation=transfer.locator('.transaction-confirm');
+    await confirmation.waitFor();
+    assert.equal(await confirmation.locator('.flow').evaluate(el=>[...el.querySelectorAll('b')].every(b=>b.scrollWidth<=b.clientWidth+1)),true);
     await transfer.locator('[data-act=go]').click();
     await transfer.waitForFunction(()=>window.qaRequests?.some(([name,args])=>name==='efel_make_offer_eur'&&args.p_player===47287&&args.p_eur===36000000));
     assert.deepEqual(transferErrors,[]);

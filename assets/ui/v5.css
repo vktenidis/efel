@@ -911,3 +911,56 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   #view[data-route="admin"] .row > input { min-width:0; max-width:100%; }
   #view[data-route="admin"] .card { overflow-wrap:anywhere; }
 }
+
+/* Player details and financial confirmation */
+#mb :is(.player-detail,.transaction-confirm) {
+  border:1px solid #48677c;
+  background:linear-gradient(155deg,#20394d,#12263a 60%,#0c1c2e);
+  box-shadow:inset 0 1px #c7dfea25,0 8px 22px #030a1470;
+}
+#mb :is(.player-detail,.transaction-confirm) .pcard {
+  min-width:0;
+  border:1px solid #68839a;
+  border-radius:10px;
+  box-shadow:inset 0 1px #d1e9f027,0 4px 12px #030b1655;
+}
+#mb :is(.player-detail,.transaction-confirm) .pcard h3 {
+  color:#f3f8fa;
+  line-height:1.12;
+  overflow-wrap:anywhere;
+}
+#mb .player-detail .vals > div {
+  min-width:0;
+  box-shadow:inset 0 1px #e4edf022,0 3px 8px #030b1445;
+}
+#mb .player-detail .vals b {
+  font-size:clamp(15px,4vw,22px);
+  line-height:1.15;
+  overflow-wrap:anywhere;
+}
+#mb .player-detail .vals small { line-height:1.4; overflow-wrap:anywhere; }
+#mb .player-detail :is(details,button,a):focus-visible,
+#mb .transaction-confirm :is(button,a):focus-visible {
+  outline:3px solid #ffdb87;
+  outline-offset:2px;
+}
+#mb .transaction-confirm .flow {
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  border:1px solid #48667b;
+  background:linear-gradient(145deg,#1b354a,#102438);
+}
+#mb .transaction-confirm .flow > div { min-width:0; }
+#mb .transaction-confirm .flow b {
+  white-space:normal;
+  overflow-wrap:anywhere;
+  font-size:clamp(16px,4.3vw,24px);
+  line-height:1.2;
+}
+#mb .transaction-confirm .flow span { color:#c9dce8; }
+#mb .transaction-confirm .flow .neg { color:#ff9b9b; }
+#mb .transaction-confirm button { min-height:44px; }
+@media(max-width:380px) {
+  #mb .transaction-confirm .flow { gap:5px; padding:10px 5px; }
+  #mb .player-detail .vals { gap:6px; }
+  #mb .player-detail .vals > div { padding:9px 7px; }
+}
