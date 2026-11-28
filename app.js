@@ -12,6 +12,9 @@ const tierTag=pr=>{const [l,c]=tierOf(pr);return `<span class="tag" style="backg
 const COLORS=['#e1262d','#2f6fd6','#f2c230','#1d8a4e','#8e44ad','#f07c1e','#17a2b8','#222f3e','#c0392b','#16a085'];
 const S={all:[],allMatches:[],leagues:[],lg:null,prices:{},archive:[],fin:null,cfg:null,teams:[],cat:[],cmap:{},matches:[],offers:[],news:[],bids:[],me:null,owner:false,names:{},md:1,mf:{q:'',g:'',av:'free',pos:'',tier:'',pmin:'',pmax:'',omin:'',omax:'',sort:'ovr',afford:false,view:'list',offset:0},offerFor:null,loaded:false};
 
+let installPrompt=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
+addEventListener('appinstalled',()=>{installPrompt=null});
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function httpsURL(value){try{const url=new URL(value);return url.protocol==='https:'&&!url.username&&!url.password?url.href:null}catch{return null}}
@@ -535,6 +538,7 @@ function vMore(){
       '<button class="morebtn" data-act="inbox">'+IC.mail+'<span>Μηνύματα</span><small>Συνομιλίες προπονητών</small></button>',
       `<button class="morebtn" data-act="mgr" data-id="${esc(S.me)}">${avatar(S.me,24)}<span>Καρτέλα προπονητή</span></button>`,
       `<button class="morebtn" data-act="profile">${IC.user}<span>Επεξεργασία προφίλ</span></button>`,
+      '<button class="morebtn" data-act="installInfo">'+IC.chev+'<span>Εγκατάσταση EFEL</span><small>Προσθήκη στην αρχική οθόνη</small></button>',
       link('admin','Εργαλεία διαχειριστή'),'<button class="morebtn" data-act="logout">'+IC.chev+'<span>Αποσύνδεση</span></button>'])}</section>`;
 }
 function vTable(){return leagueBar()+`<section class="card"><h2>Βαθμολογία</h2><div class="small muted" style="margin-bottom:10px">Νίκη 3, ισοπαλία 1. Ισοβαθμία: διαφορά τερμάτων, μετά γκολ υπέρ. Μετράνε μόνο επιβεβαιωμένα αποτελέσματα.${isAutoLg()?' Οι αγώνες αυτής της λίγκας προσομοιώνονται και δεν αναμειγνύονται με την ανθρώπινη.':''}</div>${tableHTML(true)}</section>`+archiveHTML()}
@@ -953,6 +957,13 @@ function adminDash(){const hl=S.leagues.find(l=>l.kind==='human')?.id,today=Date
 function auditHTML(){if(!S.audit?.length)return '';const L={offer:'Πρόταση',counter:'Αντιπρόταση',offer_accepted:'Αποδοχή πρότασης',offer_rejected:'Απόρριψη πρότασης',release:'Αποδέσμευση',renew:'Ανανέωση',admin_sim:'Προσομοίωση',admin_reset_results:'Μηδενισμός',admin_reopen:'Άνοιγμα αγώνα',admin_club:'Αλλαγή συλλόγου',end_manager:'Αποχώρηση manager',end_season:'Κλείσιμο σεζόν',set_config:'Ρύθμιση'};
   return `<section class="card"><h2>Αρχείο ενεργειών</h2><div class="ros">${S.audit.map(a=>`<div><span>${L[a.action]||esc(a.action)} <span class="muted small">${esc(S.names[a.actor]||'σύστημα')}</span></span><span class="muted small">${ago(Date.parse(a.ts))}</span></div>`).join('')}</div></section>`}
 
+Object.assign(A,{
+  installInfo(){const installed=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+    const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    const instructions=installed?'<p>Το EFEL είναι ήδη ανοιχτό ως εφαρμογή.</p>':ios?'<p>Στο Safari πάτησε <b>Κοινή χρήση</b> και μετά <b>Προσθήκη στην οθόνη Αφετηρίας</b>.</p>':'<p>Άνοιξε το μενού του browser και επίλεξε <b>Εγκατάσταση εφαρμογής</b> ή <b>Προσθήκη στην αρχική οθόνη</b>. Η ονομασία μπορεί να διαφέρει ανά συσκευή.</p>';
+    openM(`<div class="box install-detail"><div class="bh">Εγκατάσταση EFEL</div>${instructions}${!installed&&installPrompt?'<button data-act="installNow">Εγκατάσταση</button>':''}<p class="small muted">Οι ειδοποιήσεις όταν η εφαρμογή είναι κλειστή δεν είναι ακόμη διαθέσιμες.</p></div>`)},
+  async installNow(){const prompt=installPrompt;if(!prompt)return;installPrompt=null;try{await prompt.prompt();await prompt.userChoice}catch(e){toast('Δοκίμασε από το μενού του browser.')}closeM()}
+});
 /* ---------- PWA ---------- */
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
@@ -1318,7 +1329,7 @@ Object.assign(A,{
     openM(`<div class="box notification-detail"><div class="bh">Ειδοποιήσεις<small>${L.length?L.length+(L.length>1?' εκκρεμότητες':' εκκρεμότητα'):'Όλα εντάξει'}</small></div>
      ${L.length?`<div class="bl">${L.map(x=>goTo(x.a.startsWith('#')?x.a:x.a,`${ico('clip')}<span class="ns-t"><b>${x.t}</b><small>${x.s}</small></span>${ico('chev','chv')}`,'ns-row')).join('')}</div>`:'<p class="small muted">Καμία εκκρεμότητα αυτή τη στιγμή.</p>'}
      ${N.length?`<div class="small muted" style="margin:12px 0 4px">Τελευταία για τον σύλλογό σου</div><ul class="feed">${N.map(n=>{const x=newsLine(n);return `<li><time>${ago(n.ts)}</time><div>${x.tag} <b>${x.h}</b></div></li>`}).join('')}</ul>`:''}
-     <p class="small muted" style="margin-top:10px">Οι ειδοποιήσεις στο κινητό με κλειστή εφαρμογή έρχονται σε επόμενη έκδοση.</p></div>`)},
+     <p class="small muted" style="margin-top:10px">Οι ειδοποιήσεις στο κινητό με κλειστή εφαρμογή δεν είναι ακόμη διαθέσιμες.</p></div>`)},
   gpinfo(){A.clubGo('finance')},
   week(){const mt=myTeam();if(mt)openM(weekly(mt))},
   clubGo(k){closeM();S.clubTab=k;if(location.hash!=='#club')location.hash='#club';else render(true);setTimeout(()=>$('.seg.club')?.scrollIntoView({behavior:'smooth',block:'start'}),60)},

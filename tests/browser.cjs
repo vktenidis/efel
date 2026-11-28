@@ -259,6 +259,19 @@ async function test() {
           assert.equal(await menu.locator('a[href="#market"]').count(),1);
           assert.equal(await menu.locator('a[href="#transfers"]').count(),0);
           assert.equal(await menu.locator('a[href="#admin"]').count(),0);
+          if(width===390){
+            await menu.locator('[data-act=installInfo]').click();
+            await page.getByRole('dialog').getByText('Εγκατάσταση EFEL').waitFor();
+            await page.getByRole('dialog').getByText(/δεν είναι ακόμη διαθέσιμες/).waitFor();
+            await page.keyboard.press('Escape');
+            await page.evaluate(()=>{Object.defineProperty(navigator,'userAgent',{value:'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)',configurable:true})});
+            await menu.locator('[data-act=installInfo]').click();
+            await page.getByRole('dialog').getByText(/Προσθήκη στην οθόνη Αφετηρίας/).waitFor();
+            await page.keyboard.press('Escape');
+            await page.evaluate(()=>{const e=new Event('beforeinstallprompt',{cancelable:true});e.prompt=async()=>{window.installCalled=true};e.userChoice=Promise.resolve({outcome:'accepted'});window.dispatchEvent(e)});
+            await menu.locator('[data-act=installInfo]').click();await page.getByRole('dialog').getByRole('button',{name:'Εγκατάσταση',exact:true}).click();
+            assert.equal(await page.evaluate(()=>window.installCalled),true);
+          }
           await menu.locator('[data-act=inbox]').waitFor();
           await menu.locator('[data-act=mgr]').click();
           await page.getByRole('dialog').locator('.mgrcard').waitFor();

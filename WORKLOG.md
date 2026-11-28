@@ -253,3 +253,16 @@ Backlog item 2: the main navigation and menu now use the single market entry for
 Backlog item 4: added an introductory heading, simplified manager status, compacted club statistics and made all roster panels initially collapsed with a visible player count. Club profiles, roster details and eligible claim/release actions remain available.
 
 Browser QA verified direct links and switching, active navigation, one market menu entry, collapsed scouting and the New Proposal shortcut, transfer search/counter-offer/new-offer flows, club profile and roster expansion, and twelve routes at widths 360–1920 px. The 390 px market header and club cards were visually inspected with synthetic data. No database changes.
+
+
+## Owner clarification · simulation and economy
+
+On 28 November 2026 the owner clarified that the league and progress are a simulation and explicitly authorized changes to the economy. The existing pricing backlog remains in scope, including the requested €1,000 per eFootball GP reference; verify the actual meaning and coverage of source GP prices and test resulting balance/contract behavior before choosing a concrete conversion. Previous notes describing production-data migration as out of scope should not be read as withholding the owner's current authorization.
+
+## Install guidance and player image caching · efel-prod38
+
+Backlog item 10: added an Install EFEL action in the account menu. It gives iPhone and general browser instructions and offers the browser's installation prompt when available; an already-installed app gets an appropriate message. The app explicitly states that closed-app notifications are not yet available. Web Push was investigated: support requires browser permission, service-worker subscription and a server sender; on iOS it is supported in installed home-screen web apps. No notification subscription or server sender was added.
+
+Backlog item 11: player portraits and sprite sheets now use a separate, bounded cache (200 entries), retained across application releases. Only same-origin public static player assets are included; external crests and application data are unaffected. Existing lazy image loading remains. On an isolated local test with 350 ms simulated network delay, the first sprite fetch took about 402 ms and the repeated fetch 2 ms without a network request; the cache remained available after a service-worker update. This is a simulated measurement, not a live-device speed guarantee. Cache-first assets at the same URL persist: bump MEDIA_CACHE when replacing existing images, so clients receive updated files.
+
+Browser QA exercised install guidance, an iPhone user-agent fixture, a simulated install prompt and all twelve routes at 360–1920 px. The service-worker test checked repeat fetches and worker upgrade retention. No database change or production squad data write.
