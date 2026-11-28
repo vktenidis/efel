@@ -92,7 +92,7 @@ async function fetchJson(path){
 }
 function loadCatalogue(){
   if(!cataloguePromise){
-    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod25').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod25').catch(()=>({}))]).then(([data,ratings,prices])=>{
+    cataloguePromise=Promise.all([fetchJson('standard.json'),fetchJson('assets/verified-ratings.json?v=efel-prod26').catch(()=>({})),fetchJson('assets/standard-prices.json?v=efel-prod26').catch(()=>({}))]).then(([data,ratings,prices])=>{
       S.cat=data.map(([id,name,pos,ovr,img])=>({id,name,search:searchName(name),pos,ovr,img,price:MINP}));
       // The low 24 bits identify the footballer. Require an exact name match as well.
       const identity=p=>Number(p.id.slice(1))%16777216+'|'+p.name;
@@ -126,7 +126,7 @@ function loadCatalogue(){
   }
   if(!supportingMediaStarted){
     supportingMediaStarted=true;
-    fetchJson('assets/media.json?v=efel-prod25').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
+    fetchJson('assets/media.json?v=efel-prod26').then(data=>{MEDIA=data;if(S.loaded)render()}).catch(()=>{});
     fetchJson('details.json').then(data=>{DET=data||{}}).catch(()=>{});
   }
   return cataloguePromise;
@@ -766,7 +766,7 @@ const A={
     tiers:['Αξία eFootball και αξία EFEL','<p>Κάθε παίκτης έχει δύο αξίες: πόσο περίπου κοστίζει η standard κάρτα του στο eFootball και πόσο αξίζει στην EFEL. Η διοργάνωση υπολογίζει την τιμή EFEL σε ευρώ με βάση την κλίμακα του καταλόγου. Εξαρτάται μόνο από το OVR.</p><table class="cmp"><thead><tr><th>OVR</th><th>eFootball ≈</th><th>EFEL</th></tr></thead><tbody>'+[86,85,84,83,82,81,80,79,78,77,76,75,74,73,72,71,70].map(o=>`<tr><td><b>${o}</b></td><td>${gameGP(efbVal(o))}</td><td><b>${exactMoney(Math.max(MINP,Math.round(efbVal(o)/(cfg().ratio||3)/1000)*1000))}</b></td></tr>`).join('')+'</tbody></table><p class="small muted">Ο πίνακας δείχνει εκτιμήσεις ανά OVR. Στην καρτέλα κάθε παίκτη εμφανίζεται η τιμή GP με την πηγή της, όταν είναι διαθέσιμη.</p>'],
     reserve:['Απόθεμα ρόστερ','<p>Η λίγκα κρατά '+exactMoney(MINP)+' για κάθε κενή θέση ως τους '+(cfg().reserveTo||SQT)+' παίκτες, ώστε κανείς να μη μείνει χωρίς να μπορεί να κλείσει ρόστερ. Όσο γεμίζεις το ρόστερ, το απόθεμα μικραίνει.</p>'],
     activation:['Ενεργοποίηση κάρτας','<p>Μετά από κάθε απόκτηση δηλώνεις μέσα σε '+(cfg().activationHours||72)+' ώρες ότι έχεις την κάρτα στο eFootball. Αλλιώς η θέση καλύπτεται προσωρινά από παίκτη έως OVR '+(cfg().coverMax||65)+'.</p>']}[k];if(!H)return;
-    openM(`<div class="box"><div class="bh">${H[0]}</div>${H[1]}<div class="row" style="justify-content:flex-end"><button data-act="closeM">Κατάλαβα</button></div></div>`)},
+    openM(`<div class="box help-detail"><div class="bh">${H[0]}</div>${H[1]}<div class="row" style="justify-content:flex-end"><button data-act="closeM">Κατάλαβα</button></div></div>`)},
   shareRes(id){shareResult(id)},shareSign(pid){shareSign(pid)},
   onbGo(k){onboarding(k)},onbEnd(){closeM()},
   rq(){},mgr(uid){openM(mgrCard(uid))},clubTab(k){S.clubTab=k;render(true)},
@@ -930,7 +930,7 @@ async function shareSign(pid){const p=pl(pid),mt=myTeam(),[cv,x]=canvasBase();x.
 /* ---------- οδηγός πρώτης εισόδου ---------- */
 const ONB=[['Καλώς ήρθες στην EFEL!','Μια ζωντανή λίγκα σαν το παλιό Master League. Αναλαμβάνεις σύλλογο, χτίζεις ρόστερ 25 παικτών με budget, παίζεις τους αγώνες σου στο eFootball και δηλώνεις το σκορ εδώ.'],
   ['Η αγορά','Ελεύθερους παίκτες τους παίρνεις με κρυφές προσφορές στους γύρους ή στη βασική τιμή όταν είναι ανοιχτή η μεταγραφική. Παίκτη άλλου τον ζητάς με πρόταση, και μπορείς να κάνεις αντιπρόταση. Κάθε παίκτης ανήκει σε έναν μόνο σύλλογο.'],
-  ['Οι αγώνες','Συμφωνείς ώρα με τον αντίπαλο (ή προτείνεις εναλλακτικές), παίζετε, ένας δηλώνει το σκορ με screenshot και ο άλλος το επιβεβαιώνει. Νίκες και θέσεις φέρνουν έσοδα.'],
+  ['Οι αγώνες','Από το ημερολόγιο δηλώνεις διαθεσιμότητα και προτείνεις ώρα αγώνα ή φιλικού. Παίζετε στο eFootball, ένας δηλώνει το σκορ και ο άλλος το επιβεβαιώνει. Νίκες και θέσεις φέρνουν έσοδα.'],
   ['Έτοιμος;','Ξεκίνα διαλέγοντας έναν ελεύθερο σύλλογο από τις Ομάδες και συμπλήρωσε το προφίλ σου (πλατφόρμα και πώς σε βρίσκουν).']];
 function onboarding(k){k=+k||0;const [t,b]=ONB[k];openM(`<div class="box onb"><div class="bh">${t}<small>${k+1}/${ONB.length}</small></div><p>${b}</p><div class="dots">${ONB.map((_,i)=>`<i class="${i===k?'on':''}"></i>`).join('')}</div>
   <div class="row" style="justify-content:space-between"><button class="ghost" data-act="onbEnd">Παράλειψη</button>${k<ONB.length-1?`<button data-act="onbGo" data-id="${k+1}">Επόμενο →</button>`:`<a href="#teams"><button data-act="onbEnd">Διάλεξε σύλλογο</button></a>`}</div></div>`)}
