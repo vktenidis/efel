@@ -191,3 +191,7 @@ Removed the duplicate lineup entry from the full navigation menu. The club entry
 ### Player search link · efel-prod28
 
 Completed backlog item 5 as a small independent change. Player details now link to a Google search restricted to eFootBase and the exact displayed name. The link identifies Google as the intermediary. It does not assert a verified player match; users select the correct result. Browser QA checked the encoded Mbappé query and passed twelve routes at seven widths. No database changes. Items 2–4 and 6–14 remain pending.
+
+### Match managers · efel-prod29
+
+Completed backlog item 14 for league match details. Both home and away managers appear with their existing avatar and profile link; clubs without a manager and automatic clubs have explicit labels. Playwright checked two manager links and avatar elements in a match fixture, plus twelve routes at seven widths. No database changes. Remaining backlog items 2–4 and 6–13 are pending.

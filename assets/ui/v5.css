@@ -1107,3 +1107,26 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   #mb .onb .row > * { flex:1 1 auto; }
   #mb .onb .row a button { width:100%; }
 }
+
+.match-managers {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin:9px 0;
+}
+.match-manager {
+  display:grid;
+  align-content:start;
+  gap:5px;
+  min-width:0;
+  padding:9px;
+  color:#e5f0f6;
+  border:1px solid #405e72;
+  border-radius:8px;
+  background:linear-gradient(145deg,#233e51,#102438);
+}
+.match-manager small { color:#bfd4e2; font-size:.75rem; }
+.match-manager .mgrl { max-width:100%; min-height:44px; gap:6px; text-align:left; overflow-wrap:anywhere; white-space:normal; }
+.match-manager .mgrl .av { flex:none; }
+.match-manager .mgrl:focus-visible { outline:3px solid #ffdb87; outline-offset:2px; }
+@media(max-width:380px) { .match-manager { padding:7px; } }
