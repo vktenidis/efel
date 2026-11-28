@@ -560,3 +560,56 @@ input.euro-input {width:clamp(114px,12ch,100%);max-width:100%;font-variant-numer
   #view[data-route="matches"] .match { gap:6px; padding:9px; }
 }
 #view:is([data-route="calendar"],[data-route="matches"]) button { font-family:"Fira Sans",system-ui,sans-serif; }
+
+/* Standings and club directory */
+#view:is([data-route="table"],[data-route="teams"]) .card {
+  border:1px solid #405a71;
+  background:linear-gradient(155deg,#1b3046,#111f32 55%,#0c192a);
+  box-shadow:inset 0 1px #c7e0eb20,0 7px 20px #020b1570;
+}
+#view[data-route="table"] .scroll {
+  border:1px solid #405a70;
+  border-radius:9px;
+  background:#102035;
+  scrollbar-color:#87aabc #14263a;
+}
+#view[data-route="table"] .ft { border-collapse:collapse; width:100%; }
+#view[data-route="table"] .ft th {
+  color:#c9dce8;
+  background:#233b50;
+  font-weight:700;
+}
+#view[data-route="table"] .ft td {
+  border-bottom:1px solid #344d63;
+  color:#edf4f9;
+}
+#view[data-route="table"] .ft tbody tr:nth-child(even) { background:#1d344a; }
+#view[data-route="table"] .ft tbody tr:hover { background:#2a465b; }
+#view[data-route="table"] .ft .pts { color:#ffe09a; font-weight:800; }
+#view[data-route="teams"] .teams { gap:14px; }
+#view[data-route="teams"] .tcard {
+  overflow:hidden;
+  border-radius:11px;
+  background:linear-gradient(155deg,#21394d,#112238 70%);
+}
+#view[data-route="teams"] .tcard > h2:first-child {
+  border-bottom:1px solid #6b8494;
+  background:linear-gradient(100deg,color-mix(in srgb,var(--c) 58%,#102035),#162b3f 80%);
+}
+#view[data-route="teams"] .tcard .stat > div {
+  padding:9px;
+  border:1px solid #3e5c72;
+  border-radius:8px;
+  background:linear-gradient(150deg,#294459,#13283b);
+  box-shadow:inset 0 1px #c5e4ec1c;
+}
+#view:is([data-route="table"],[data-route="teams"]) :is(button,a,.scroll):focus-visible {
+  outline:3px solid #ffda82;
+  outline-offset:2px;
+}
+#view[data-route="teams"] .tcard button { min-height:44px!important; font-family:"Fira Sans",system-ui,sans-serif; }
+@media(max-width:600px) {
+  #view[data-route="table"] .scroll { max-width:100%; }
+  #view[data-route="table"] .ft td,#view[data-route="table"] .ft th { padding:9px 6px; }
+  #view[data-route="teams"] .tcard .stat b { overflow-wrap:anywhere; }
+}
